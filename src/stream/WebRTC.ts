@@ -1,9 +1,11 @@
 import * as signalR from "@aspnet/signalr";
-import { createConnection } from "net";
 
 const hub = new signalR.HubConnectionBuilder()
-  .withUrl(process.env.REACT_APP_INGEST_SIGNALR_URL as string)
   .configureLogging(signalR.LogLevel.Information)
+  .withUrl(process.env.REACT_APP_INGEST_SIGNALR_URL as string, {
+    skipNegotiation: true,
+    transport: signalR.HttpTransportType.WebSockets
+  })
   .build();
 
 export default class WebRTC {
@@ -11,34 +13,36 @@ export default class WebRTC {
 
   constructor() {
     this.connection = new RTCPeerConnection(undefined);
+
     hub.start().then(() => {
-      console.log("SignalR Connected")
-    }).catch((error) => console.log("Error"));
+      console.log("SignalR connected...");
+    });
 
     //Called when a new track is added to the stream.
-    this.connection.ontrack = (track) => {
+    this.connection.ontrack = track => {
       var newAudioElement = document.createElement("audio");
       newAudioElement.srcObject = track.streams[0];
 
       var body = document.querySelector("body");
-      if (body != null)
-        body.appendChild(newAudioElement);
-    }
+      if (body != null) body.appendChild(newAudioElement);
+    };
 
     //Recieved new candidate
-    hub.on("onCandidate", message => {
-      this.connection.addIceCandidate(new RTCIceCandidate(message.candidate));
+    hub.on("onCandidate", candidate => {
+      this.connection.addIceCandidate(
+        new RTCIceCandidate(JSON.parse(candidate))
+      );
     });
 
     //Recieved new offer
     hub.on("onOffer", message => {
-      this.sendResponse(message);
+      this.sendResponse(JSON.parse(message));
     });
 
     //Recieved answer.
     hub.on("onAnswer", message => {
-      this.handleAnswer(message);
-    })
+      this.handleAnswer(JSON.parse(message));
+    });
   }
 
   /**
@@ -48,7 +52,7 @@ export default class WebRTC {
     //New ICE Candidate
     this.connection.onicecandidate = event => {
       if (event.candidate) {
-        hub.send("newCandidate", JSON.stringify({ candidate: event.candidate }));
+        hub.send("newCandidate", JSON.stringify(event.candidate));
       }
     };
 
@@ -58,39 +62,64 @@ export default class WebRTC {
 
   private sendOffer = (groupId: string) => {
     //Join the group.
-    hub.invoke("joinGroup", JSON.stringify({ groupId: groupId }));
+    hub.invoke("joinGroup", "tag", groupId);
 
-    navigator.getUserMedia({ video: false, audio: true }, stream => {
-      stream.getTracks().forEach(track => this.connection.addTrack(track, stream));
+    navigator.getUserMedia(
+      { video: false, audio: true },
+      stream => {
+        stream
+          .getTracks()
+          .forEach(track => this.connection.addTrack(track, stream));
 
-      this.connection.createOffer().then(offer => {
-        return this.connection.setLocalDescription(offer);
-      }).then(() => {
-        hub.invoke("sendOffer", JSON.stringify({ sdp: this.connection.localDescription }));
-      });
-    },
+        this.connection
+          .createOffer()
+          .then(offer => {
+            return this.connection.setLocalDescription(offer);
+          })
+          .then(() => {
+            hub.invoke(
+              "sendOffer",
+              JSON.stringify({ sdp: this.connection.localDescription })
+            );
+          });
+      },
       //On Error
-      () => { })
-  }
+      () => {}
+    );
+  };
 
   private sendResponse = (message: any) => {
-    navigator.getUserMedia({ video: false, audio: true }, stream => {
-      this.connection.setRemoteDescription(message.sdp).then(() => {
-        stream.getTracks().forEach(track => this.connection.addTrack(track, stream));
+    console.log(message);
 
-        this.connection.createAnswer().then(desc => {
-          return this.connection.setLocalDescription(desc);
-        })
-          .then(() => {
-            hub.invoke("sendAnswer", JSON.stringify({ sdp: this.connection.localDescription }))
-          })
-      })
-    },
+    navigator.getUserMedia(
+      { video: false, audio: true },
+      stream => {
+        this.connection.setRemoteDescription(message.sdp).then(() => {
+          console.log(message.sdp);
+          stream
+            .getTracks()
+            .forEach(track => this.connection.addTrack(track, stream));
+
+          this.connection
+            .createAnswer()
+            .then(desc => {
+              console.log(desc);
+              return this.connection.setLocalDescription(desc);
+            })
+            .then(() => {
+              hub.invoke(
+                "sendAnswer",
+                JSON.stringify({ sdp: this.connection.localDescription })
+              );
+            });
+        });
+      },
       //On Error
-      () => { })
-  }
+      () => {}
+    );
+  };
 
   private handleAnswer = (answer: any) => {
     this.connection.setRemoteDescription(answer.sdp);
-  }
+  };
 }
