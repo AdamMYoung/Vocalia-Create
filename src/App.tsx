@@ -1,25 +1,35 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import WebRTC from "./stream/WebRTC"
 
-class App extends Component {
+interface IProps { }
+
+interface IState {
+  value: string;
+  webRtcClient: WebRTC;
+}
+
+class App extends Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      value: "",
+      webRtcClient: new WebRTC()
+    }
+  }
+
+  connectToClient = () => {
+    this.state.webRtcClient.connect(this.state.value)
+  };
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <input type="text" value={this.state.value}
+          onChange={(event) => this.setState({ value: event.target.value })} />
+        <button onClick={() => this.connectToClient()}>Connect</button>
       </div>
     );
   }
