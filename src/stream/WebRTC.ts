@@ -67,6 +67,7 @@ export default class WebRTC {
      * Handles the incoming call request.
      */
     private answer = (offer: RTCSessionDescriptionInit) => {
+        console.log(offer);
         this.peerConnection.setRemoteDescription(offer);
         this.getMedia().then(this.buildAnswer);
     }
