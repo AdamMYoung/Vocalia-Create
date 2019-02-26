@@ -15,7 +15,6 @@ class App extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-
     this.state = {
       value: "",
       webRtcClient: new WebRTC(this.onNewMedia),
