@@ -14,9 +14,7 @@ export default class WebRTC {
   constructor() {
     this.connection = new RTCPeerConnection(undefined);
 
-    hub.start().then(() => {
-      console.log("SignalR connected...");
-    });
+    hub.start();
 
     //Called when a new track is added to the stream.
     this.connection.ontrack = track => {
@@ -29,9 +27,10 @@ export default class WebRTC {
 
     //Recieved new candidate
     hub.on("onCandidate", candidate => {
-      this.connection.addIceCandidate(
-        new RTCIceCandidate(JSON.parse(candidate))
-      );
+      if (JSON.parse(candidate))
+        this.connection.addIceCandidate(
+          new RTCIceCandidate(JSON.parse(candidate))
+        );
     });
 
     //Recieved new offer
@@ -43,27 +42,34 @@ export default class WebRTC {
     hub.on("onAnswer", message => {
       this.handleAnswer(JSON.parse(message));
     });
+
+    this.connection.onicecandidate = event => {
+      if (event.candidate) {
+        hub.send("newCandidate", JSON.stringify(event.candidate));
+      }
+    };
   }
 
   /**
    * Established a WebRTC connection to the provided group ID.
    */
   public connect = (groupId: string) => {
-    //New ICE Candidate
-    this.connection.onicecandidate = event => {
-      if (event.candidate) {
-        hub.send("newCandidate", JSON.stringify(event.candidate));
-      }
-    };
-
-    //Sends the initial offer to the group.
-    this.sendOffer(groupId);
-  };
-
-  private sendOffer = (groupId: string) => {
     //Join the group.
     hub.invoke("joinGroup", "tag", groupId);
 
+    //Sends the initial offer to the group.
+    this.sendOffer();
+  };
+
+  public awaitConnection = (groupId: string) => {
+    //New ICE Candidate
+
+
+    //Join the group.
+    hub.invoke("joinGroup", "tag", groupId);
+  }
+
+  private sendOffer = () => {
     navigator.getUserMedia(
       { video: false, audio: true },
       stream => {
@@ -74,28 +80,26 @@ export default class WebRTC {
         this.connection
           .createOffer()
           .then(offer => {
-            return this.connection.setLocalDescription(offer);
+            this.connection.setLocalDescription(offer).then(() => {
+              console.log("Sent Offer...")
+              hub.invoke(
+                "sendOffer",
+                JSON.stringify({ sdp: this.connection.localDescription })
+              );
+            });
           })
-          .then(() => {
-            hub.invoke(
-              "sendOffer",
-              JSON.stringify({ sdp: this.connection.localDescription })
-            );
-          });
       },
       //On Error
-      () => {}
+      () => { }
     );
   };
 
   private sendResponse = (message: any) => {
-    console.log(message);
-
+    console.log("Recieved Offer...")
     navigator.getUserMedia(
       { video: false, audio: true },
       stream => {
         this.connection.setRemoteDescription(message.sdp).then(() => {
-          console.log(message.sdp);
           stream
             .getTracks()
             .forEach(track => this.connection.addTrack(track, stream));
@@ -103,23 +107,24 @@ export default class WebRTC {
           this.connection
             .createAnswer()
             .then(desc => {
-              console.log(desc);
-              return this.connection.setLocalDescription(desc);
+              this.connection.setLocalDescription(desc).then(() => {
+                console.log("Sent Answer...")
+                hub.invoke(
+                  "sendAnswer",
+                  JSON.stringify({ sdp: this.connection.localDescription })
+                );
+              });;
             })
-            .then(() => {
-              hub.invoke(
-                "sendAnswer",
-                JSON.stringify({ sdp: this.connection.localDescription })
-              );
-            });
+
         });
       },
       //On Error
-      () => {}
+      () => { }
     );
   };
 
   private handleAnswer = (answer: any) => {
+    console.log("Recieved Answer...")
     this.connection.setRemoteDescription(answer.sdp);
   };
 }
