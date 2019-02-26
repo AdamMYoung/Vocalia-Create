@@ -29,6 +29,16 @@ var servers = {
             credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
             username: '28224511:1379330808'
         },
+        {
+            urls: 'turn:turn.bistri.com:80',
+            credential: 'homeo',
+            username: 'homeo'
+        },
+        {
+            urls: 'turn:turn.anyfirewall.com:443?transport=tcp',
+            credential: 'webrtc',
+            username: 'webrtc'
+        },
         { urls: "stun:stun01.sipphone.com" },
         { urls: "stun:stun.ekiga.net" },
         { urls: "stun:stun.fwdnet.net" },
