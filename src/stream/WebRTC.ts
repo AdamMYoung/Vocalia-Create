@@ -12,7 +12,29 @@ const offerOptions: RTCOfferOptions = {
 /**
  * ICE servers to connect to.
  */
-var servers = { 'iceServers': [{ 'urls': 'stun:74.125.142.127:19302' }] };
+var servers = {
+    'iceServers': [
+        { urls: "stun:stun01.sipphone.com" },
+        { urls: "stun:stun.ekiga.net" },
+        { urls: "stun:stun.fwdnet.net" },
+        { urls: "stun:stun.ideasip.com" },
+        { urls: "stun:stun.iptel.org" },
+        { urls: "stun:stun.rixtelecom.se" },
+        { urls: "stun:stun.schlund.de" },
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "stun:stun1.l.google.com:19302" },
+        { urls: "stun:stun2.l.google.com:19302" },
+        { urls: "stun:stun3.l.google.com:19302" },
+        { urls: "stun:stun4.l.google.com:19302" },
+        { urls: "stun:stunserver.org" },
+        { urls: "stun:stun.softjoys.com" },
+        { urls: "stun:stun.voiparound.com" },
+        { urls: "stun:stun.voipbuster.com" },
+        { urls: "stun:stun.voipstunt.com" },
+        { urls: "stun:stun.voxgratia.org" },
+        { urls: "stun:stun.xten.com" }
+    ]
+};
 
 /**
  * SignalR signalling server connection information.
