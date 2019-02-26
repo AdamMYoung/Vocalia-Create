@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import WebRTC2 from "./stream/WebRTC2"
+import WebRTC from "./stream/WebRTC"
 
 interface IProps { }
 
 interface IState {
   value: string;
-  webRtcClient: WebRTC2;
+  webRtcClient: WebRTC;
   stream: MediaStream | null;
 }
 
@@ -18,7 +18,7 @@ class App extends Component<IProps, IState> {
 
     this.state = {
       value: "",
-      webRtcClient: new WebRTC2(this.onNewMedia),
+      webRtcClient: new WebRTC(this.onNewMedia),
       stream: null
     }
   }
