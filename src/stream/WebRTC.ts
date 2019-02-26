@@ -41,8 +41,6 @@ export default class WebRTC {
         });
 
         hub.on("onCandidate", (candidate: string) => {
-            console.log("New Candidate:");
-            console.log(candidate);
             this.peerConnection.addIceCandidate(
                 new RTCIceCandidate(JSON.parse(candidate)))
         })
@@ -69,7 +67,6 @@ export default class WebRTC {
      * Handles the incoming call request.
      */
     private answer = (offer: RTCSessionDescriptionInit) => {
-        console.log(offer);
         this.peerConnection.setRemoteDescription(offer);
         this.getMedia().then(this.buildAnswer);
     }
@@ -128,8 +125,6 @@ export default class WebRTC {
      * Sends an initial offer to the other users.
      */
     private sendOffer = (description: RTCSessionDescriptionInit) => {
-        console.log("Sending offer...");
-
         this.peerConnection.setLocalDescription(description)
             .then(() => {
                 hub.invoke("sendOffer", JSON.stringify(description));
@@ -140,8 +135,6 @@ export default class WebRTC {
      * Sends an answer to the sender.
      */
     private sendAnswer = (answer: RTCSessionDescriptionInit) => {
-        console.log("Sending answer...");
-
         this.peerConnection.setLocalDescription(answer)
             .then(() => {
                 hub.invoke("sendAnswer", JSON.stringify(answer));
