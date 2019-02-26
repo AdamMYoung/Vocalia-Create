@@ -37,7 +37,6 @@ class App extends Component<IProps, IState> {
   }
 
   onNewMedia = (stream: MediaStream) => {
-    console.log(stream);
     var streams = this.state.streams;
     streams.push(stream);
     this.setState({ streams: streams });
