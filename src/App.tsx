@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import WebRTC from "./stream/WebRTC"
+import { string } from "prop-types";
 
 interface IProps { }
 
@@ -28,13 +29,10 @@ class App extends Component<IProps, IState> {
   }
 
   connectToClient = () => {
-    this.state.webRtcClient.call();
+    this.setState({ group: this.state.value });
+    this.state.webRtcClient.connect("", this.state.value);
   };
 
-  setGroup = () => {
-    this.setState({ group: this.state.value });
-    this.state.webRtcClient.setGroup("tag", this.state.value);
-  }
 
   onNewMedia = (stream: MediaStream) => {
     var streams = this.state.streams;
@@ -50,10 +48,8 @@ class App extends Component<IProps, IState> {
       <div className="App">
         <input type="text" value={value}
           onChange={(event) => this.setState({ value: event.target.value })} />
-        <button onClick={() => this.setGroup()}>Set Group</button>
-        {group &&
-          <button onClick={() => this.connectToClient()}>Connect</button>
-        }
+        <button onClick={() => this.connectToClient()} disabled={value.length == 0}>Connect</button>
+
         <p>Current Group: {group}</p>
         {streams.map(stream =>
           <audio key={stream.id} ref={audio => { if (audio) audio.srcObject = stream }} controls autoPlay />)}

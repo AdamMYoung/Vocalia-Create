@@ -1,5 +1,6 @@
 import * as signalR from "@aspnet/signalr";
 
+
 /**
  * Options to offer to the other client.
  */
@@ -76,66 +77,72 @@ const hub = new signalR.HubConnectionBuilder()
  */
 export default class WebRTC {
     private connections: { [id: string]: RTCPeerConnection } = {};
-    private peerConnection: RTCPeerConnection = new RTCPeerConnection(servers);
     private currentGroup: string | null = null;
 
-    /**
-     * Called when a new track is added.
-     */
     public onTrackAdded: ((event: MediaStream) => void) = () => { };
 
     constructor() {
-        this.peerConnection.onicecandidate = e => this.onIceCandidate(e);
-        this.peerConnection.ontrack = t => this.onTrackAdded(t.streams[0]);
-
         hub.start();
 
+        hub.on("onMembersAcquired", (memberIds: string[]) => {
+            memberIds.forEach((key) => this.establishConnection(key))
+        })
+
         //Called when an offer has been recieved.
-        hub.on("onOffer", (offer: string, connectionId: string) => {
-            this.answer(JSON.parse(offer), connectionId);
+        hub.on("onOffer", (offer: string, senderId: string) => {
+            this.answer(JSON.parse(offer), senderId);
         })
 
         //Called when an answer has been recieved.
-        hub.on("onAnswer", (answer: string) => {
-            this.peerConnection.setRemoteDescription(JSON.parse(answer));
+        hub.on("onAnswer", (answer: string, senderId: string) => {
+            var connection = this.connections[senderId];
+            connection.setRemoteDescription(JSON.parse(answer));
         });
 
         //Called when a candidate has been recieved.
-        hub.on("onCandidate", (candidate: string) => {
-            console.log(candidate);
-            this.peerConnection.addIceCandidate(
-                new RTCIceCandidate(JSON.parse(candidate)));
+        hub.on("onCandidate", (candidate: string, connectionKey: string) => {
+            this.connections[connectionKey]
+                .addIceCandidate(
+                    new RTCIceCandidate(JSON.parse(candidate)));
         })
     }
 
     /**
-     * Start a call to the other party.
+     * Connects to the specified groupId.
      */
-    public call = () => {
-        console.log("Sending request...")
-        if (this.currentGroup != null) {
-            this.getMedia().then(this.buildOffer);
-        }
+    public connect = (name: string, groupId: string) => {
+        hub.invoke("joinGroup", name, groupId);
+        this.currentGroup = groupId;
+        hub.invoke("queryGroupMembers");
+    }
+
+    /**
+     * Starts building a connection to the specified target ID.
+     */
+    private establishConnection = (targetId: string) => {
+        this.getMedia().then((e) => this.buildOffer(e, targetId));
     }
 
     /**
      * Called when a new stream has been acquired.
      */
-    private buildOffer = (stream: MediaStream) => {
-        var code = this.generateRandomCode();
-        stream.getTracks().forEach(track => this.peerConnection.addTrack(track, stream));
+    private buildOffer = (stream: MediaStream, targetId: string) => {
+        var connection = this.createConnection(targetId);
+        this.connections[targetId] = connection;
 
-        this.peerConnection.createOffer(offerOptions)
-            .then((offer) => this.sendOffer(offer));
+        stream.getTracks().forEach(track => connection.addTrack(track, stream));
+
+        connection.createOffer(offerOptions)
+            .then((offer) => this.sendOffer(offer, targetId, connection));
     }
 
     /**
      * Sends an initial offer to the other users.
      */
-    private sendOffer = (description: RTCSessionDescriptionInit) => {
-        this.peerConnection.setLocalDescription(description)
+    private sendOffer = (description: RTCSessionDescriptionInit, targetId: string, connection: RTCPeerConnection) => {
+        connection.setLocalDescription(description)
             .then(() => {
-                hub.invoke("sendOffer", JSON.stringify(description));
+                hub.invoke("sendOffer", JSON.stringify(description), targetId);
             })
     }
 
@@ -143,44 +150,33 @@ export default class WebRTC {
      * Handles the incoming call request.
      */
     private answer = (offer: RTCSessionDescriptionInit, senderId: string) => {
-        console.log("Recieved request...");
-        this.peerConnection.setRemoteDescription(offer);
-        this.getMedia().then((e) => this.buildAnswer(e, senderId));
+        var connection = this.createConnection(senderId);
+        this.connections[senderId] = connection;
+
+        connection.setRemoteDescription(offer);
+        this.getMedia().then((e) => this.buildAnswer(e, connection, senderId));
     }
 
     /**
      * Called when a new stream has been acquired.
      */
-    private buildAnswer = (stream: MediaStream, senderId: string) => {
-        stream.getTracks().forEach(track => this.peerConnection.addTrack(track, stream));
+    private buildAnswer = (stream: MediaStream, connection: RTCPeerConnection,
+        senderId: string) => {
+        stream.getTracks().forEach(track => connection.addTrack(track, stream));
 
-        this.peerConnection.createAnswer(offerOptions)
-            .then((answer) => this.sendAnswer(answer, senderId))
+        connection.createAnswer(offerOptions)
+            .then((answer) => this.sendAnswer(answer, connection, senderId));
     }
 
     /**
      * Sends an answer to the sender.
      */
-    private sendAnswer = (answer: RTCSessionDescriptionInit, senderId: string) => {
-        this.peerConnection.setLocalDescription(answer)
+    private sendAnswer = (answer: RTCSessionDescriptionInit, connection: RTCPeerConnection,
+        senderId: string) => {
+        connection.setLocalDescription(answer)
             .then(() => {
                 hub.invoke("sendAnswer", JSON.stringify(answer), senderId);
             })
-    }
-
-    /**
-    * Generates a random code for connection identification.
-    */
-    private generateRandomCode = () => {
-        return Math.random().toString(36).substring(7);
-    }
-
-    /**
-     * Sets the desired group to connect to.
-     */
-    public setGroup = (name: string, groupId: string) => {
-        hub.invoke("joinGroup", name, groupId);
-        this.currentGroup = groupId;
     }
 
     /**
@@ -191,10 +187,22 @@ export default class WebRTC {
     }
 
     /**
+     * Creates a new RTCPeerConnection object.
+     */
+    private createConnection = (connectionKey: string): RTCPeerConnection => {
+        var connection = new RTCPeerConnection(servers);
+
+        connection.onicecandidate = e => this.onIceCandidate(e, connectionKey);
+        connection.ontrack = t => this.onTrackAdded(t.streams[0]);
+
+        return connection;
+    }
+
+    /**
      * Triggered when a new ICE candiate is found.
      */
-    private onIceCandidate = (event: RTCPeerConnectionIceEvent) => {
+    private onIceCandidate = (event: RTCPeerConnectionIceEvent, connectionKey: string) => {
         if (event.candidate)
-            hub.send("newCandidate", JSON.stringify(event.candidate));
+            hub.send("newCandidate", JSON.stringify(event.candidate), connectionKey);
     }
 }
