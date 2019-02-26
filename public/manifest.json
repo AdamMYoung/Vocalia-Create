@@ -1,15 +1,15 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Vocalia",
+  "name": "Vocalia | Create",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "https://vocalia.blob.core.windows.net/static-content/assets/logo_solo.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#3f51b5",
   "background_color": "#ffffff"
 }
