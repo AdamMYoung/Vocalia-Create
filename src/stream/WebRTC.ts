@@ -10,6 +10,11 @@ const offerOptions: RTCOfferOptions = {
 };
 
 /**
+ * ICE servers to connect to.
+ */
+var servers = { 'iceServers': [{ 'urls': 'stun:74.125.142.127:19302' }] };
+
+/**
  * SignalR signalling server connection information.
  */
 const hub = new signalR.HubConnectionBuilder()
@@ -23,7 +28,7 @@ const hub = new signalR.HubConnectionBuilder()
  * Class to manage WebRTC connection establishment and handling.
  */
 export default class WebRTC {
-    private peerConnection: RTCPeerConnection = new RTCPeerConnection();
+    private peerConnection: RTCPeerConnection = new RTCPeerConnection(servers);
     private currentGroup: string | null = null;
     private onNewMediaCallback: (stream: MediaStream) => void = () => { };
 
@@ -41,6 +46,7 @@ export default class WebRTC {
         });
 
         hub.on("onCandidate", (candidate: string) => {
+            console.log(candidate);
             this.peerConnection.addIceCandidate(
                 new RTCIceCandidate(JSON.parse(candidate)))
         })
