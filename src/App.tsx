@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import WebRTC from "./stream/WebRTC"
-import { string } from "prop-types";
 
 interface IProps { }
 
@@ -10,7 +8,7 @@ interface IState {
   value: string;
   group: string;
   webRtcClient: WebRTC;
-  streams: MediaStream[];
+  streams: { [id: string]: MediaStream };
 }
 
 class App extends Component<IProps, IState> {
@@ -18,27 +16,41 @@ class App extends Component<IProps, IState> {
     super(props);
 
     var rtcClient = new WebRTC;
-    rtcClient.onTrackAdded = this.onNewMedia
+    rtcClient.onTrackAdded = this.onAddSource
+    rtcClient.onTrackRemoved = this.onRemoveSource
 
     this.state = {
       value: "",
       group: "",
       webRtcClient: rtcClient,
-      streams: [] as MediaStream[]
+      streams: {}
     }
   }
 
+  /**
+   * Connects the user to the specified group client.
+   */
   connectToClient = () => {
     this.setState({ group: this.state.value });
     this.state.webRtcClient.connect("", this.state.value);
   };
 
-
-  onNewMedia = (stream: MediaStream) => {
+  /**
+   * Called when a new media source has been added.
+   */
+  onAddSource = (key: string, stream: MediaStream) => {
     var streams = this.state.streams;
-    streams.push(stream);
+    streams[key] = stream;
     this.setState({ streams: streams });
+  }
 
+  /**
+   * Called when a media source has been removed.
+   */
+  onRemoveSource = (key: string) => {
+    var streams = this.state.streams;
+    delete streams[key];
+    this.setState({ streams: streams });
   }
 
   render() {
@@ -51,7 +63,7 @@ class App extends Component<IProps, IState> {
         <button onClick={() => this.connectToClient()} disabled={value.length == 0}>Connect</button>
 
         <p>Current Group: {group}</p>
-        {streams.map(stream =>
+        {Object.values(streams).map(stream =>
           <audio key={stream.id} ref={audio => { if (audio) audio.srcObject = stream }} controls autoPlay />)}
       </div>
     );

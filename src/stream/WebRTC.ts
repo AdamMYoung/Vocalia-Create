@@ -77,9 +77,16 @@ const hub = new signalR.HubConnectionBuilder()
  */
 export default class WebRTC {
     private connections: { [id: string]: RTCPeerConnection } = {};
-    private currentGroup: string | null = null;
 
-    public onTrackAdded: ((event: MediaStream) => void) = () => { };
+    /**
+     * Fired when a new audio source track has been established.
+     */
+    public onTrackAdded: ((key: string, event: MediaStream) => void) = () => { };
+
+    /**
+     * Fired when an audio source track has ended.
+     */
+    public onTrackRemoved: ((key: string) => void) = () => { };
 
     constructor() {
         hub.start();
@@ -112,8 +119,14 @@ export default class WebRTC {
      */
     public connect = (name: string, groupId: string) => {
         hub.invoke("joinGroup", name, groupId);
-        this.currentGroup = groupId;
         hub.invoke("queryGroupMembers");
+    }
+
+    /**
+     * Disconnects from all connected peers.
+     */
+    public disconnectFromPeers = () => {
+
     }
 
     /**
@@ -193,7 +206,15 @@ export default class WebRTC {
         var connection = new RTCPeerConnection(servers);
 
         connection.onicecandidate = e => this.onIceCandidate(e, connectionKey);
-        connection.ontrack = t => this.onTrackAdded(t.streams[0]);
+        connection.oniceconnectionstatechange = e => {
+            if (connection.iceConnectionState == "disconnected") {
+                this.onTrackRemoved(connectionKey);
+            }
+        }
+        connection.ontrack = t => {
+            var track = t.streams[0];
+            this.onTrackAdded(connectionKey, track);
+        };
 
         return connection;
     }
