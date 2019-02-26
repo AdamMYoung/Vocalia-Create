@@ -41,6 +41,8 @@ export default class WebRTC {
         });
 
         hub.on("onCandidate", (candidate: string) => {
+            console.log("New Candidate:");
+            console.log(candidate);
             this.peerConnection.addIceCandidate(
                 new RTCIceCandidate(JSON.parse(candidate)))
         })
