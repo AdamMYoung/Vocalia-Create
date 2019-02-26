@@ -77,15 +77,21 @@ const hub = new signalR.HubConnectionBuilder()
 export default class WebRTC {
     private peerConnection: RTCPeerConnection = new RTCPeerConnection(servers);
     private currentGroup: string | null = null;
-    private onNewMediaCallback: (stream: MediaStream) => void = () => { };
 
-    constructor(onNewMedia: (stream: MediaStream) => void) {
-        this.onNewMediaCallback = onNewMedia;
-        this.initCall();
-        hub.start().catch((e) => console.log());
+    /**
+     * Called when a new track is added.
+     */
+    public onTrackAdded: ((event: MediaStream) => void) = () => { };
 
-        hub.on("onOffer", (offer: string) => {
-            this.answer(JSON.parse(offer));
+    constructor() {
+        this.peerConnection.onicecandidate = e => this.onIceCandidate(e);
+        this.peerConnection.ontrack = t => this.onTrackAdded(t.streams[0]);
+
+        hub.start();
+
+        //Called when an offer has been recieved.
+        hub.on("onOffer", (offer: string, connectionId: string) => {
+            this.answer(JSON.parse(offer), connectionId);
         })
 
         hub.on("onAnswer", (answer: string) => {
@@ -95,7 +101,7 @@ export default class WebRTC {
         hub.on("onCandidate", (candidate: string) => {
             console.log(candidate);
             this.peerConnection.addIceCandidate(
-                new RTCIceCandidate(JSON.parse(candidate)))
+                new RTCIceCandidate(JSON.parse(candidate)));
         })
     }
 
@@ -111,6 +117,7 @@ export default class WebRTC {
      * Start a call to the other party.
      */
     public call = () => {
+        console.log("Sending request...")
         if (this.currentGroup != null) {
             this.getMedia().then(this.buildOffer);
         }
@@ -119,9 +126,10 @@ export default class WebRTC {
     /**
      * Handles the incoming call request.
      */
-    private answer = (offer: RTCSessionDescriptionInit) => {
+    private answer = (offer: RTCSessionDescriptionInit, senderId: string) => {
+        console.log("Recieved request...");
         this.peerConnection.setRemoteDescription(offer);
-        this.getMedia().then(this.buildAnswer);
+        this.getMedia().then((e) => this.buildAnswer(e, senderId));
     }
 
     /**
@@ -129,14 +137,6 @@ export default class WebRTC {
      */
     private getMedia = (): Promise<MediaStream> => {
         return navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-    }
-
-    /**
-     * Initializes the current call.
-     */
-    private initCall = () => {
-        this.peerConnection.onicecandidate = e => this.onIceCandidate(e);
-        this.peerConnection.ontrack = t => this.onTrack(t);
     }
 
     /**
@@ -148,30 +148,23 @@ export default class WebRTC {
     }
 
     /**
-     * Triggered when a new track is available to add.
-     */
-    private onTrack = (event: RTCTrackEvent) => {
-        this.onNewMediaCallback(event.streams[0]);
-    }
-
-    /**
      * Called when a new stream has been acquired.
      */
     private buildOffer = (stream: MediaStream) => {
         stream.getTracks().forEach(track => this.peerConnection.addTrack(track, stream));
 
         this.peerConnection.createOffer(offerOptions)
-            .then(this.sendOffer)
+            .then((offer) => this.sendOffer(offer))
     }
 
     /**
      * Called when a new stream has been acquired.
      */
-    private buildAnswer = (stream: MediaStream) => {
+    private buildAnswer = (stream: MediaStream, senderId: string) => {
         stream.getTracks().forEach(track => this.peerConnection.addTrack(track, stream));
 
         this.peerConnection.createAnswer(offerOptions)
-            .then(this.sendAnswer)
+            .then((answer) => this.sendAnswer(answer, senderId))
     }
 
     /**
@@ -187,10 +180,10 @@ export default class WebRTC {
     /**
      * Sends an answer to the sender.
      */
-    private sendAnswer = (answer: RTCSessionDescriptionInit) => {
+    private sendAnswer = (answer: RTCSessionDescriptionInit, senderId: string) => {
         this.peerConnection.setLocalDescription(answer)
             .then(() => {
-                hub.invoke("sendAnswer", JSON.stringify(answer));
+                hub.invoke("sendAnswer", JSON.stringify(answer), senderId);
             })
     }
 }

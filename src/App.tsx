@@ -9,18 +9,21 @@ interface IState {
   value: string;
   group: string;
   webRtcClient: WebRTC;
-  stream: MediaStream | null;
+  streams: MediaStream[];
 }
 
 class App extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    var rtcClient = new WebRTC;
+    rtcClient.onTrackAdded = this.onNewMedia
+
     this.state = {
       value: "",
       group: "",
-      webRtcClient: new WebRTC(this.onNewMedia),
-      stream: null
+      webRtcClient: rtcClient,
+      streams: [] as MediaStream[]
     }
   }
 
@@ -34,11 +37,15 @@ class App extends Component<IProps, IState> {
   }
 
   onNewMedia = (stream: MediaStream) => {
-    this.setState({ stream: stream });
+    console.log(stream);
+    var streams = this.state.streams;
+    streams.push(stream);
+    this.setState({ streams: streams });
+
   }
 
   render() {
-    const { value, group, stream } = this.state;
+    const { value, group, streams } = this.state;
 
     return (
       <div className="App">
@@ -49,7 +56,8 @@ class App extends Component<IProps, IState> {
           <button onClick={() => this.connectToClient()}>Connect</button>
         }
         <p>Current Group: {group}</p>
-        <audio ref={audio => { if (audio) audio.srcObject = stream }} controls autoPlay />
+        {streams.map(stream =>
+          <audio key={stream.id} ref={audio => { if (audio) audio.srcObject = stream }} controls autoPlay />)}
       </div>
     );
   }
