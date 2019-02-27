@@ -97,6 +97,7 @@ export default class WebRTC {
   constructor() {
     hub.start();
 
+    //Called when group members has been recieved.
     hub.on("onMembersAcquired", (users: UserDetails[]) => {
       users.forEach(key => this.establishConnection(key));
     });
@@ -104,14 +105,12 @@ export default class WebRTC {
     //Called when an offer has been recieved.
     hub.on("onOffer", (offer: string, senderDetails: UserDetails) => {
       this.answer(JSON.parse(offer), senderDetails);
-      console.log(senderDetails);
     });
 
     //Called when an answer has been recieved.
     hub.on("onAnswer", (answer: string, senderDetails: UserDetails) => {
       var user = this.connections[senderDetails.id];
 
-      console.log(senderDetails);
       user.connection.setRemoteDescription(JSON.parse(answer));
     });
 
@@ -230,6 +229,7 @@ export default class WebRTC {
         this.onTrackRemoved(user.id);
       }
     };
+
     connection.ontrack = t => {
       var track = t.streams[0];
       this.onTrackAdded({ id: user.id, tag: user.tag, stream: track });

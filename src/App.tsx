@@ -83,8 +83,6 @@ class App extends Component<IProps, IState> {
         <p>Current Group: {group}</p>
         {Object.values(streams).map(stream => (
           <div key={stream.id}>
-            {console.log(stream.tag)}
-
             <audio
               ref={audio => {
                 if (audio) audio.srcObject = stream.stream;
