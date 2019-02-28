@@ -11,8 +11,8 @@ import {
 } from "react-router";
 import Navigation from "./navigation/Navigation";
 import Record from "./record/Record";
-import { Edit } from "@material-ui/icons";
 import Publish from "./publish/Publish";
+import Editor from "./editor/Editor";
 
 /**
  * State information for the application.
@@ -29,12 +29,16 @@ interface ILayoutProps extends RouteComponentProps {
   isMobile: boolean;
 }
 
+/**
+ * Redirects the user to the login screen if not authenticated, waiting 1 second before redirecting to
+ * ensure auth credentials have been fetched first.
+ */
 function PrivateRoute({ component: Component, isAuthenticated, ...rest }: any) {
   return (
     <Route
       {...rest}
       render={props =>
-        isAuthenticated ? (
+        setTimeout(() => isAuthenticated(), 1000) ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -74,7 +78,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
 
   render() {
     const { isMobile } = this.props;
-    const { isAuthenticated } = this.state.auth;
+    const { auth } = this.state;
 
     /**
      * Elements that can be routed to.
@@ -83,17 +87,17 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
       <Switch>
         <PrivateRoute
           path="/record"
-          isAuthenticated={isAuthenticated}
+          isAuthenticated={auth.isAuthenticated}
           component={() => <Record />}
         />
         <PrivateRoute
           path="/edit"
-          isAuthenticated={isAuthenticated}
-          component={() => <Edit />}
+          isAuthenticated={auth.isAuthenticated}
+          component={() => <Editor />}
         />
         <PrivateRoute
           path="/publish"
-          isAuthenticated={isAuthenticated}
+          isAuthenticated={auth.isAuthenticated}
           component={() => <Publish />}
         />
         <Route
@@ -108,10 +112,16 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
             return <Login auth={this.state.auth} />;
           }}
         />
+
+        <Route render={() => <Redirect to="/record" />} />
       </Switch>
     );
 
-    return <Navigation isMobile={isMobile}>{RoutingContents}</Navigation>;
+    return (
+      <Navigation isMobile={isMobile} auth={auth}>
+        {RoutingContents}
+      </Navigation>
+    );
   }
 }
 
@@ -128,6 +138,7 @@ class Login extends Component<ILoginProps> {
   constructor(props: ILoginProps) {
     super(props);
 
+    console.log(props.auth.isAuthenticated());
     props.auth.login();
   }
 

@@ -6,10 +6,14 @@ import {
   createStyles,
   withStyles,
   WithStyles,
-  Theme
+  Theme,
+  Toolbar,
+  Typography,
+  Button
 } from "@material-ui/core";
 import { LinkContainer } from "react-router-bootstrap";
 import { RecordVoiceOver, Edit, Public } from "@material-ui/icons";
+import Auth from "../../auth/Auth";
 
 /**
  * CSS Styles of the browser
@@ -36,6 +40,7 @@ interface INavigationState {
 
 interface INavigationProps extends WithStyles<typeof styles> {
   isMobile: boolean;
+  auth: Auth;
 }
 
 export class Navigation extends Component<INavigationProps, INavigationState> {
@@ -55,11 +60,32 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
 
   render() {
     const { selectedNavItem } = this.state;
-    const { classes } = this.props;
+    const { classes, isMobile } = this.props;
+    const { isAuthenticated, logout } = this.props.auth;
 
     return (
       <div>
+        {/* Top Bar */}
+        <AppBar position="static">
+          <Toolbar variant={isMobile ? "regular" : "dense"}>
+            <Typography
+              variant="h6"
+              color="inherit"
+              noWrap
+              style={{ flexGrow: 1 }}
+            >
+              Vocalia Create
+            </Typography>
+            {isAuthenticated() && (
+              <Button onClick={() => logout()} color="inherit">
+                Logout
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+        {/* Content */}
         {this.props.children}
+        {/* Bottom Bar */}
         <AppBar
           position="fixed"
           style={{ top: "auto", bottom: 0 }}
