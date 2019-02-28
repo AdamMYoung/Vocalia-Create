@@ -89,7 +89,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
         <PrivateRoute
           path="/social"
           isAuthenticated={auth.isAuthenticated}
-          component={() => <Social />}
+          component={() => <Social isMobile={isMobile} />}
         />
         <PrivateRoute
           path="/record"
