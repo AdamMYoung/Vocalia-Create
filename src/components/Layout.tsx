@@ -9,6 +9,7 @@ import {
   Redirect,
   Switch
 } from "react-router";
+import Navigation from "./navigation/Navigation";
 
 /**
  * State information for the application.
@@ -49,21 +50,43 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
   };
 
   render() {
+    const { isMobile } = this.props;
+
     /**
      * Elements that can be routed to.
      */
     const RoutingContents = (
       <Switch>
         <Route
+          path="/record"
+          render={() => {
+            return <p>Record</p>;
+          }}
+        />
+        <Route
+          path="/edit"
+          render={() => {
+            return <p>Edit</p>;
+          }}
+        />
+        <Route
+          path="/publish"
+          render={() => {
+            return <p>Publish</p>;
+          }}
+        />
+        <Route
           path="/callback"
           render={() => {
             return <Callback auth={this.state.auth} />;
           }}
         />
+
+        <Route render={() => <Redirect to="/record" />} />
       </Switch>
     );
 
-    return { RoutingContents };
+    return <Navigation isMobile={isMobile}>{RoutingContents}</Navigation>;
   }
 }
 

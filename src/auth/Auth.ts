@@ -42,9 +42,9 @@ export default class Auth {
         this.setSession(authResult);
       } else if (err) {
         console.log(err);
-        this.routeProps.history.replace("/top");
-        if (process.env.NODE_ENV == "development")
-          alert(`Error: ${err.error}. Check the console for further details.`);
+        this.routeProps.history.replace("/");
+        //if (process.env.NODE_ENV == "development")
+        //alert(`Error: ${err.error}. Check the console for further details.`);
       }
     });
   };
@@ -91,10 +91,10 @@ export default class Auth {
       } else if (err) {
         this.clearSignIn();
         console.log(err);
-        if (process.env.NODE_ENV == "development")
-          alert(
-            `Could not get a new token (${err.error}: ${err.errorDescription}).`
-          );
+        //if (process.env.NODE_ENV == "development")
+        //alert(
+        //  `Could not get a new token (${err.error}: ${err.errorDescription}).`
+        //);
       }
     });
   };
