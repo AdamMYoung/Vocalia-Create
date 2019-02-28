@@ -10,6 +10,9 @@ import {
   Switch
 } from "react-router";
 import Navigation from "./navigation/Navigation";
+import Record from "./record/Record";
+import { Edit } from "@material-ui/icons";
+import Publish from "./publish/Publish";
 
 /**
  * State information for the application.
@@ -24,6 +27,26 @@ interface ILayoutState {
  */
 interface ILayoutProps extends RouteComponentProps {
   isMobile: boolean;
+}
+
+function PrivateRoute({ component: Component, isAuthenticated, ...rest }: any) {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        isAuthenticated ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
+  );
 }
 
 /**
@@ -51,29 +74,27 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
 
   render() {
     const { isMobile } = this.props;
+    const { isAuthenticated } = this.state.auth;
 
     /**
      * Elements that can be routed to.
      */
     const RoutingContents = (
       <Switch>
-        <Route
+        <PrivateRoute
           path="/record"
-          render={() => {
-            return <p>Record</p>;
-          }}
+          isAuthenticated={isAuthenticated}
+          component={() => <Record />}
         />
-        <Route
+        <PrivateRoute
           path="/edit"
-          render={() => {
-            return <p>Edit</p>;
-          }}
+          isAuthenticated={isAuthenticated}
+          component={() => <Edit />}
         />
-        <Route
+        <PrivateRoute
           path="/publish"
-          render={() => {
-            return <p>Publish</p>;
-          }}
+          isAuthenticated={isAuthenticated}
+          component={() => <Publish />}
         />
         <Route
           path="/callback"
@@ -81,8 +102,12 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
             return <Callback auth={this.state.auth} />;
           }}
         />
-
-        <Route render={() => <Redirect to="/record" />} />
+        <Route
+          path="/login"
+          render={() => {
+            return <Login auth={this.state.auth} />;
+          }}
+        />
       </Switch>
     );
 
@@ -91,3 +116,22 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
 }
 
 export default withRouter(Layout);
+
+interface ILoginProps {
+  auth: Auth;
+}
+
+/**
+ * Component to facilitate login redirects.
+ */
+class Login extends Component<ILoginProps> {
+  constructor(props: ILoginProps) {
+    super(props);
+
+    props.auth.login();
+  }
+
+  render() {
+    return <div />;
+  }
+}
