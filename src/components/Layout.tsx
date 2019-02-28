@@ -76,15 +76,6 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
     var api = new DataManager();
     api.accessToken = token;
     this.setState({ api: api });
-
-    var user = this.state.auth.getProfile();
-    if (user)
-      api.updateUserInfo({
-        userUID: user.user_id,
-        firstName: user.given_name,
-        lastName: user.family_name,
-        pictureUrl: user.picture
-      } as User);
   };
 
   render() {
