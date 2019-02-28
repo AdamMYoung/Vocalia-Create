@@ -151,6 +151,7 @@ export default class Auth {
   isAuthenticated = () => {
     // Check whether the current time is past the
     // access token's expiry time.
+
     let expiresAt = this.expiresAt as number;
     return new Date().getTime() < expiresAt;
   };

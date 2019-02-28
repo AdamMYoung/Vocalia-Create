@@ -38,7 +38,7 @@ function PrivateRoute({ component: Component, isAuthenticated, ...rest }: any) {
     <Route
       {...rest}
       render={props =>
-        setTimeout(() => isAuthenticated(), 1000) ? (
+        isAuthenticated() ? (
           <Component {...props} />
         ) : (
           <Redirect
