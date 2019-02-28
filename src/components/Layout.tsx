@@ -14,6 +14,7 @@ import Record from "./record/Record";
 import Publish from "./publish/Publish";
 import Editor from "./editor/Editor";
 import Social from "./social/Social";
+import { User } from "../utility/types";
 
 /**
  * State information for the application.
@@ -75,6 +76,15 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
     var api = new DataManager();
     api.accessToken = token;
     this.setState({ api: api });
+
+    var user = this.state.auth.getProfile();
+    if (user)
+      api.updateUserInfo({
+        userUID: user.user_id,
+        firstName: user.given_name,
+        lastName: user.family_name,
+        pictureUrl: user.picture
+      } as User);
   };
 
   render() {

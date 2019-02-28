@@ -1,11 +1,11 @@
-import auth0 from "auth0-js";
+import auth0, { Auth0UserProfile } from "auth0-js";
 import { RouteComponentProps } from "react-router";
-import DataManager from "../api/DataManager";
 
 export default class Auth {
   accessToken: string | null = null;
   idToken: string | null = null;
   expiresAt: number | null = null;
+  userProfile: Auth0UserProfile | null = null;
   tokenRenewalTimeout: NodeJS.Timeout | null = null;
   routeProps: RouteComponentProps;
   tokenUpdatedCallback: (token: string) => void;
@@ -30,13 +30,13 @@ export default class Auth {
     clientID: "uHe5eYe5imVEsBTnzcJciIHtj45N2px1",
     redirectUri: process.env.REACT_APP_AUTH_CALLBACK,
     responseType: "token id_token",
-    scope: "openid offline_access"
+    scope: "openid profile offline_access"
   });
 
   /**
    * Parses the JWT from the current URL.
    */
-  handleAuthentication = () => {
+  handleAuthentication = (): void => {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
@@ -52,21 +52,21 @@ export default class Auth {
   /**
    * Returns the stored access code.
    */
-  getAccessToken = () => {
+  getAccessToken = (): string | null => {
     return this.accessToken;
   };
 
   /**
    * Returns the stored ID token.
    */
-  getIdToken = () => {
+  getIdToken = (): string | null => {
     return this.idToken;
   };
 
   /**
    * Sets the session information from the decoded hash.
    */
-  setSession = (authResult: auth0.Auth0DecodedHash) => {
+  setSession = (authResult: auth0.Auth0DecodedHash): void => {
     // Set the time that the access token will expire at
     let expiresAt =
       (authResult.expiresIn as number) * 1000 + new Date().getTime();
@@ -84,7 +84,7 @@ export default class Auth {
   /**
    * Silently renews the session information from the Auth0 portal.
    */
-  renewSession = () => {
+  renewSession = (): void => {
     this.auth0.checkSession({}, (err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
@@ -102,7 +102,7 @@ export default class Auth {
   /**
    * Schedules a renewal for every 15 minutes to renew the access token.
    */
-  scheduleRenewal() {
+  scheduleRenewal(): void {
     let expiresAt = this.expiresAt;
     if (expiresAt != null) {
       const timeout = expiresAt - Date.now();
@@ -117,7 +117,7 @@ export default class Auth {
   /**
    * Clears the current signed in information.
    */
-  clearSignIn = () => {
+  clearSignIn = (): void => {
     // Remove tokens and expiry time
     this.accessToken = null;
     this.idToken = null;
@@ -133,7 +133,7 @@ export default class Auth {
   /**
    * Logs the user out locally and server side.
    */
-  logout = () => {
+  logout = (): void => {
     this.clearSignIn();
     this.auth0.logout({ returnTo: process.env.REACT_APP_AUTH_HOME });
   };
@@ -141,18 +141,33 @@ export default class Auth {
   /**
    * Logs the user in, starting the Auth0 flow.
    */
-  login = () => {
+  login = (): void => {
     this.auth0.authorize();
   };
 
   /**
    * Checks if the current user is authenticated.
    */
-  isAuthenticated = () => {
+  isAuthenticated = (): boolean => {
     // Check whether the current time is past the
     // access token's expiry time.
 
     let expiresAt = this.expiresAt as number;
     return new Date().getTime() < expiresAt;
+  };
+
+  getProfile = (): Auth0UserProfile | null => {
+    if (!this.userProfile) {
+      if (!this.accessToken) {
+        console.log("Access Token must exist to fetch profile");
+      }
+
+      this.auth0.client.userInfo(this.accessToken as string, (err, profile) => {
+        if (profile) {
+          this.userProfile = profile;
+        }
+      });
+    }
+    return this.userProfile;
   };
 }
