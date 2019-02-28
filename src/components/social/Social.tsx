@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, AppBar } from "@material-ui/core";
 import Feed from "./Feed";
 import Profile from "./Profile";
 
@@ -40,17 +40,19 @@ export default class Social extends Component<ISocialProps, ISocialState> {
 
     return (
       <div>
-        <Tabs
-          value={this.state.selectedTab}
-          indicatorColor="primary"
-          textColor="primary"
-          centered={!isMobile}
-          onChange={this.handleChange}
-          variant={isMobile ? "fullWidth" : "standard"}
-        >
-          <Tab label="Feed" />
-          <Tab label="Profile" />
-        </Tabs>
+        <AppBar position="static" style={{ background: "#fff" }}>
+          <Tabs
+            value={this.state.selectedTab}
+            indicatorColor="primary"
+            textColor="primary"
+            centered={!isMobile}
+            onChange={this.handleChange}
+            variant={isMobile ? "fullWidth" : "standard"}
+          >
+            <Tab label="Feed" />
+            <Tab label="Profile" />
+          </Tabs>
+        </AppBar>
         {currentTab}
       </div>
     );
