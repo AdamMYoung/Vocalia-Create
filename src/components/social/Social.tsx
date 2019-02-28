@@ -45,9 +45,8 @@ export default class Social extends Component<ISocialProps, ISocialState> {
             value={this.state.selectedTab}
             indicatorColor="primary"
             textColor="primary"
-            centered={!isMobile}
             onChange={this.handleChange}
-            variant={isMobile ? "fullWidth" : "standard"}
+            variant="fullWidth"
           >
             <Tab label="Feed" />
             <Tab label="Profile" />
