@@ -1,100 +1,52 @@
 import React, { Component } from "react";
-import "./App.css";
-import WebRTC from "./stream/WebRTC";
-import { UserStream } from "./types";
+import { isMobile } from "./utility/DeviceUtils";
+import Layout from "./components/Layout";
 
-interface IProps {}
-
-interface IState {
-  groupId: string;
-  userName: string;
-  group: string;
-  webRtcClient: WebRTC;
-  streams: { [id: string]: UserStream };
+/**
+ * State information for the application
+ */
+interface IAppState {
+  isMobile: boolean;
 }
 
-class App extends Component<IProps, IState> {
-  constructor(props: IProps) {
+/**
+ * Required properties for the application.
+ */
+interface IAppProps { }
+
+class App extends Component<IAppProps, IAppState> {
+  constructor(props: IAppProps) {
     super(props);
 
-    var rtcClient = new WebRTC();
-    rtcClient.onTrackAdded = this.onAddSource;
-    rtcClient.onTrackRemoved = this.onRemoveSource;
-
     this.state = {
-      groupId: "",
-      userName: "",
-      group: "",
-      webRtcClient: rtcClient,
-      streams: {}
+      isMobile: false
     };
   }
 
   /**
-   * Connects the user to the specified group client.
-   */
-  connectToClient = () => {
-    this.setState({ group: this.state.groupId });
-    this.state.webRtcClient.connect(this.state.userName, this.state.groupId);
-  };
+  * Called after the component has mounted, and sets a resize event listener for state updates.
+  */
+  componentDidMount() {
+    this.updatePredicate();
+    window.addEventListener("resize", this.updatePredicate);
+  }
 
   /**
-   * Called when a new media source has been added.
+   * Called when the component is unloaded, and removes a resize event listener for state updates.
    */
-  onAddSource = (stream: UserStream) => {
-    var streams = this.state.streams;
-    streams[stream.id] = stream;
-    this.setState({ streams: streams });
-  };
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updatePredicate);
+  }
 
   /**
-   * Called when a media source has been removed.
+   * Checks the screen state of the current device for UI management.
    */
-  onRemoveSource = (peerId: string) => {
-    var streams = this.state.streams;
-    delete streams[peerId];
-    this.setState({ streams: streams });
+  updatePredicate = () => {
+    this.setState({ isMobile: isMobile() });
   };
 
   render() {
-    const { groupId, group, streams, userName } = this.state;
-
-    return (
-      <div className="App">
-        <p>Username</p>
-        <input
-          type="text"
-          value={userName}
-          onChange={event => this.setState({ userName: event.target.value })}
-        />
-        <p>Group</p>
-        <input
-          type="text"
-          value={groupId}
-          onChange={event => this.setState({ groupId: event.target.value })}
-        />
-        <button
-          onClick={() => this.connectToClient()}
-          disabled={groupId.length == 0}
-        >
-          Connect
-        </button>
-
-        <p>Current Group: {group}</p>
-        {Object.values(streams).map(stream => (
-          <div key={stream.id}>
-            <audio
-              ref={audio => {
-                if (audio) audio.srcObject = stream.stream;
-              }}
-              controls
-              autoPlay
-            />
-            <p>{stream.tag}</p>
-          </div>
-        ))}
-      </div>
-    );
+    return <Layout {...this.state} />;
   }
 }
 
