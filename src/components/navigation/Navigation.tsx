@@ -74,7 +74,7 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
               noWrap
               style={{ flexGrow: 1 }}
             >
-              Vocalia Create
+              Vocalia
             </Typography>
             {isAuthenticated() && (
               <Button onClick={() => logout()} color="inherit">
@@ -94,6 +94,7 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
           <BottomNavigation
             value={selectedNavItem}
             onChange={this.handleChange}
+            showLabels={isMobile ? false : true}
             className={classes.nav}
           >
             <LinkContainer to="/social">
