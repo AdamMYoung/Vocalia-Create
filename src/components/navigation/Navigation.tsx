@@ -12,7 +12,7 @@ import {
   Button
 } from "@material-ui/core";
 import { LinkContainer } from "react-router-bootstrap";
-import { RecordVoiceOver, Edit, Public } from "@material-ui/icons";
+import { Mic, Edit, Public, Person } from "@material-ui/icons";
 import Auth from "../../auth/Auth";
 
 /**
@@ -94,15 +94,22 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
           <BottomNavigation
             value={selectedNavItem}
             onChange={this.handleChange}
-            showLabels
             className={classes.nav}
           >
+            <LinkContainer to="/social">
+              <BottomNavigationAction
+                className={classes.navItem}
+                classes={{ selected: classes.selected }}
+                label="Social"
+                icon={<Person />}
+              />
+            </LinkContainer>
             <LinkContainer to="/record">
               <BottomNavigationAction
                 className={classes.navItem}
                 classes={{ selected: classes.selected }}
                 label="Record"
-                icon={<RecordVoiceOver />}
+                icon={<Mic />}
               />
             </LinkContainer>
             <LinkContainer to="/edit">

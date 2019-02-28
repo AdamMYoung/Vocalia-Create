@@ -13,6 +13,7 @@ import Navigation from "./navigation/Navigation";
 import Record from "./record/Record";
 import Publish from "./publish/Publish";
 import Editor from "./editor/Editor";
+import Social from "./social/Social";
 
 /**
  * State information for the application.
@@ -86,6 +87,11 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
     const RoutingContents = (
       <Switch>
         <PrivateRoute
+          path="/social"
+          isAuthenticated={auth.isAuthenticated}
+          component={() => <Social />}
+        />
+        <PrivateRoute
           path="/record"
           isAuthenticated={auth.isAuthenticated}
           component={() => <Record />}
@@ -113,7 +119,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
           }}
         />
 
-        <Route render={() => <Redirect to="/record" />} />
+        <Route render={() => <Redirect to="/social" />} />
       </Switch>
     );
 
