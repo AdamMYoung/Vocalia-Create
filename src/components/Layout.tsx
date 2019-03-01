@@ -80,7 +80,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
 
   render() {
     const { isMobile } = this.props;
-    const { auth } = this.state;
+    const { auth, api } = this.state;
 
     /**
      * Elements that can be routed to.
@@ -90,7 +90,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
         <PrivateRoute
           path="/social"
           isAuthenticated={auth.isAuthenticated}
-          component={() => <Social isMobile={isMobile} />}
+          component={() => <Social api={api} isMobile={isMobile} />}
         />
         <PrivateRoute
           path="/record"

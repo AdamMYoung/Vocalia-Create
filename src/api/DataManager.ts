@@ -1,6 +1,6 @@
 import IngestApiRepository from "./IngestApiRepository";
 import SocialApiRepository from "./SocialApiRepository";
-import { User } from "../utility/types";
+import { User, Group, Podcast, Session } from "../utility/types";
 
 export default class DataManager {
   private ingest: IngestApiRepository = new IngestApiRepository();
@@ -45,26 +45,31 @@ export default class DataManager {
   /**
    * Gets the groups belonging to the current signed-in user.
    */
-  public async getUserGroups() {
+  public async getUserGroups(): Promise<Group[] | null> {
     if (this.accessToken)
       return await this.ingest.getUserGroups(this.accessToken);
+    return null;
   }
 
   /**
    * Gets all podcasts belonging to the specified group UID.
    * @param groupUid UID of the group.
    */
-  public async getGroupPodcasts(groupUid: string) {
+  public async getGroupPodcasts(groupUid: string): Promise<Podcast[] | null> {
     if (this.accessToken)
       return await this.ingest.getGroupPodcasts(this.accessToken, groupUid);
+    return null;
   }
 
   /**
    * Gets all sessions belonging to the specified podcast UID.
    * @param podcastUid UID of the podcast.
    */
-  public async getPodcastSessions(podcastUid: string) {
+  public async getPodcastSessions(
+    podcastUid: string
+  ): Promise<Session[] | null> {
     if (this.accessToken)
       return await this.ingest.getPodcastSessions(this.accessToken, podcastUid);
+    return null;
   }
 }
