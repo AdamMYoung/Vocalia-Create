@@ -1,8 +1,29 @@
-export interface Group {}
+export interface Group {
+  uid: string;
+  name: string;
+  description: string;
+}
 
-export interface Podcast {}
+export interface Podcast {
+  uid: string;
+  name: string;
+}
 
-export interface Session {}
+export interface Session {
+  uid: string;
+  date: Date;
+  inProgress: boolean;
+}
+
+export interface Listen {
+  userUID: string;
+  userName: string;
+  rssUrl: string;
+  episodeUrl: string;
+  episodeName: string;
+  date: Date;
+  isCompleted: boolean;
+}
 
 export interface User {
   userUID: string;
@@ -10,4 +31,7 @@ export interface User {
   firstName: string;
   lastName: string;
   pictureUrl: string;
+  listens: Listen[];
+  following: User[];
+  followers: User[];
 }
