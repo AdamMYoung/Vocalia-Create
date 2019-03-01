@@ -3,7 +3,7 @@ import { User } from "../../utility/types";
 import DataManager from "../../api/DataManager";
 
 interface ISocialState {
-  visibleUser: User;
+  visibleUser: User | null;
 }
 
 interface ISocialProps {
@@ -15,8 +15,14 @@ export default class Social extends Component<ISocialProps, ISocialState> {
   constructor(props: ISocialProps) {
     super(props);
 
-    this.userSelected(null);
+    this.state = {
+      visibleUser: null
+    };
   }
+
+  componentDidMount = () => {
+    this.userSelected(null);
+  };
 
   userSelected = async (userId: string | null) => {
     const { api } = this.props;
@@ -24,6 +30,7 @@ export default class Social extends Component<ISocialProps, ISocialState> {
       ? await api.getUserInfo(userId)
       : await api.getSignedInUserInfo();
 
+    console.log(user);
     if (user) this.setState({ visibleUser: user });
   };
 
@@ -31,10 +38,6 @@ export default class Social extends Component<ISocialProps, ISocialState> {
     const { isMobile } = this.props;
     const { visibleUser } = this.state;
 
-    return (
-      <div>
-        <p>{visibleUser.firstName}</p>
-      </div>
-    );
+    return <div>{visibleUser && <p>{visibleUser.firstName}</p>}</div>;
   }
 }
