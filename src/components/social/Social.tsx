@@ -18,19 +18,19 @@ export default class Social extends Component<ISocialProps, ISocialState> {
     this.state = {
       visibleUser: null
     };
+
+    this.userSelected(null);
   }
 
-  componentDidMount = () => {
-    this.userSelected(null);
-  };
-
+  /**
+   * Loads the specified user's details from the API.
+   */
   userSelected = async (userId: string | null) => {
     const { api } = this.props;
-    var user = userId
+    let user = userId
       ? await api.getUserInfo(userId)
       : await api.getSignedInUserInfo();
 
-    console.log(user);
     if (user) this.setState({ visibleUser: user });
   };
 

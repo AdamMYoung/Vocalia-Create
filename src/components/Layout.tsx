@@ -14,7 +14,6 @@ import Record from "./record/Record";
 import Publish from "./publish/Publish";
 import Editor from "./editor/Editor";
 import Social from "./social/Social";
-import { User } from "../utility/types";
 
 /**
  * State information for the application.
@@ -45,8 +44,7 @@ function PrivateRoute({ component: Component, isAuthenticated, ...rest }: any) {
         ) : (
           <Redirect
             to={{
-              pathname: "/login",
-              state: { from: props.location }
+              pathname: "/login"
             }}
           />
         )
@@ -119,8 +117,6 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
             return <Login auth={this.state.auth} />;
           }}
         />
-
-        <Route render={() => <Redirect to="/social" />} />
       </Switch>
     );
 
@@ -145,7 +141,7 @@ class Login extends Component<ILoginProps> {
   constructor(props: ILoginProps) {
     super(props);
 
-    console.log(props.auth.isAuthenticated());
+    console.log("Loading login");
     props.auth.login();
   }
 
