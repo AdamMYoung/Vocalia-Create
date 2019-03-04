@@ -32,6 +32,10 @@ export default class Social extends Component<ISocialProps, ISocialState> {
    */
   userSelected = async (userId: string | null) => {
     const { api } = this.props;
+    const { visibleUser } = this.state;
+
+    if (visibleUser && visibleUser.userUID == userId) return;
+
     if (api.accessToken) {
       let user = userId
         ? await api.getUserInfo(userId)
@@ -47,14 +51,17 @@ export default class Social extends Component<ISocialProps, ISocialState> {
     return (
       <div>
         {visibleUser && (
-          <Grid container spacing={16}>
+          <Grid container>
             {/* User Info */}
             <Grid item sm={3} xs={12}>
               <CurrentUser user={visibleUser} />
             </Grid>
             {/* Feed */}
             <Grid item sm={6} xs={12}>
-              <Feed feed={visibleUser.listens} />
+              <Feed
+                feed={visibleUser.listens}
+                userSelected={this.userSelected}
+              />
             </Grid>
             {/* Spacing for symmetry */}
             <Grid item sm={3} xs={12} />

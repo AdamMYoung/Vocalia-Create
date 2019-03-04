@@ -11,7 +11,7 @@ export default class CurrentUser extends Component<ICurrentUserProps> {
     const { user } = this.props;
 
     return (
-      <Paper style={{ margin: 12 }}>
+      <Paper style={{ margin: 16 }}>
         <Grid container justify="center" alignItems="center">
           <Avatar
             style={{ margin: 10, width: 60, height: 60 }}
@@ -19,7 +19,7 @@ export default class CurrentUser extends Component<ICurrentUserProps> {
             src={user.pictureUrl}
           />
           <Typography component="div">
-            <p style={{ fontSize: 20 }}>
+            <p style={{ fontSize: 18 }}>
               {user.firstName + " " + user.lastName}
             </p>
           </Typography>
