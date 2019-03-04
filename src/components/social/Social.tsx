@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { User } from "../../utility/types";
 import DataManager from "../../api/DataManager";
+import { Grid, Paper, Avatar, Typography } from "@material-ui/core";
+import CurrentUser from "./CurrentUser";
+import Feed from "./Feed";
 
 interface ISocialState {
   visibleUser: User | null;
@@ -18,26 +21,46 @@ export default class Social extends Component<ISocialProps, ISocialState> {
     this.state = {
       visibleUser: null
     };
-
-    this.userSelected(null);
   }
+
+  componentDidMount = () => {
+    this.userSelected(null);
+  };
 
   /**
    * Loads the specified user's details from the API.
    */
   userSelected = async (userId: string | null) => {
     const { api } = this.props;
-    let user = userId
-      ? await api.getUserInfo(userId)
-      : await api.getSignedInUserInfo();
+    if (api.accessToken) {
+      let user = userId
+        ? await api.getUserInfo(userId)
+        : await api.getSignedInUserInfo();
 
-    if (user) this.setState({ visibleUser: user });
+      if (user) this.setState({ visibleUser: user });
+    }
   };
 
   render() {
-    const { isMobile } = this.props;
     const { visibleUser } = this.state;
 
-    return <div>{visibleUser && <p>{visibleUser.firstName}</p>}</div>;
+    return (
+      <div>
+        {visibleUser && (
+          <Grid container spacing={16}>
+            {/* User Info */}
+            <Grid item sm={3} xs={12}>
+              <CurrentUser user={visibleUser} />
+            </Grid>
+            {/* Feed */}
+            <Grid item sm={6} xs={12}>
+              <Feed feed={visibleUser.listens} />
+            </Grid>
+            {/* Spacing for symmetry */}
+            <Grid item sm={3} xs={12} />
+          </Grid>
+        )}
+      </div>
+    );
   }
 }

@@ -1,5 +1,6 @@
 import auth0, { Auth0UserProfile } from "auth0-js";
 import { RouteComponentProps } from "react-router";
+import sleep from "../utility/SysUtils";
 
 export default class Auth {
   accessToken: string | null = null;
@@ -154,20 +155,5 @@ export default class Auth {
 
     let expiresAt = this.expiresAt as number;
     return new Date().getTime() < expiresAt;
-  };
-
-  getProfile = (): Auth0UserProfile | null => {
-    if (!this.userProfile) {
-      if (!this.accessToken) {
-        console.log("Access Token must exist to fetch profile");
-      }
-
-      this.auth0.client.userInfo(this.accessToken as string, (err, profile) => {
-        if (profile) {
-          this.userProfile = profile;
-        }
-      });
-    }
-    return this.userProfile;
   };
 }

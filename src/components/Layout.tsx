@@ -14,6 +14,7 @@ import Record from "./record/Record";
 import Publish from "./publish/Publish";
 import Editor from "./editor/Editor";
 import Social from "./social/Social";
+import sleep from "../utility/SysUtils";
 
 /**
  * State information for the application.
@@ -31,8 +32,8 @@ interface ILayoutProps extends RouteComponentProps {
 }
 
 /**
- * Redirects the user to the login screen if not authenticated, waiting 1 second before redirecting to
- * ensure auth credentials have been fetched first.
+ * Redirects the user to the login screen if not authenticated, otherwise allows access to the
+ * provided component. Works with components with additional props, but instantiates it twice.
  */
 function PrivateRoute({ component: Component, isAuthenticated, ...rest }: any) {
   return (
@@ -85,10 +86,15 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
      */
     const RoutingContents = (
       <Switch>
-        <PrivateRoute
+        <Route
           path="/social"
-          isAuthenticated={auth.isAuthenticated}
-          component={() => <Social api={api} isMobile={isMobile} />}
+          render={() =>
+            auth.isAuthenticated() ? (
+              <Social api={api} isMobile={isMobile} />
+            ) : (
+              <Login auth={auth} />
+            )
+          }
         />
         <PrivateRoute
           path="/record"
@@ -122,7 +128,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
 
     return (
       <Navigation isMobile={isMobile} auth={auth}>
-        {RoutingContents}
+        {auth.accessToken && RoutingContents}
       </Navigation>
     );
   }
@@ -141,7 +147,7 @@ class Login extends Component<ILoginProps> {
   constructor(props: ILoginProps) {
     super(props);
 
-    console.log("Loading login");
+    console.log("Redirecting to login");
     props.auth.login();
   }
 
