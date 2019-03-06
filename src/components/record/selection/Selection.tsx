@@ -171,6 +171,7 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
         <div style={{ display: "flex", flexWrap: "nowrap", overflowX: "auto" }}>
           {sessions.map(s => (
             <RecordEntry
+              key={s.uid}
               name={new Date(s.date).toLocaleString()}
               uid={s.uid}
               onClick={() => this.props.history.push("/record/" + s.uid)}
