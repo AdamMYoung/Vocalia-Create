@@ -38,7 +38,7 @@ export default class Social extends Component<ISocialProps, ISocialState> {
 
     if (api.accessToken) {
       let user = userId
-        ? await api.getUserInfo(userId)
+        ? await api.getUserDetailInfo(userId)
         : await api.getSignedInUserInfo();
 
       if (user) this.setState({ visibleUser: user });

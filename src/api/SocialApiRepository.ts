@@ -1,7 +1,8 @@
 import { User, Listen } from "../utility/types";
 
 const API = process.env.REACT_APP_SOCIAL_API_URL;
-const USER = "user";
+const USER_DETAIL = "user/detail";
+const USER_OVERVIEW = "user/overview";
 const FEED = "feed";
 const FOLLOWERS = "followers";
 
@@ -20,8 +21,18 @@ export default class SocialApiRepository {
    * Gets the specified user's timeline.
    * @param userId User to fetch.
    */
-  public async getUserInfo(userId: string): Promise<User | null> {
-    return await fetch(API + USER + "?userId=" + userId)
+  public async getUserDetailInfo(userId: string): Promise<User | null> {
+    return await fetch(API + USER_DETAIL + "?userId=" + userId)
+      .then(response => response.json())
+      .then(data => data as User);
+  }
+
+  /**
+   * Gets the specified user's timeline.
+   * @param userId User to fetch.
+   */
+  public async getUserOverviewInfo(userId: string): Promise<User | null> {
+    return await fetch(API + USER_OVERVIEW + "?userId=" + userId)
       .then(response => response.json())
       .then(data => data as User);
   }

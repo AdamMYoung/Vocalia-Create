@@ -20,8 +20,17 @@ export default class DataManager {
    * Gets the specified user's timeline.
    * @param userId User to fetch.
    */
-  public async getUserInfo(userId: string): Promise<User | null> {
-    if (this.accessToken) return await this.social.getUserInfo(userId);
+  public async getUserDetailInfo(userId: string): Promise<User | null> {
+    if (this.accessToken) return await this.social.getUserDetailInfo(userId);
+    return null;
+  }
+
+  /**
+   * Gets the specified user's timeline.
+   * @param userId User to fetch.
+   */
+  public async getUserOverviewInfo(userId: string): Promise<User | null> {
+    if (this.accessToken) return await this.social.getUserOverviewInfo(userId);
     return null;
   }
 
@@ -70,6 +79,66 @@ export default class DataManager {
   ): Promise<Session[] | null> {
     if (this.accessToken)
       return await this.ingest.getPodcastSessions(this.accessToken, podcastUid);
+    return null;
+  }
+
+  /**
+   * Adds a podcast to the specified group.
+   * @param name Name of the group to add.
+   * @param description Description of the group.
+   */
+  public async createNewGroup(name: string, description: string) {
+    if (this.accessToken)
+      await this.ingest.createUserGroup(this.accessToken, name, description);
+  }
+
+  /**
+   * Adds a podcast to the specified group.
+   * @param groupId UID of the group to add to.
+   * @param name Name of the podcast to add.
+   */
+  public async createGroupPodcast(groupId: string, name: string) {
+    if (this.accessToken)
+      await this.ingest.createGroupPodcast(this.accessToken, groupId, name);
+  }
+
+  /**
+   * Creates a new session for the specified podcast.
+   * @param podcastUid UID of the podcast.
+   */
+  public async createPodcastSession(podcastId: string) {
+    if (this.accessToken)
+      await this.ingest.createPodcastSession(this.accessToken, podcastId);
+  }
+
+  /**
+   * Creates an invite link to add others to a group.
+   * @param groupId Group to get invite link for.
+   * @param expiry Date when the link should expire (optional).
+   */
+  public async createInviteLink(
+    groupUID: string,
+    expiry: Date
+  ): Promise<string | null> {
+    if (this.accessToken)
+      return await this.ingest.GetInviteLink(
+        this.accessToken,
+        groupUID,
+        expiry
+      );
+
+    return null;
+  }
+
+  /**
+   * Creates an invite link to add others to a group.
+   * @param groupId Group to get invite link for.
+   * @param expiry Date when the link should expire (optional).
+   */
+  public async acceptInviteLink(groupUID: string) {
+    if (this.accessToken)
+      await this.ingest.AcceptInviteLink(this.accessToken, groupUID);
+
     return null;
   }
 }
