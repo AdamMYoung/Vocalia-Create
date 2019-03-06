@@ -11,7 +11,7 @@ export default class CurrentUser extends Component<ICurrentUserProps> {
     const { user } = this.props;
 
     return (
-      <Paper style={{ margin: 16 }}>
+      <Paper>
         <Grid container justify="center" alignItems="center">
           <Avatar
             style={{ margin: 10, width: 60, height: 60 }}
@@ -29,19 +29,24 @@ export default class CurrentUser extends Component<ICurrentUserProps> {
           <Typography component="div">
             {user.followers.length > 0 && (
               <div>
-                <p style={{ fontSize: 16 }}>Followers</p>}
-                {user.followers.map(f => (
-                  <Avatar alt={f.firstName} src={f.pictureUrl} />
-                ))}
+                <p style={{ fontSize: 16 }}>Followers</p>
+                <div style={{ overflow: "auto", whiteSpace: "nowrap" }}>
+                  }
+                  {user.followers.map(f => (
+                    <Avatar alt={f.firstName} src={f.pictureUrl} />
+                  ))}
+                </div>
               </div>
             )}
 
             {user.following.length > 0 && (
               <div>
                 <p style={{ fontSize: 16 }}>Following</p>
-                {user.following.map(f => (
-                  <Avatar alt={f.firstName} src={f.pictureUrl} />
-                ))}
+                <div style={{ overflow: "auto", whiteSpace: "nowrap" }}>
+                  {user.following.map(f => (
+                    <Avatar alt={f.firstName} src={f.pictureUrl} />
+                  ))}
+                </div>
               </div>
             )}
           </Typography>

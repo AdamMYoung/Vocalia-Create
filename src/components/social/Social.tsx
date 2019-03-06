@@ -21,11 +21,9 @@ export default class Social extends Component<ISocialProps, ISocialState> {
     this.state = {
       visibleUser: null
     };
-  }
 
-  componentDidMount = () => {
     this.userSelected(null);
-  };
+  }
 
   /**
    * Loads the specified user's details from the API.
@@ -33,8 +31,6 @@ export default class Social extends Component<ISocialProps, ISocialState> {
   userSelected = async (userId: string | null) => {
     const { api } = this.props;
     const { visibleUser } = this.state;
-
-    if (visibleUser && visibleUser.userUID == userId) return;
 
     if (api.accessToken) {
       let user = userId

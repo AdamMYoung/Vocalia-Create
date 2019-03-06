@@ -84,7 +84,7 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
           </Toolbar>
         </AppBar>
         {/* Content */}
-        {this.props.children}
+        <div style={{ margin: 16 }}>{this.props.children}</div>
         {/* Bottom Bar */}
         <AppBar
           position="fixed"
@@ -105,7 +105,7 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
                 icon={<People />}
               />
             </LinkContainer>
-            <LinkContainer to="/record">
+            <LinkContainer to="/selection">
               <BottomNavigationAction
                 className={classes.navItem}
                 classes={{ selected: classes.selected }}

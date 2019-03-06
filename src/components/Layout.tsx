@@ -10,11 +10,10 @@ import {
   Switch
 } from "react-router";
 import Navigation from "./navigation/Navigation";
-import Record from "./record/Record";
 import Publish from "./publish/Publish";
 import Editor from "./editor/Editor";
 import Social from "./social/Social";
-import sleep from "../utility/SysUtils";
+import Selection from "./record/selection/Selection";
 
 /**
  * State information for the application.
@@ -96,11 +95,18 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
             )
           }
         />
-        <PrivateRoute
-          path="/record"
-          isAuthenticated={auth.isAuthenticated}
-          component={() => <Record />}
+
+        <Route
+          path="/selection"
+          render={() =>
+            auth.isAuthenticated() ? (
+              <Selection api={api} />
+            ) : (
+              <Login auth={auth} />
+            )
+          }
         />
+
         <PrivateRoute
           path="/edit"
           isAuthenticated={auth.isAuthenticated}
@@ -111,6 +117,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
           isAuthenticated={auth.isAuthenticated}
           component={() => <Publish />}
         />
+
         <Route
           path="/callback"
           render={() => {
@@ -128,7 +135,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
 
     return (
       <Navigation isMobile={isMobile} auth={auth}>
-        {auth.accessToken && RoutingContents}
+        {RoutingContents}
       </Navigation>
     );
   }

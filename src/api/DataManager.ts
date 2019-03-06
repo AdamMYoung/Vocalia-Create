@@ -121,7 +121,7 @@ export default class DataManager {
     expiry: Date
   ): Promise<string | null> {
     if (this.accessToken)
-      return await this.ingest.GetInviteLink(
+      return await this.ingest.getInviteLink(
         this.accessToken,
         groupUID,
         expiry
@@ -137,7 +137,7 @@ export default class DataManager {
    */
   public async acceptInviteLink(groupUID: string) {
     if (this.accessToken)
-      await this.ingest.AcceptInviteLink(this.accessToken, groupUID);
+      await this.ingest.acceptInviteLink(this.accessToken, groupUID);
 
     return null;
   }

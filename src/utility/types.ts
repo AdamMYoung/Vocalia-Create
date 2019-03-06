@@ -12,7 +12,6 @@ export interface Podcast {
 export interface Session {
   uid: string;
   date: Date;
-  inProgress: boolean;
 }
 
 export interface Listen {
