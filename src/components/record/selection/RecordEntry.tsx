@@ -13,6 +13,7 @@ interface IEntryProps {
   uid: string;
   description: string | null;
   image: string | null;
+  isSelected: boolean;
   onClick: (uid: string) => void;
 }
 
@@ -30,12 +31,16 @@ export default class RecordEntry extends Component<IEntryProps, IEntryState> {
   }
   render() {
     const { isLoaded } = this.state;
-    const { name, description, image, uid, onClick } = this.props;
+    const { name, description, image, uid, onClick, isSelected } = this.props;
 
     return (
       <Card
         onClick={() => onClick(uid)}
-        style={{ margin: 4, flex: "0 0 auto" }}
+        style={{
+          margin: 4,
+          flex: "0 0 auto",
+          background: isSelected ? "#ebebeb" : "#ffffff"
+        }}
       >
         <CardActionArea style={{ width: 180, height: 150 }}>
           {image && (

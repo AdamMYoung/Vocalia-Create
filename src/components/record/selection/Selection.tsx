@@ -116,9 +116,10 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
               key={g.uid}
               name={g.name}
               uid={g.uid}
-              onClick={this.onGroupSelected}
               description={g.description}
               image={null}
+              isSelected={this.state.currentGroupUid == g.uid ? true : false}
+              onClick={this.onGroupSelected}
             />
           ))}
         </div>
@@ -145,9 +146,10 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
               key={p.uid}
               name={p.name}
               uid={p.uid}
-              onClick={this.onPodcastSelected}
               description={null}
               image={null}
+              isSelected={this.state.currentPodcastUid == p.uid ? true : false}
+              onClick={this.onPodcastSelected}
             />
           ))}
         </div>
@@ -174,9 +176,10 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
               key={s.uid}
               name={new Date(s.date).toLocaleString()}
               uid={s.uid}
-              onClick={() => this.props.history.push("/record/" + s.uid)}
               description={null}
               image={null}
+              isSelected={false}
+              onClick={() => this.props.history.push("/record/" + s.uid)}
             />
           ))}
         </div>
