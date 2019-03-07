@@ -12,6 +12,7 @@ interface IChatProps {
 
 interface IChatState {
   webRTC: WebRTC;
+  currentUser: User | null;
   userStreams: { [id: string]: UserStream };
   userInfo: { [id: string]: User };
 }
@@ -26,17 +27,27 @@ export default class Chat extends Component<IChatProps, IChatState> {
     rtc.onTrackAdded = this.onTrackAdded;
     rtc.onTrackRemoved = this.onTrackRemoved;
 
-    if (sessionId)
-      api.getSignedInUserInfo().then(user => {
-        if (user && sessionId) rtc.connect(user.userUID, sessionId);
-      });
+    api.getSignedInUserInfo().then(user => {
+      this.setState({ currentUser: user });
+      if (user && sessionId) rtc.connect(user.userUID, sessionId);
+    });
 
     this.state = {
       webRTC: rtc,
+      currentUser: null,
       userStreams: {},
       userInfo: {}
     };
   }
+
+  componentWillUpdate = (nextProps: IChatProps) => {
+    const { webRTC, currentUser } = this.state;
+
+    if (currentUser && nextProps.sessionId) {
+      webRTC.disconnectFromPeers();
+      webRTC.connect(currentUser.userUID, nextProps.sessionId);
+    }
+  };
 
   /**
    * Called when a track has been added.

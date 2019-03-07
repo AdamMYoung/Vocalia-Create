@@ -11,7 +11,6 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 interface ISelectionProps extends RouteComponentProps {
   api: DataManager;
   onSessionSelected: () => void;
-  onPodcastSelected: (podcastName: string) => void;
 }
 
 interface ISelectionState {
@@ -172,7 +171,6 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
               onClick={() => {
                 this.onPodcastSelected(p.uid);
                 this.setState({ currentPodcastName: p.name });
-                this.props.onPodcastSelected(p.name);
               }}
             />
           ))}

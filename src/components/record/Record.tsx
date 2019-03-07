@@ -25,7 +25,6 @@ interface IRecordProps {
 interface IRecordState {
   dialogOpen: boolean;
   selectedSession: string | null;
-  selectedPodcastName: string;
 }
 
 export default class Record extends Component<IRecordProps, IRecordState> {
@@ -36,23 +35,23 @@ export default class Record extends Component<IRecordProps, IRecordState> {
 
     this.state = {
       dialogOpen: false,
-      selectedSession: sessionId,
-      selectedPodcastName:
-        podcastName != null ? podcastName : "Select a Podcast"
+      selectedSession: sessionId
     };
   }
 
+  componentWillReceiveProps = (props: IRecordProps) => {
+    if (this.props.sessionId != props.sessionId)
+      this.setState({ selectedSession: props.sessionId });
+  };
+
   render() {
-    const { api, isMobile } = this.props;
-    const { selectedSession, selectedPodcastName } = this.state;
+    const { api, isMobile, podcastName } = this.props;
+    const { selectedSession } = this.state;
 
     const SelectionItem = (
       <Selection
         api={api}
         onSessionSelected={() => this.setState({ dialogOpen: false })}
-        onPodcastSelected={(podcastName: string) =>
-          this.setState({ selectedPodcastName: podcastName })
-        }
       />
     );
 
@@ -86,7 +85,7 @@ export default class Record extends Component<IRecordProps, IRecordState> {
                 noWrap
                 style={{ flexGrow: 1 }}
               >
-                {selectedPodcastName}
+                {podcastName}
               </Typography>
               {isMobile && (
                 <Button onClick={() => this.setState({ dialogOpen: true })}>
