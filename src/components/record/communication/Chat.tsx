@@ -40,15 +40,6 @@ export default class Chat extends Component<IChatProps, IChatState> {
     };
   }
 
-  componentWillUpdate = (nextProps: IChatProps) => {
-    const { webRTC, currentUser } = this.state;
-
-    if (currentUser && nextProps.sessionId) {
-      webRTC.disconnectFromPeers();
-      webRTC.connect(currentUser.userUID, nextProps.sessionId);
-    }
-  };
-
   /**
    * Called when a track has been added.
    */
