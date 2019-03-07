@@ -99,15 +99,7 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
             showLabels={isMobile ? false : true}
             className={classes.nav}
           >
-            <LinkContainer to="/social">
-              <BottomNavigationAction
-                className={classes.navItem}
-                classes={{ selected: classes.selected }}
-                label="Social"
-                icon={<People />}
-              />
-            </LinkContainer>
-            <LinkContainer to="/selection">
+            <LinkContainer to="/record">
               <BottomNavigationAction
                 className={classes.navItem}
                 classes={{ selected: classes.selected }}

@@ -79,7 +79,8 @@ export default class Auth {
     this.scheduleRenewal();
 
     // navigate to the home route
-    this.routeProps.history.replace("/social");
+    var path = localStorage.getItem("path");
+    this.routeProps.history.replace(path != null ? path : "/record");
   };
 
   /**

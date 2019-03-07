@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import DataManager from "../../../api/DataManager";
 import { Podcast, Group, Session } from "../../../utility/types";
 import RecordEntry from "./RecordEntry";
-import { Typography, Button } from "@material-ui/core";
-import { LinkContainer } from "react-router-bootstrap";
+import { Typography, Button, Toolbar, Divider } from "@material-ui/core";
 import PodcastDialog from "./PodcastDialog";
 import GroupDialog from "./GroupDialog";
 import SessionDialog from "./SessionDialog";
@@ -59,7 +58,12 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
     const { api } = this.props;
     var podcasts = await api.getGroupPodcasts(uid);
 
-    if (podcasts) this.setState({ podcasts: podcasts, currentGroupUid: uid });
+    if (podcasts)
+      this.setState({
+        podcasts: podcasts,
+        currentGroupUid: uid,
+        currentPodcastUid: ""
+      });
   };
 
   /**
@@ -101,15 +105,19 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
      */
     const Groups = (
       <div>
-        <Typography component="div">
-          <h1 style={{ display: "inline-block" }}>Groups</h1>
-          <Button
-            style={{ marginLeft: 8, marginBottom: 8 }}
-            onClick={() => this.setState({ groupDialogOpen: true })}
+        <Toolbar variant="dense">
+          <Typography
+            variant="h6"
+            color="inherit"
+            noWrap
+            style={{ flexGrow: 1 }}
           >
+            Groups
+          </Typography>
+          <Button onClick={() => this.setState({ groupDialogOpen: true })}>
             New Group
           </Button>
-        </Typography>
+        </Toolbar>
         <div style={{ display: "flex", flexWrap: "nowrap", overflowX: "auto" }}>
           {groups.map(g => (
             <RecordEntry
@@ -131,15 +139,19 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
      */
     const Podcasts = (
       <div>
-        <Typography component="div">
-          <h1 style={{ display: "inline-block" }}>Podcasts</h1>
-          <Button
-            style={{ marginLeft: 8, marginBottom: 8 }}
-            onClick={() => this.setState({ podcastDialogOpen: true })}
+        <Toolbar variant="dense">
+          <Typography
+            variant="h6"
+            color="inherit"
+            noWrap
+            style={{ flexGrow: 1 }}
           >
+            Podcasts
+          </Typography>
+          <Button onClick={() => this.setState({ podcastDialogOpen: true })}>
             New Podcast
           </Button>
-        </Typography>
+        </Toolbar>
         <div style={{ display: "flex", flexWrap: "nowrap", overflowX: "auto" }}>
           {podcasts.map(p => (
             <RecordEntry
@@ -161,15 +173,19 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
      */
     const Sessions = (
       <div>
-        <Typography component="div">
-          <h1 style={{ display: "inline-block" }}>Sessions</h1>
-          <Button
-            style={{ marginLeft: 8, marginBottom: 8 }}
-            onClick={() => this.setState({ sessionDialogOpen: true })}
+        <Toolbar variant="dense">
+          <Typography
+            variant="h6"
+            color="inherit"
+            noWrap
+            style={{ flexGrow: 1 }}
           >
+            Sessions
+          </Typography>
+          <Button onClick={() => this.setState({ sessionDialogOpen: true })}>
             New Session
           </Button>
-        </Typography>
+        </Toolbar>
         <div style={{ display: "flex", flexWrap: "nowrap", overflowX: "auto" }}>
           {sessions.map(s => (
             <RecordEntry
@@ -207,8 +223,16 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
         />
 
         {Groups}
-        {this.state.currentGroupUid.length > 0 && Podcasts}
-        {this.state.currentPodcastUid.length > 0 && Sessions}
+        {this.state.currentGroupUid.length > 0 && (
+          <div>
+            <Divider /> {Podcasts}
+          </div>
+        )}
+        {this.state.currentPodcastUid.length > 0 && (
+          <div>
+            <Divider /> {Sessions}
+          </div>
+        )}
       </div>
     );
   }

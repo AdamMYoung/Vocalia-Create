@@ -52,7 +52,7 @@ export default class SessionDialog extends Component<ISessionProps> {
           <Button onClick={() => closeDialog()} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => this.createSession()} color="primary">
+          <Button onClick={this.createSession} color="primary">
             Create Session
           </Button>
         </DialogActions>

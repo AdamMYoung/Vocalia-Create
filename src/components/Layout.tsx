@@ -12,8 +12,8 @@ import {
 import Navigation from "./navigation/Navigation";
 import Publish from "./publish/Publish";
 import Editor from "./editor/Editor";
-import Social from "./social/Social";
-import Selection from "./record/selection/Selection";
+import Record from "./record/Record";
+import Login from "./Login";
 
 /**
  * State information for the application.
@@ -86,10 +86,14 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
     const RoutingContents = (
       <Switch>
         <Route
-          path="/social"
-          render={() =>
+          path="/record/:id/"
+          render={props =>
             auth.isAuthenticated() ? (
-              <Social api={api} isMobile={isMobile} />
+              <Record
+                api={api}
+                isMobile={isMobile}
+                sessionId={props.match.params.id}
+              />
             ) : (
               <Login auth={auth} />
             )
@@ -97,10 +101,10 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
         />
 
         <Route
-          path="/selection"
-          render={() =>
+          path="/record/"
+          render={props =>
             auth.isAuthenticated() ? (
-              <Selection api={api} />
+              <Record api={api} isMobile={isMobile} sessionId={null} />
             ) : (
               <Login auth={auth} />
             )
@@ -142,23 +146,3 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
 }
 
 export default withRouter(Layout);
-
-interface ILoginProps {
-  auth: Auth;
-}
-
-/**
- * Component to facilitate login redirects.
- */
-class Login extends Component<ILoginProps> {
-  constructor(props: ILoginProps) {
-    super(props);
-
-    console.log("Redirecting to login");
-    props.auth.login();
-  }
-
-  render() {
-    return <div />;
-  }
-}
