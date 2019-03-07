@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent, Component } from "react";
 import WebRTC from "../../../stream/WebRTC";
 import { UserStream } from "../../../types";
 import DataManager from "../../../api/DataManager";
@@ -11,7 +11,7 @@ interface IChatProps {
 }
 
 interface IChatState {
-  webRTC: WebRTC;
+  webRTC: WebRTC | null;
   currentUser: User | null;
   userStreams: { [id: string]: UserStream };
   userInfo: { [id: string]: User };
@@ -21,6 +21,28 @@ export default class Chat extends Component<IChatProps, IChatState> {
   constructor(props: IChatProps) {
     super(props);
 
+    this.state = {
+      webRTC: null,
+      currentUser: null,
+      userStreams: {},
+      userInfo: {}
+    };
+
+    this.setupWebRTC();
+  }
+
+  componentDidUpdate(newProps: IChatProps) {
+    const { webRTC, currentUser } = this.state;
+    const { sessionId } = newProps;
+    const oldSessionId = this.props.sessionId;
+
+    if (webRTC && currentUser && sessionId && oldSessionId != sessionId) {
+      webRTC.disconnectFromPeers();
+      webRTC.connect(currentUser.userUID, sessionId);
+    }
+  }
+
+  setupWebRTC = () => {
     const { api, sessionId } = this.props;
 
     var rtc = new WebRTC();
@@ -28,17 +50,12 @@ export default class Chat extends Component<IChatProps, IChatState> {
     rtc.onTrackRemoved = this.onTrackRemoved;
 
     api.getSignedInUserInfo().then(user => {
-      this.setState({ currentUser: user });
-      if (user && sessionId) rtc.connect(user.userUID, sessionId);
+      if (user && sessionId) {
+        rtc.connect(user.userUID, sessionId);
+        this.setState({ currentUser: user, webRTC: rtc });
+      }
     });
-
-    this.state = {
-      webRTC: rtc,
-      currentUser: null,
-      userStreams: {},
-      userInfo: {}
-    };
-  }
+  };
 
   /**
    * Called when a track has been added.
@@ -68,7 +85,9 @@ export default class Chat extends Component<IChatProps, IChatState> {
   };
 
   componentWillUnmount = () => {
-    this.state.webRTC.disconnectFromPeers();
+    const { webRTC } = this.state;
+
+    if (webRTC) webRTC.disconnectFromPeers();
   };
 
   render() {
