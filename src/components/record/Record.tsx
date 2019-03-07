@@ -39,14 +39,14 @@ export default class Record extends Component<IRecordProps, IRecordState> {
     return (
       <Grid container>
         <Grid item xs={8}>
-          {isMobile && (
-            <div>
+          <div>
+            {isMobile && (
               <Button onClick={() => this.setState({ dialogOpen: true })}>
                 Podcast Selection
               </Button>
-              <Chat api={api} sessionId={selectedSession} />
-            </div>
-          )}
+            )}
+            <Chat api={api} sessionId={selectedSession} />
+          </div>
         </Grid>
         <Grid item xs={4}>
           {isMobile ? (

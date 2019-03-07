@@ -102,7 +102,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
 
         <Route
           path="/record/"
-          render={props =>
+          render={() =>
             auth.isAuthenticated() ? (
               <Record api={api} isMobile={isMobile} sessionId={null} />
             ) : (
