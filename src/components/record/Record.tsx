@@ -34,6 +34,7 @@ export default class Record extends Component<IRecordProps, IRecordState> {
 
   render() {
     const { api, isMobile } = this.props;
+    const { selectedSession } = this.state;
 
     return (
       <Grid container>
@@ -43,7 +44,7 @@ export default class Record extends Component<IRecordProps, IRecordState> {
               <Button onClick={() => this.setState({ dialogOpen: true })}>
                 Podcast Selection
               </Button>
-              <Chat />
+              <Chat api={api} sessionId={selectedSession} />
             </div>
           )}
         </Grid>
