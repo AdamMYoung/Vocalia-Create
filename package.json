@@ -6,6 +6,7 @@
     "@aspnet/signalr": "^1.1.2",
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
+    "@material-ui/lab": "^3.0.0-alpha.30",
     "@types/auth0-js": "^8.11.11",
     "@types/jest": "23.3.13",
     "@types/node": "10.12.20",

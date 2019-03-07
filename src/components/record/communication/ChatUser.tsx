@@ -3,6 +3,7 @@ import { UserStream } from "../../../types";
 import { User } from "../../../utility/types";
 import { Card, Avatar, Typography, IconButton } from "@material-ui/core";
 import { PlayArrow, VolumeMute, VolumeUp } from "@material-ui/icons";
+import Slider from "@material-ui/lab/Slider";
 
 interface IChatUserProps {
   stream: UserStream;
@@ -42,15 +43,12 @@ export default class ChatUser extends Component<
 
   render() {
     const { user } = this.props;
-    const { isMuted } = this.state;
+    const { isMuted, audio } = this.state;
 
     const VolumeIcon = isMuted ? <VolumeMute /> : <VolumeUp />;
 
     return (
       <div style={{ width: "100%", display: "flex", margin: 6 }}>
-        <IconButton style={{ margin: 6 }} onClick={this.onToggleMute}>
-          {VolumeIcon}
-        </IconButton>
         <Avatar src={user.pictureUrl} style={{ margin: "auto 0" }} />
         <Typography
           variant="h6"
@@ -58,6 +56,9 @@ export default class ChatUser extends Component<
           style={{ margin: "auto 0", paddingLeft: 8 }}
         >
           {user.firstName + " " + user.lastName}
+          <IconButton style={{ margin: 6 }} onClick={this.onToggleMute}>
+            {VolumeIcon}
+          </IconButton>
         </Typography>
       </div>
     );

@@ -67,7 +67,7 @@ export default class Chat extends Component<IChatProps, IChatState> {
     userStreams[stream.id] = stream;
 
     var user = await api.getUserOverviewInfo(stream.tag);
-    if (user) userInfo[stream.id] = user;
+    if (user) userInfo[stream.tag] = user;
 
     this.setState({ userStreams, userInfo });
   };
@@ -79,7 +79,6 @@ export default class Chat extends Component<IChatProps, IChatState> {
     const { userStreams, userInfo } = this.state;
 
     delete userStreams[id];
-    delete userInfo[id];
 
     this.setState({ userStreams, userInfo });
   };
@@ -96,7 +95,7 @@ export default class Chat extends Component<IChatProps, IChatState> {
     return (
       <div>
         {Object.values(userStreams).map(s => (
-          <ChatUser key={s.id} stream={s} user={userInfo[s.id]} />
+          <ChatUser key={s.id} stream={s} user={userInfo[s.tag]} />
         ))}
       </div>
     );

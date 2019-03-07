@@ -82,18 +82,17 @@ const hub = new signalR.HubConnectionBuilder()
  * Class to manage WebRTC connection establishment and handling.
  */
 export default class WebRTC {
-
   private connections: { [id: string]: UserConnection } = {};
 
   /**
    * Fired when a new audio source track has been established.
    */
-  public onTrackAdded: (stream: UserStream) => void = () => { };
+  public onTrackAdded: (stream: UserStream) => void = () => {};
 
   /**
    * Fired when an audio source track has ended.
    */
-  public onTrackRemoved: (peerId: string) => void = () => { };
+  public onTrackRemoved: (peerId: string) => void = () => {};
 
   constructor() {
     hub.start();
@@ -233,6 +232,10 @@ export default class WebRTC {
 
     connection.ontrack = t => {
       var track = t.streams[0];
+      track
+        .getTracks()
+        .forEach(t => t.applyConstraints({ echoCancellation: true }));
+
       this.onTrackAdded({ id: user.id, tag: user.tag, stream: track });
     };
 
