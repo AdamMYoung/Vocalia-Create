@@ -10,6 +10,8 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 
 interface ISelectionProps extends RouteComponentProps {
   api: DataManager;
+  onSessionSelected: () => void;
+  onPodcastSelected: (podcastName: string) => void;
 }
 
 interface ISelectionState {
@@ -18,6 +20,7 @@ interface ISelectionState {
   sessions: Session[];
   currentGroupUid: string;
   currentPodcastUid: string;
+  currentPodcastName: string;
   groupDialogOpen: boolean;
   podcastDialogOpen: boolean;
   sessionDialogOpen: boolean;
@@ -33,6 +36,7 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
       sessions: [],
       currentGroupUid: "",
       currentPodcastUid: "",
+      currentPodcastName: "",
       groupDialogOpen: false,
       podcastDialogOpen: false,
       sessionDialogOpen: false
@@ -62,7 +66,8 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
       this.setState({
         podcasts: podcasts,
         currentGroupUid: uid,
-        currentPodcastUid: ""
+        currentPodcastUid: "",
+        currentPodcastName: ""
       });
   };
 
@@ -92,13 +97,16 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
     this.onGroupSelected(this.state.currentGroupUid);
   };
 
+  /**
+   * Closes the session creation dialog.
+   */
   closeSessionDialog = () => {
     this.setState({ sessionDialogOpen: false });
     this.onPodcastSelected(this.state.currentPodcastUid);
   };
 
   render() {
-    const { groups, podcasts, sessions } = this.state;
+    const { groups, podcasts, sessions, currentPodcastName } = this.state;
 
     /**
      * Displays all groups belonging to the user.
@@ -161,7 +169,11 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
               description={null}
               image={null}
               isSelected={this.state.currentPodcastUid == p.uid ? true : false}
-              onClick={this.onPodcastSelected}
+              onClick={() => {
+                this.onPodcastSelected(p.uid);
+                this.setState({ currentPodcastName: p.name });
+                this.props.onPodcastSelected(p.name);
+              }}
             />
           ))}
         </div>
@@ -195,7 +207,12 @@ class Selection extends Component<ISelectionProps, ISelectionState> {
               description={null}
               image={null}
               isSelected={false}
-              onClick={() => this.props.history.push("/record/" + s.uid)}
+              onClick={() => {
+                this.props.history.push(
+                  "/record/" + currentPodcastName + "/" + s.uid
+                );
+                this.props.onSessionSelected();
+              }}
             />
           ))}
         </div>

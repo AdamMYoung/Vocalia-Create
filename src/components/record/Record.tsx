@@ -6,7 +6,11 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Toolbar,
+  Typography,
+  AppBar,
+  Divider
 } from "@material-ui/core";
 import Selection from "./selection/Selection";
 import Chat from "./communication/Chat";
@@ -15,62 +19,89 @@ interface IRecordProps {
   api: DataManager;
   isMobile: boolean;
   sessionId: string | null;
+  podcastName: string | null;
 }
 
 interface IRecordState {
   dialogOpen: boolean;
   selectedSession: string | null;
+  selectedPodcastName: string;
 }
 
 export default class Record extends Component<IRecordProps, IRecordState> {
   constructor(props: IRecordProps) {
     super(props);
 
+    const { sessionId, podcastName } = this.props;
+
     this.state = {
       dialogOpen: false,
-      selectedSession: this.props.sessionId
+      selectedSession: sessionId,
+      selectedPodcastName:
+        podcastName != null ? podcastName : "Select a Podcast"
     };
   }
 
   render() {
     const { api, isMobile } = this.props;
-    const { selectedSession } = this.state;
+    const { selectedSession, selectedPodcastName } = this.state;
+
+    const SelectionItem = (
+      <Selection
+        api={api}
+        onSessionSelected={() => this.setState({ dialogOpen: false })}
+        onPodcastSelected={(podcastName: string) =>
+          this.setState({ selectedPodcastName: podcastName })
+        }
+      />
+    );
+
+    const SelectionDialog = (
+      <Dialog
+        open={this.state.dialogOpen}
+        fullScreen
+        onClose={() => this.setState({ dialogOpen: false })}
+      >
+        <DialogContent>{SelectionItem}</DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => this.setState({ dialogOpen: false })}
+            color="primary"
+            autoFocus
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
 
     return (
       <Grid container>
-        <Grid item xs={8}>
+        <Grid item xs={isMobile ? 12 : 8}>
           <div>
-            {isMobile && (
-              <Button onClick={() => this.setState({ dialogOpen: true })}>
-                Podcast Selection
-              </Button>
-            )}
+            <Toolbar variant={isMobile ? "regular" : "dense"}>
+              <Typography
+                variant="h6"
+                color="inherit"
+                noWrap
+                style={{ flexGrow: 1 }}
+              >
+                {selectedPodcastName}
+              </Typography>
+              {isMobile && (
+                <Button onClick={() => this.setState({ dialogOpen: true })}>
+                  Change
+                </Button>
+              )}
+            </Toolbar>
+            <Divider />
+            {SelectionDialog}
             <Chat api={api} sessionId={selectedSession} />
           </div>
         </Grid>
+
         <Grid item xs={4}>
-          {isMobile ? (
-            <Dialog
-              open={this.state.dialogOpen}
-              fullScreen
-              onClose={() => this.setState({ dialogOpen: false })}
-            >
-              <DialogContent>
-                <Selection api={api} />
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => this.setState({ dialogOpen: false })}
-                  color="primary"
-                  autoFocus
-                >
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
-          ) : (
-            <Selection api={api} />
-          )}
+          {!isMobile && SelectionItem}
         </Grid>
       </Grid>
     );

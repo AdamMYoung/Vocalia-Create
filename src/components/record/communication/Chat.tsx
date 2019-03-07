@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import WebRTC from "../../../stream/WebRTC";
 import { UserStream } from "../../../types";
 import DataManager from "../../../api/DataManager";
+import { User } from "../../../utility/types";
+import ChatUser from "./ChatUser";
 
 interface IChatProps {
   sessionId: string | null;
@@ -11,6 +13,7 @@ interface IChatProps {
 interface IChatState {
   webRTC: WebRTC;
   userStreams: { [id: string]: UserStream };
+  userInfo: { [id: string]: User };
 }
 
 export default class Chat extends Component<IChatProps, IChatState> {
@@ -23,28 +26,43 @@ export default class Chat extends Component<IChatProps, IChatState> {
     rtc.onTrackAdded = this.onTrackAdded;
     rtc.onTrackRemoved = this.onTrackRemoved;
 
-    api.getSignedInUserInfo().then(user => {
-      if (user && sessionId) rtc.connect(user.firstName, sessionId);
-    });
+    if (sessionId)
+      api.getSignedInUserInfo().then(user => {
+        if (user && sessionId) rtc.connect(user.userUID, sessionId);
+      });
 
     this.state = {
       webRTC: rtc,
-      userStreams: {}
+      userStreams: {},
+      userInfo: {}
     };
   }
 
-  onTrackAdded = (stream: UserStream) => {
-    var userStreams = this.state.userStreams;
+  /**
+   * Called when a track has been added.
+   */
+  onTrackAdded = async (stream: UserStream) => {
+    const { userStreams, userInfo } = this.state;
+    const { api } = this.props;
+
     userStreams[stream.id] = stream;
 
-    this.setState({ userStreams });
+    var user = await api.getUserOverviewInfo(stream.tag);
+    if (user) userInfo[stream.id] = user;
+
+    this.setState({ userStreams, userInfo });
   };
 
+  /**
+   * Called when a track has been removed.
+   */
   onTrackRemoved = (id: string) => {
-    var userStreams = this.state.userStreams;
-    delete userStreams[id];
+    const { userStreams, userInfo } = this.state;
 
-    this.setState({ userStreams });
+    delete userStreams[id];
+    delete userInfo[id];
+
+    this.setState({ userStreams, userInfo });
   };
 
   componentWillUnmount = () => {
@@ -52,21 +70,12 @@ export default class Chat extends Component<IChatProps, IChatState> {
   };
 
   render() {
-    const { userStreams } = this.state;
+    const { userStreams, userInfo } = this.state;
 
     return (
       <div>
         {Object.values(userStreams).map(s => (
-          <div key={s.id}>
-            <audio
-              ref={audio => {
-                if (audio) audio.srcObject = s.stream;
-              }}
-              controls
-              autoPlay
-            />
-            <p>{s.tag}</p>
-          </div>
+          <ChatUser key={s.id} stream={s} user={userInfo[s.id]} />
         ))}
       </div>
     );
