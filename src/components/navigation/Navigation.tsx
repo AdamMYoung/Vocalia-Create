@@ -84,9 +84,7 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
           </Toolbar>
         </AppBar>
         {/* Content */}
-        <div style={{ margin: 16, marginBottom: 60 }}>
-          {this.props.children}
-        </div>
+        <div style={{ marginBottom: 60 }}>{this.props.children}</div>
         {/* Bottom Bar */}
         <AppBar
           position="fixed"

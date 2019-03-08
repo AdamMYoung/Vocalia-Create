@@ -1,7 +1,6 @@
-import { Group, Podcast, Session } from "../utility/types";
+import { Podcast, Session } from "../utility/types";
 
 const API = process.env.REACT_APP_INGEST_API_URL;
-const GROUP = "group";
 const PODCAST = "podcast";
 const SESSION = "session";
 const INVITE = "invite";

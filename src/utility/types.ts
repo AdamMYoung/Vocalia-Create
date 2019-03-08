@@ -1,12 +1,8 @@
-export interface Group {
-  uid: string;
-  name: string;
-  description: string;
-}
-
 export interface Podcast {
   uid: string;
   name: string;
+  description: string;
+  imageUrl: string;
 }
 
 export interface Session {

@@ -92,6 +92,7 @@ export default class Auth {
         this.setSession(authResult);
       } else if (err) {
         this.clearSignIn();
+        this.login();
         console.log(err);
         //if (process.env.NODE_ENV == "development")
         //alert(

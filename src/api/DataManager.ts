@@ -1,6 +1,6 @@
 import IngestApiRepository from "./IngestApiRepository";
 import SocialApiRepository from "./SocialApiRepository";
-import { User, Group, Podcast, Session } from "../utility/types";
+import { User, Podcast, Session } from "../utility/types";
 
 export default class DataManager {
   private ingest: IngestApiRepository = new IngestApiRepository();

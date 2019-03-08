@@ -13,10 +13,8 @@ class Login extends Component<ILoginProps> {
   constructor(props: ILoginProps) {
     super(props);
 
-    console.log("Redirecting to login");
     localStorage.setItem("path", this.props.location.pathname);
-
-    props.auth.login();
+    props.auth.renewSession();
   }
 
   render() {

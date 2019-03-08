@@ -14,6 +14,7 @@ import Publish from "./publish/Publish";
 import Editor from "./editor/Editor";
 import Record from "./record/Record";
 import Login from "./Login";
+import Selection from "./selection/Selection";
 
 /**
  * State information for the application.
@@ -105,12 +106,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
           path="/record/"
           render={() =>
             auth.isAuthenticated() ? (
-              <Record
-                api={api}
-                isMobile={isMobile}
-                podcastName={null}
-                sessionId={null}
-              />
+              <Selection api={api} />
             ) : (
               <Login auth={auth} />
             )
