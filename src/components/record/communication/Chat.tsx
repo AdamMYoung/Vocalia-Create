@@ -1,8 +1,7 @@
-import React, { PureComponent, Component } from "react";
+import React, { Component } from "react";
 import WebRTC from "../../../stream/WebRTC";
-import { UserStream } from "../../../types";
+import { UserStream, User } from "../../../utility/types";
 import DataManager from "../../../api/DataManager";
-import { User } from "../../../utility/types";
 import ChatUser from "./ChatUser";
 
 interface IChatProps {

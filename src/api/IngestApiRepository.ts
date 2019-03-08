@@ -12,7 +12,7 @@ export default class IngestApiRepository {
    * @param accessToken Token for API access.
    * @param podcastUid UID of the podcast.
    */
-  public async getPodcastSessions(
+  public async getSessions(
     accessToken: string,
     podcastUid: string
   ): Promise<Session[] | null> {
@@ -29,7 +29,7 @@ export default class IngestApiRepository {
    * @param accessToken Token for API access.
    * @param podcastUid UID of the podcast.
    */
-  public async createPodcastSession(accessToken: string, podcastUid: string) {
+  public async createSession(accessToken: string, podcastUid: string) {
     await this.getInjectedFetch(
       API + SESSION + "?podcastUid=" + podcastUid,
       accessToken,
@@ -38,48 +38,57 @@ export default class IngestApiRepository {
   }
 
   /**
+   * Deletes a session from the specified podcast.
+   * @param accessToken Token for API access.
+   * @param sessionUid UID of the session.
+   */
+  public async deleteSession(accessToken: string, sessionUid: string) {
+    await this.getInjectedFetch(
+      API + SESSION + "?sessionUid=" + sessionUid,
+      accessToken,
+      "DELETE"
+    );
+  }
+
+  /**
    * Gets all podcasts belonging to the specified group UID.
    * @param accessToken Token for API access.
-   * @param groupUid UID of the group.
    */
-  public async getGroupPodcasts(
-    accessToken: string,
-    groupUid: string
-  ): Promise<Podcast[] | null> {
-    return await this.getInjectedFetch(
-      API + PODCAST + "?groupUid=" + groupUid,
-      accessToken
-    )
+  public async getPodcasts(accessToken: string): Promise<Podcast[] | null> {
+    return await this.getInjectedFetch(API + PODCAST, accessToken)
       .then(response => response.json())
       .then(data => data as Podcast[]);
   }
 
   /**
-   * Adds a podcast to the specified group.
+   * Adds a podcast to the database.
    * @param accessToken Token for API access.
-   * @param groupUid UID of the group to add to.
-   * @param name Name of the podcast to add.
+   * @param podcast Podcast to add.
    */
-  public async createGroupPodcast(
-    accessToken: string,
-    groupUid: string,
-    name: String
-  ) {
-    await this.getInjectedFetch(
-      API + PODCAST + "?groupUid=" + groupUid + "&name=" + name,
-      accessToken,
-      "POST"
-    );
+  public async createPodcast(accessToken: string, podcast: Podcast) {
+    await this.getInjectedFetch(API + PODCAST, accessToken, "POST", podcast);
   }
 
   /**
-   * Gets the groups belonging to the current signed-in user.
+   * Updates the provided podcast.
    * @param accessToken Token for API access.
+   * @param podcast Podcast to update.
    */
-  public async getUserGroups(accessToken: string): Promise<Group[] | null> {
-    return await this.getInjectedFetch(API + GROUP, accessToken)
-      .then(response => response.json())
-      .then(data => data as Group[]);
+  public async editPodcast(accessToken: string, podcast: Podcast) {
+    await this.getInjectedFetch(API + PODCAST, accessToken, "PUT", podcast);
+  }
+
+  /**
+   * Deletes the podcast with the specified UID.
+   * @param accessToken Token for API access.
+   * @param podcastUid Podcast to delete.
+   */
+  public async deletePodcast(accessToken: string, podcastUid: string) {
+    await this.getInjectedFetch(
+      API + PODCAST + "?podcastUid=" + podcastUid,
+      accessToken,
+      "DELETE"
+    );
   }
 
   /**
@@ -90,10 +99,10 @@ export default class IngestApiRepository {
    */
   public async getInviteLink(
     accessToken: string,
-    groupId: string,
+    podcastUid: string,
     expiry: Date
   ): Promise<string | null> {
-    var query = API + INVITE + "?groupUid=" + groupId;
+    var query = API + INVITE + "?podcastUid=" + podcastUid;
     if (expiry) query = query + "&expiry=" + expiry;
 
     return await this.getInjectedFetch(query, accessToken)
@@ -111,24 +120,6 @@ export default class IngestApiRepository {
       API + INVITE + "?inviteLink=" + inviteLink,
       accessToken,
       "PUT"
-    );
-  }
-
-  /**
-   * Adds a podcast to the specified group.
-   * @param accessToken Token for API access.
-   * @param name Name of the group to add.
-   * @param description Description of the group.
-   */
-  public async createUserGroup(
-    accessToken: string,
-    name: string,
-    description: String
-  ) {
-    await this.getInjectedFetch(
-      API + GROUP + "?name=" + name + "&description=" + description,
-      accessToken,
-      "POST"
     );
   }
 

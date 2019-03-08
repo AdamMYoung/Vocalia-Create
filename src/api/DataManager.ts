@@ -52,63 +52,67 @@ export default class DataManager {
   }
 
   /**
-   * Gets the groups belonging to the current signed-in user.
+   * Gets all podcasts belonging to the specified group UID.
    */
-  public async getUserGroups(): Promise<Group[] | null> {
+  public async getPodcasts(): Promise<Podcast[] | null> {
     if (this.accessToken)
-      return await this.ingest.getUserGroups(this.accessToken);
+      return await this.ingest.getPodcasts(this.accessToken);
     return null;
   }
 
   /**
-   * Gets all podcasts belonging to the specified group UID.
-   * @param groupUid UID of the group.
+   * Adds a podcast to the specified group.
+   * @param podcast Podcast to insert.
    */
-  public async getGroupPodcasts(groupUid: string): Promise<Podcast[] | null> {
+  public async createPodcast(podcast: Podcast) {
     if (this.accessToken)
-      return await this.ingest.getGroupPodcasts(this.accessToken, groupUid);
-    return null;
+      await this.ingest.createPodcast(this.accessToken, podcast);
+  }
+
+  /**
+   * Updates the specfied podcast in the database.
+   * @param podcast Podcast to insert.
+   */
+  public async editPodcast(podcast: Podcast) {
+    if (this.accessToken)
+      await this.ingest.editPodcast(this.accessToken, podcast);
+  }
+
+  /**
+   * Deletes the specified podcast from the database.
+   * @param podcastUid UID of the podcast.
+   */
+  public async deletePodcast(podcastUid: string) {
+    if (this.accessToken)
+      await this.ingest.deletePodcast(this.accessToken, podcastUid);
   }
 
   /**
    * Gets all sessions belonging to the specified podcast UID.
    * @param podcastUid UID of the podcast.
    */
-  public async getPodcastSessions(
-    podcastUid: string
-  ): Promise<Session[] | null> {
+  public async getSessions(podcastUid: string): Promise<Session[] | null> {
     if (this.accessToken)
-      return await this.ingest.getPodcastSessions(this.accessToken, podcastUid);
+      return await this.ingest.getSessions(this.accessToken, podcastUid);
     return null;
-  }
-
-  /**
-   * Adds a podcast to the specified group.
-   * @param name Name of the group to add.
-   * @param description Description of the group.
-   */
-  public async createNewGroup(name: string, description: string) {
-    if (this.accessToken)
-      await this.ingest.createUserGroup(this.accessToken, name, description);
-  }
-
-  /**
-   * Adds a podcast to the specified group.
-   * @param groupId UID of the group to add to.
-   * @param name Name of the podcast to add.
-   */
-  public async createGroupPodcast(groupId: string, name: string) {
-    if (this.accessToken)
-      await this.ingest.createGroupPodcast(this.accessToken, groupId, name);
   }
 
   /**
    * Creates a new session for the specified podcast.
    * @param podcastUid UID of the podcast.
    */
-  public async createPodcastSession(podcastId: string) {
+  public async createSession(podcastId: string) {
     if (this.accessToken)
-      await this.ingest.createPodcastSession(this.accessToken, podcastId);
+      await this.ingest.createSession(this.accessToken, podcastId);
+  }
+
+  /**
+   * Deletes the specified session.
+   * @param sessionId UID of the session.
+   */
+  public async deleteSession(sessionId: string) {
+    if (this.accessToken)
+      await this.ingest.deleteSession(this.accessToken, sessionId);
   }
 
   /**

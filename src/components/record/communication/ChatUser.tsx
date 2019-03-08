@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { UserStream } from "../../../types";
-import { User } from "../../../utility/types";
-import { Card, Avatar, Typography, IconButton } from "@material-ui/core";
-import { PlayArrow, VolumeMute, VolumeUp } from "@material-ui/icons";
-import Slider from "@material-ui/lab/Slider";
+import { UserStream, User } from "../../../utility/types";
+import { Avatar, Typography, IconButton } from "@material-ui/core";
+import { VolumeMute, VolumeUp } from "@material-ui/icons";
 
 interface IChatUserProps {
   stream: UserStream;

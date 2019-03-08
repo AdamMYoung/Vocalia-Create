@@ -1,5 +1,5 @@
 import * as signalR from "@aspnet/signalr";
-import { UserDetails, UserStream } from "../types";
+import { UserDetails, UserStream } from "../utility/types";
 
 /**
  * Options to offer to the other client.
