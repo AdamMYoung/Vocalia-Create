@@ -12,7 +12,6 @@ import {
   AppBar,
   Divider
 } from "@material-ui/core";
-import Selection from "./selection/Selection";
 import Chat from "./communication/Chat";
 
 interface IRecordProps {
@@ -31,7 +30,7 @@ export default class Record extends Component<IRecordProps, IRecordState> {
   constructor(props: IRecordProps) {
     super(props);
 
-    const { sessionId, podcastName } = this.props;
+    const { sessionId } = this.props;
 
     this.state = {
       dialogOpen: false,
@@ -48,35 +47,9 @@ export default class Record extends Component<IRecordProps, IRecordState> {
     const { api, isMobile, podcastName } = this.props;
     const { selectedSession } = this.state;
 
-    const SelectionItem = (
-      <Selection
-        api={api}
-        onSessionSelected={() => this.setState({ dialogOpen: false })}
-      />
-    );
-
-    const SelectionDialog = (
-      <Dialog
-        open={this.state.dialogOpen}
-        fullScreen
-        onClose={() => this.setState({ dialogOpen: false })}
-      >
-        <DialogContent>{SelectionItem}</DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => this.setState({ dialogOpen: false })}
-            color="primary"
-            autoFocus
-          >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-
     return (
       <Grid container>
-        <Grid item xs={isMobile ? 12 : 8}>
+        <Grid item xs={12}>
           <div>
             <Toolbar variant={isMobile ? "regular" : "dense"}>
               <Typography
@@ -87,20 +60,10 @@ export default class Record extends Component<IRecordProps, IRecordState> {
               >
                 {podcastName}
               </Typography>
-              {isMobile && (
-                <Button onClick={() => this.setState({ dialogOpen: true })}>
-                  Change
-                </Button>
-              )}
             </Toolbar>
             <Divider />
-            {SelectionDialog}
             <Chat api={api} sessionId={selectedSession} />
           </div>
-        </Grid>
-
-        <Grid item xs={4}>
-          {!isMobile && SelectionItem}
         </Grid>
       </Grid>
     );
