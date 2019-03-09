@@ -12,7 +12,7 @@ import {
   Button
 } from "@material-ui/core";
 import ImageUploader from "react-images-upload";
-import { Podcast } from "../../../utility/types";
+import { Podcast, PodcastUpload } from "../../../utility/types";
 
 interface IPodcastCreationDialogProps {
   api: DataManager;
@@ -58,25 +58,30 @@ export default class PodcastCreationDialog extends Component<
     reader.readAsDataURL(picture[0]);
   };
 
+  /**
+   * Submits the podcast to the API.
+   */
   submitPodcast = () => {
     const { api, onFinish } = this.props;
     const { podcastName, podcastDescription, podcastImage } = this.state;
 
-    if (
-      podcastName.length > 0 &&
-      podcastDescription.length > 0 &&
-      podcastImage
-    ) {
+    if (podcastImage) {
       var reader = new FileReader();
+      var fileType = podcastImage.name.match(/\.[0-9a-z]+$/i);
+
       reader.onload = () => {
+        var imageResult = reader.result as string;
+
         api.createPodcast({
           name: podcastName,
           description: podcastDescription,
-          imageUrl: reader.result
-        } as Podcast);
+          imageData: imageResult.split(",")[1],
+          fileType: fileType ? fileType.toString() : ""
+        } as PodcastUpload);
         onFinish();
       };
-      reader.readAsBinaryString(podcastImage);
+
+      reader.readAsDataURL(podcastImage);
     }
   };
 
@@ -88,6 +93,9 @@ export default class PodcastCreationDialog extends Component<
       podcastImagePath,
       podcastImage
     } = this.state;
+
+    const canSubmit =
+      podcastName.length > 0 && podcastDescription.length > 0 && podcastImage;
 
     return (
       <Dialog open={open} onClose={onFinish}>
@@ -141,7 +149,12 @@ export default class PodcastCreationDialog extends Component<
           <Button onClick={onFinish} color="primary">
             Cancel
           </Button>
-          <Button autoFocus onClick={this.submitPodcast} color="primary">
+          <Button
+            autoFocus
+            onClick={this.submitPodcast}
+            color="primary"
+            disabled={!canSubmit}
+          >
             Create
           </Button>
         </DialogActions>

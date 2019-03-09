@@ -9,6 +9,7 @@ import NewSessionConfirmDialog from "./dialogs/NewSessionConfirmDialog";
 
 interface ISelectionProps {
   api: DataManager;
+  isMobile: boolean;
 }
 
 interface ISelectionState {
@@ -52,7 +53,8 @@ export default class Selection extends Component<
       newPodcastOpen,
       newSessionOpen
     } = this.state;
-    const { api } = this.props;
+
+    const { api, isMobile } = this.props;
 
     return (
       <Grid>
@@ -65,9 +67,11 @@ export default class Selection extends Component<
           </Button>
         </Toolbar>
 
-        <Grid container justify="flex-start">
-          {podcasts && podcasts.map(p => <PodcastEntry podcast={p} />)}
+        <Grid container justify={isMobile ? "center" : "flex-start"}>
+          {podcasts &&
+            podcasts.map(p => <PodcastEntry key={p.uid} podcast={p} />)}
         </Grid>
+
         <PodcastCreationDialog
           api={api}
           open={newPodcastOpen}

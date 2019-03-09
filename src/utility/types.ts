@@ -5,6 +5,14 @@ export interface Podcast {
   imageUrl: string;
 }
 
+export interface PodcastUpload {
+  uid: string;
+  name: string;
+  description: string;
+  imageData: string;
+  fileType: string;
+}
+
 export interface Session {
   uid: string;
   date: Date;

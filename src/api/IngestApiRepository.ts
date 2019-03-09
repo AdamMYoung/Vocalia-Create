@@ -1,4 +1,4 @@
-import { Podcast, Session } from "../utility/types";
+import { Podcast, Session, PodcastUpload } from "../utility/types";
 
 const API = process.env.REACT_APP_INGEST_API_URL;
 const PODCAST = "podcast";
@@ -64,7 +64,7 @@ export default class IngestApiRepository {
    * @param accessToken Token for API access.
    * @param podcast Podcast to add.
    */
-  public async createPodcast(accessToken: string, podcast: Podcast) {
+  public async createPodcast(accessToken: string, podcast: PodcastUpload) {
     await this.getInjectedFetch(API + PODCAST, accessToken, "POST", podcast);
   }
 
@@ -73,7 +73,7 @@ export default class IngestApiRepository {
    * @param accessToken Token for API access.
    * @param podcast Podcast to update.
    */
-  public async editPodcast(accessToken: string, podcast: Podcast) {
+  public async editPodcast(accessToken: string, podcast: PodcastUpload) {
     await this.getInjectedFetch(API + PODCAST, accessToken, "PUT", podcast);
   }
 

@@ -1,6 +1,6 @@
 import IngestApiRepository from "./IngestApiRepository";
 import SocialApiRepository from "./SocialApiRepository";
-import { User, Podcast, Session } from "../utility/types";
+import { User, Podcast, Session, PodcastUpload } from "../utility/types";
 
 export default class DataManager {
   private ingest: IngestApiRepository = new IngestApiRepository();
@@ -64,7 +64,8 @@ export default class DataManager {
    * Adds a podcast to the specified group.
    * @param podcast Podcast to insert.
    */
-  public async createPodcast(podcast: Podcast) {
+  public async createPodcast(podcast: PodcastUpload) {
+    console.log(podcast);
     if (this.accessToken)
       await this.ingest.createPodcast(this.accessToken, podcast);
   }
@@ -73,7 +74,7 @@ export default class DataManager {
    * Updates the specfied podcast in the database.
    * @param podcast Podcast to insert.
    */
-  public async editPodcast(podcast: Podcast) {
+  public async editPodcast(podcast: PodcastUpload) {
     if (this.accessToken)
       await this.ingest.editPodcast(this.accessToken, podcast);
   }

@@ -106,7 +106,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
           path="/record/"
           render={() =>
             auth.isAuthenticated() ? (
-              <Selection api={api} />
+              <Selection api={api} isMobile={isMobile} />
             ) : (
               <Login auth={auth} />
             )
