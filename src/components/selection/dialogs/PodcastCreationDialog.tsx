@@ -5,14 +5,11 @@ import {
   TextField,
   DialogContent,
   DialogTitle,
-  CardActionArea,
-  CardMedia,
-  Typography,
   DialogActions,
   Button
 } from "@material-ui/core";
 import ImageUploader from "react-images-upload";
-import { Podcast, PodcastUpload } from "../../../utility/types";
+import { PodcastUpload } from "../../../utility/types";
 
 interface IPodcastCreationDialogProps {
   api: DataManager;

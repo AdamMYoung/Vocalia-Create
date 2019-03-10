@@ -3,6 +3,8 @@ export interface Podcast {
   name: string;
   description: string;
   imageUrl: string;
+  members: PodcastMember[];
+  sessions: Session[];
 }
 
 export interface PodcastUpload {
@@ -11,6 +13,11 @@ export interface PodcastUpload {
   description: string;
   imageData: string;
   fileType: string;
+}
+
+export interface PodcastMember {
+  userUid: string;
+  isAdmin: boolean;
 }
 
 export interface Session {

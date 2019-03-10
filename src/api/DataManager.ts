@@ -89,16 +89,6 @@ export default class DataManager {
   }
 
   /**
-   * Gets all sessions belonging to the specified podcast UID.
-   * @param podcastUid UID of the podcast.
-   */
-  public async getSessions(podcastUid: string): Promise<Session[] | null> {
-    if (this.accessToken)
-      return await this.ingest.getSessions(this.accessToken, podcastUid);
-    return null;
-  }
-
-  /**
    * Creates a new session for the specified podcast.
    * @param podcastUid UID of the podcast.
    */

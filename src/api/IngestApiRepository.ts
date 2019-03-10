@@ -7,23 +7,6 @@ const INVITE = "invite";
 
 export default class IngestApiRepository {
   /**
-   * Gets all sessions belonging to the specified podcast UID.
-   * @param accessToken Token for API access.
-   * @param podcastUid UID of the podcast.
-   */
-  public async getSessions(
-    accessToken: string,
-    podcastUid: string
-  ): Promise<Session[] | null> {
-    return await this.getInjectedFetch(
-      API + SESSION + "?podcastUid=" + podcastUid,
-      accessToken
-    )
-      .then(response => response.json())
-      .then(data => data as Session[]);
-  }
-
-  /**
    * Creates a new session for the specified podcast.
    * @param accessToken Token for API access.
    * @param podcastUid UID of the podcast.

@@ -36,6 +36,7 @@ const styles = (theme: Theme) =>
  */
 interface IEntryProps extends WithStyles<typeof styles> {
   podcast: Podcast;
+  onSelected: () => void;
 }
 
 interface IEntryState {}
@@ -50,10 +51,10 @@ class PodcastEntry extends Component<IEntryProps, IEntryState> {
   }
 
   render() {
-    const { classes, podcast } = this.props;
+    const { classes, podcast, onSelected } = this.props;
 
-    const Entry = (
-      <Card className={classes.paper}>
+    return (
+      <Card className={classes.paper} onClick={onSelected}>
         <CardActionArea>
           <CardMedia component="img" image={podcast.imageUrl} />
           <CardContent>
@@ -62,8 +63,6 @@ class PodcastEntry extends Component<IEntryProps, IEntryState> {
         </CardActionArea>
       </Card>
     );
-
-    return <LinkContainer to={podcast.uid}>{Entry}</LinkContainer>;
   }
 }
 

@@ -14,6 +14,7 @@ interface ISelectionProps {
 
 interface ISelectionState {
   podcasts: Podcast[] | null;
+  selectedPodcast: Podcast | null;
   podcastDetailOpen: boolean;
   newPodcastOpen: boolean;
   newSessionOpen: boolean;
@@ -28,6 +29,7 @@ export default class Selection extends Component<
 
     this.state = {
       podcasts: null,
+      selectedPodcast: null,
       podcastDetailOpen: false,
       newPodcastOpen: false,
       newSessionOpen: false
@@ -49,6 +51,7 @@ export default class Selection extends Component<
   render() {
     const {
       podcasts,
+      selectedPodcast,
       podcastDetailOpen,
       newPodcastOpen,
       newSessionOpen
@@ -69,7 +72,15 @@ export default class Selection extends Component<
 
         <Grid container justify={isMobile ? "center" : "flex-start"}>
           {podcasts &&
-            podcasts.map(p => <PodcastEntry key={p.uid} podcast={p} />)}
+            podcasts.map(p => (
+              <PodcastEntry
+                key={p.uid}
+                podcast={p}
+                onSelected={() =>
+                  this.setState({ selectedPodcast: p, podcastDetailOpen: true })
+                }
+              />
+            ))}
         </Grid>
 
         <PodcastCreationDialog
@@ -80,7 +91,17 @@ export default class Selection extends Component<
             this.setState({ newPodcastOpen: false });
           }}
         />
-        <PodcastDetailDialog api={api} open={podcastDetailOpen} />
+        {selectedPodcast && (
+          <PodcastDetailDialog
+            api={api}
+            open={podcastDetailOpen}
+            podcast={selectedPodcast}
+            onFinish={() => {
+              this.setState({ podcastDetailOpen: false });
+            }}
+          />
+        )}
+
         <NewSessionConfirmDialog api={api} open={newSessionOpen} />
       </Grid>
     );
