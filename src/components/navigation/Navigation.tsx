@@ -97,7 +97,7 @@ export class Navigation extends Component<INavigationProps, INavigationState> {
             showLabels={isMobile ? false : true}
             className={classes.nav}
           >
-            <LinkContainer to="/record">
+            <LinkContainer to="/selection">
               <BottomNavigationAction
                 className={classes.navItem}
                 classes={{ selected: classes.selected }}

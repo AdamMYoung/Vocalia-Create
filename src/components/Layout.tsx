@@ -87,6 +87,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
     const RoutingContents = (
       <Switch>
         <Route
+          exact
           path="/record/:podcast/:session/"
           render={props =>
             auth.isAuthenticated() ? (
@@ -103,7 +104,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
         />
 
         <Route
-          path="/record/"
+          path="/selection/"
           render={() =>
             auth.isAuthenticated() ? (
               <Selection api={api} isMobile={isMobile} />

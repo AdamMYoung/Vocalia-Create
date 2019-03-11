@@ -33,14 +33,18 @@ export default class Chat extends Component<IChatProps, IChatState> {
   componentDidUpdate(newProps: IChatProps) {
     const { webRTC, currentUser } = this.state;
     const { sessionId } = newProps;
-    const oldSessionId = this.props.sessionId;
 
-    if (webRTC && currentUser && sessionId && oldSessionId != sessionId) {
-      webRTC.disconnectFromPeers();
-      webRTC.connect(currentUser.userUID, sessionId);
+    if (webRTC && currentUser && sessionId) {
+      if (this.props.sessionId != sessionId) {
+        webRTC.disconnectFromPeers();
+        webRTC.connect(currentUser.userUID, sessionId);
+      }
     }
   }
 
+  /**
+   * Creates the WebRTC connection object.
+   */
   setupWebRTC = () => {
     const { api, sessionId } = this.props;
 
@@ -76,15 +80,15 @@ export default class Chat extends Component<IChatProps, IChatState> {
    */
   onTrackRemoved = (id: string) => {
     const { userStreams, userInfo } = this.state;
-
     delete userStreams[id];
-
     this.setState({ userStreams, userInfo });
   };
 
+  /**
+   * Disconnects from WebRTC on unmount.
+   */
   componentWillUnmount = () => {
     const { webRTC } = this.state;
-
     if (webRTC) webRTC.disconnectFromPeers();
   };
 
@@ -92,7 +96,7 @@ export default class Chat extends Component<IChatProps, IChatState> {
     const { userStreams, userInfo } = this.state;
 
     return (
-      <div>
+      <div style={{ padding: 12 }}>
         {Object.values(userStreams).map(s => (
           <ChatUser key={s.id} stream={s} user={userInfo[s.tag]} />
         ))}

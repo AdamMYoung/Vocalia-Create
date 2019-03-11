@@ -1,17 +1,6 @@
 import React, { Component } from "react";
 import DataManager from "../../api/DataManager";
-import {
-  Grid,
-  Drawer,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Toolbar,
-  Typography,
-  AppBar,
-  Divider
-} from "@material-ui/core";
+import { Grid, Toolbar, Typography, Divider } from "@material-ui/core";
 import Chat from "./communication/Chat";
 
 interface IRecordProps {

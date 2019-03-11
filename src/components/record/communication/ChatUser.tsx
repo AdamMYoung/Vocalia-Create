@@ -46,7 +46,7 @@ export default class ChatUser extends Component<
     const VolumeIcon = isMuted ? <VolumeMute /> : <VolumeUp />;
 
     return (
-      <div style={{ width: "100%", display: "flex", margin: 6 }}>
+      <div style={{ width: "100%", display: "flex" }}>
         <Avatar src={user.pictureUrl} style={{ margin: "auto 0" }} />
         <Typography
           variant="h6"

@@ -135,6 +135,7 @@ export default class WebRTC {
    */
   public disconnectFromPeers = () => {
     Object.values(this.connections).forEach(c => c.connection.close());
+    hub.stop();
   };
 
   /**

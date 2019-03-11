@@ -12,9 +12,10 @@ import {
   ListItemText,
   DialogContentText
 } from "@material-ui/core";
-import { Podcast, Session } from "../../../utility/types";
+import { Podcast } from "../../../utility/types";
 import { LinkContainer } from "react-router-bootstrap";
 import NewSessionConfirmDialog from "./NewSessionConfirmDialog";
+import TimeAgo from "react-timeago";
 
 interface IPodcastSelectedDialogProps {
   api: DataManager;
@@ -100,21 +101,27 @@ export default class PodcastSelectedDialog extends Component<
 
               <DialogContent style={{ paddingTop: 5 }}>
                 {/* Episodes */}
-                <DialogContentText>Sessions</DialogContentText>
+                <DialogContentText>Latest Session</DialogContentText>
                 <List>
-                  {podcast.sessions != null &&
-                    podcast.sessions.map(item => (
-                      <ListItem key={item.uid} divider>
-                        <ListItemText primary={item.date} />
-                      </ListItem>
-                    ))}
+                  {podcast.sessions != null && podcast.sessions[0] != null && (
+                    <ListItem divider>
+                      <ListItemText
+                        primary={<TimeAgo date={podcast.sessions[0].date} />}
+                        secondary={podcast.sessions[0].uid}
+                      />
+                    </ListItem>
+                  )}
                 </List>
               </DialogContent>
 
               {/* Close button */}
               <DialogActions>
                 {podcast.sessions.length > 0 ? (
-                  <LinkContainer to={"/record/" + podcast.sessions[0].uid}>
+                  <LinkContainer
+                    to={
+                      "/record/" + podcast.name + "/" + podcast.sessions[0].uid
+                    }
+                  >
                     <Button onClick={this.props.onFinish} color="primary">
                       Join
                     </Button>
