@@ -101,8 +101,6 @@ export default class Selection extends Component<
             }}
           />
         )}
-
-        <NewSessionConfirmDialog api={api} open={newSessionOpen} />
       </Grid>
     );
   }

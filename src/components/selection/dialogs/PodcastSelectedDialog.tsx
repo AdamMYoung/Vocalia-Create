@@ -9,10 +9,13 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  DialogContentText,
+  Divider
 } from "@material-ui/core";
 import { Podcast } from "../../../utility/types";
 import { LinkContainer } from "react-router-bootstrap";
+import NewSessionConfirmDialog from "./NewSessionConfirmDialog";
 
 interface IPodcastSelectedDialogProps {
   api: DataManager;
@@ -21,7 +24,9 @@ interface IPodcastSelectedDialogProps {
   onFinish: () => void;
 }
 
-interface IPodcastSelectedDialogState {}
+interface IPodcastSelectedDialogState {
+  newSessionOpen: boolean;
+}
 
 export default class PodcastSelectedDialog extends Component<
   IPodcastSelectedDialogProps,
@@ -30,78 +35,92 @@ export default class PodcastSelectedDialog extends Component<
   constructor(props: IPodcastSelectedDialogProps) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      newSessionOpen: false
+    };
   }
 
   render() {
-    const { open, onFinish, podcast } = this.props;
+    const { open, onFinish, podcast, api } = this.props;
+    const { newSessionOpen } = this.state;
 
     return (
-      <Dialog open={open} onClose={onFinish}>
-        <DialogTitle disableTypography={true}>
-          <Typography component={"span"}>
-            <div style={{ display: "flex", maxHeight: 250 }}>
-              <div style={{ height: 80, width: 80, paddingTop: 16 }}>
-                <img
-                  style={{ height: 80, width: 80 }}
-                  src={podcast.imageUrl}
-                  onLoad={() => this.setState({ imageLoaded: true })}
-                />
-              </div>
+      <React.Fragment>
+        <Dialog open={open} onClose={onFinish}>
+          <DialogTitle disableTypography={true}>
+            <Typography component={"span"}>
+              <div style={{ display: "flex", maxHeight: 250 }}>
+                <div style={{ height: 80, width: 80, paddingTop: 16 }}>
+                  <img
+                    style={{ height: 80, width: 80 }}
+                    src={podcast.imageUrl}
+                  />
+                </div>
 
-              <div
-                style={{
-                  display: "inline",
-                  paddingLeft: 15,
-                  maxHeight: 250
-                }}
+                <div
+                  style={{
+                    display: "inline",
+                    paddingLeft: 15,
+                    maxHeight: 250
+                  }}
+                >
+                  <h2>{podcast.name}</h2>
+                  <p style={{ overflow: "auto", maxHeight: 200 }}>
+                    {podcast.description}
+                  </p>
+                </div>
+              </div>
+            </Typography>
+          </DialogTitle>
+
+          <DialogContent style={{ paddingTop: 5 }}>
+            {/* Episodes */}
+            <DialogContentText>Sessions</DialogContentText>
+            <List>
+              {podcast.sessions != null &&
+                podcast.sessions.map(item => (
+                  <ListItem key={item.uid} divider>
+                    <ListItemText primary={item.date} />
+                  </ListItem>
+                ))}
+            </List>
+          </DialogContent>
+
+          {/* Close button */}
+          <DialogActions>
+            {podcast.sessions.length > 0 ? (
+              <LinkContainer to={"/record/" + podcast.sessions[0].uid}>
+                <Button onClick={this.props.onFinish} color="primary">
+                  Join
+                </Button>
+              </LinkContainer>
+            ) : (
+              <Button
+                onClick={this.props.onFinish}
+                color="primary"
+                disabled={true}
               >
-                <h2>{podcast.name}</h2>
-                <p style={{ overflow: "auto", maxHeight: 200 }}>
-                  {podcast.description}
-                </p>
-              </div>
-            </div>
-          </Typography>
-        </DialogTitle>
-
-        <DialogContent style={{ paddingTop: 5 }}>
-          {/* Episodes */}
-          <List>
-            {podcast.sessions != null &&
-              podcast.sessions.map(item => (
-                <ListItem key={item.uid}>
-                  <ListItemText primary={item.date} />
-                </ListItem>
-              ))}
-          </List>
-        </DialogContent>
-
-        {/* Close button */}
-        <DialogActions>
-          {podcast.sessions.length > 0 ? (
-            <LinkContainer to={"/record/" + podcast.sessions[0].uid}>
-              <Button onClick={this.props.onFinish} color="primary">
                 Join
               </Button>
-            </LinkContainer>
-          ) : (
+            )}
             <Button
-              onClick={this.props.onFinish}
+              onClick={() => this.setState({ newSessionOpen: true })}
               color="primary"
-              disabled={true}
             >
-              Join
+              New Session
             </Button>
-          )}
-          <Button onClick={this.props.onFinish} color="primary">
-            New Session
-          </Button>
-          <Button onClick={this.props.onFinish} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <Button onClick={this.props.onFinish} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <NewSessionConfirmDialog
+          open={newSessionOpen}
+          api={api}
+          podcastUid={podcast.uid}
+          onClose={() => this.setState({ newSessionOpen: false })}
+        />
+      </React.Fragment>
     );
   }
 }
