@@ -10,12 +10,17 @@ import {
   List,
   ListItem,
   ListItemText,
-  DialogContentText
+  DialogContentText,
+  IconButton,
+  Avatar
 } from "@material-ui/core";
 import { Podcast } from "../../../utility/types";
 import { LinkContainer } from "react-router-bootstrap";
 import NewSessionConfirmDialog from "./NewSessionConfirmDialog";
 import TimeAgo from "react-timeago";
+import { Share } from "@material-ui/icons";
+import ProfileAvatar from "../ProfileAvatar";
+import InviteLinkDialog from "./InviteLinkDialog";
 
 interface IPodcastSelectedDialogProps {
   api: DataManager;
@@ -26,6 +31,7 @@ interface IPodcastSelectedDialogProps {
 
 interface IPodcastSelectedDialogState {
   newSessionOpen: boolean;
+  inviteLinkOpen: boolean;
   podcast: Podcast | null;
 }
 
@@ -38,6 +44,7 @@ export default class PodcastSelectedDialog extends Component<
 
     this.state = {
       newSessionOpen: false,
+      inviteLinkOpen: false,
       podcast: null
     };
   }
@@ -66,7 +73,7 @@ export default class PodcastSelectedDialog extends Component<
 
   render() {
     const { open, onFinish, api } = this.props;
-    const { newSessionOpen, podcast } = this.state;
+    const { newSessionOpen, inviteLinkOpen, podcast } = this.state;
 
     return (
       <React.Fragment>
@@ -76,30 +83,47 @@ export default class PodcastSelectedDialog extends Component<
               <DialogTitle disableTypography={true}>
                 <Typography component={"span"}>
                   <div style={{ display: "flex", maxHeight: 250 }}>
-                    <div style={{ height: 80, width: 80, paddingTop: 16 }}>
-                      <img
-                        style={{ height: 80, width: 80 }}
-                        src={podcast.imageUrl}
-                      />
-                    </div>
+                    <div style={{ display: "flex", flexGrow: 1 }}>
+                      <div style={{ height: 80, width: 80, paddingTop: 16 }}>
+                        <img
+                          style={{ height: 80, width: 80 }}
+                          src={podcast.imageUrl}
+                        />
+                      </div>
 
-                    <div
-                      style={{
-                        display: "inline",
-                        paddingLeft: 15,
-                        maxHeight: 250
-                      }}
-                    >
-                      <h2>{podcast.name}</h2>
-                      <p style={{ overflow: "auto", maxHeight: 200 }}>
-                        {podcast.description}
-                      </p>
+                      <div
+                        style={{
+                          display: "inline",
+                          paddingLeft: 15,
+                          maxHeight: 250
+                        }}
+                      >
+                        <h2>{podcast.name}</h2>
+                        <p style={{ overflow: "auto", maxHeight: 200 }}>
+                          {podcast.description}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <IconButton
+                        onClick={() => this.setState({ inviteLinkOpen: true })}
+                      >
+                        <Share />
+                      </IconButton>
                     </div>
                   </div>
                 </Typography>
               </DialogTitle>
 
               <DialogContent style={{ paddingTop: 5 }}>
+                {/* Users */}
+                <DialogContentText>Members</DialogContentText>
+                <div style={{ display: "flex" }}>
+                  {podcast.members.map(m => (
+                    <ProfileAvatar key={m.uid} api={api} userUid={m.uid} />
+                  ))}
+                </div>
+
                 {/* Episodes */}
                 <DialogContentText>Latest Session</DialogContentText>
                 <List>
@@ -148,13 +172,22 @@ export default class PodcastSelectedDialog extends Component<
             </React.Fragment>
           )}
         </Dialog>
+
         {podcast && (
-          <NewSessionConfirmDialog
-            open={newSessionOpen}
-            api={api}
-            podcastUid={podcast.uid}
-            onClose={this.loadPodcast}
-          />
+          <div>
+            <NewSessionConfirmDialog
+              open={newSessionOpen}
+              api={api}
+              podcastUid={podcast.uid}
+              onClose={this.loadPodcast}
+            />
+            <InviteLinkDialog
+              open={inviteLinkOpen}
+              api={api}
+              podcastUid={podcast.uid}
+              onClose={() => this.setState({ inviteLinkOpen: false })}
+            />
+          </div>
         )}
       </React.Fragment>
     );

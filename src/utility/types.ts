@@ -16,7 +16,7 @@ export interface PodcastUpload {
 }
 
 export interface PodcastMember {
-  userUid: string;
+  uid: string;
   isAdmin: boolean;
 }
 

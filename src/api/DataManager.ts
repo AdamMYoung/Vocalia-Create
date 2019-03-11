@@ -117,18 +117,18 @@ export default class DataManager {
   }
 
   /**
-   * Creates an invite link to add others to a group.
-   * @param groupId Group to get invite link for.
+   * Creates an invite link to add others to a podcast.
+   * @param podcastUid Podcast to get invite link for.
    * @param expiry Date when the link should expire (optional).
    */
   public async createInviteLink(
-    groupUID: string,
-    expiry: Date
+    podcastUid: string,
+    expiry: Date | null
   ): Promise<string | null> {
     if (this.accessToken)
       return await this.ingest.getInviteLink(
         this.accessToken,
-        groupUID,
+        podcastUid,
         expiry
       );
 

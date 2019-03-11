@@ -100,7 +100,7 @@ export default class IngestApiRepository {
   public async getInviteLink(
     accessToken: string,
     podcastUid: string,
-    expiry: Date
+    expiry: Date | null
   ): Promise<string | null> {
     var query = API + INVITE + "?podcastUid=" + podcastUid;
     if (expiry) query = query + "&expiry=" + expiry;
