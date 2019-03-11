@@ -61,6 +61,16 @@ export default class DataManager {
   }
 
   /**
+   * Gets specific podcast information for the provided UID.
+   * @param podcastUid UID of the specified podcast.
+   */
+  public async getPodcastDetail(podcastUid: string): Promise<Podcast | null> {
+    if (this.accessToken)
+      return await this.ingest.getPodcastDetail(this.accessToken, podcastUid);
+    return null;
+  }
+
+  /**
    * Adds a podcast to the specified group.
    * @param podcast Podcast to insert.
    */

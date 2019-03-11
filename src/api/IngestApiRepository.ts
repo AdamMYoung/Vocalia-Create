@@ -2,6 +2,7 @@ import { Podcast, Session, PodcastUpload } from "../utility/types";
 
 const API = process.env.REACT_APP_INGEST_API_URL;
 const PODCAST = "podcast";
+const PODCASTS = "podcasts";
 const SESSION = "session";
 const INVITE = "invite";
 
@@ -37,9 +38,26 @@ export default class IngestApiRepository {
    * @param accessToken Token for API access.
    */
   public async getPodcasts(accessToken: string): Promise<Podcast[] | null> {
-    return await this.getInjectedFetch(API + PODCAST, accessToken)
+    return await this.getInjectedFetch(API + PODCASTS, accessToken)
       .then(response => response.json())
       .then(data => data as Podcast[]);
+  }
+
+  /**
+   * Gets specific podcast information for the provided UID.
+   * @param accessToken Token for API access.
+   * @param podcastUid UID of the specified podcast.
+   */
+  public async getPodcastDetail(
+    accessToken: string,
+    podcastUid: string
+  ): Promise<Podcast | null> {
+    return await this.getInjectedFetch(
+      API + PODCAST + "?podcastUid=" + podcastUid,
+      accessToken
+    )
+      .then(response => response.json())
+      .then(data => data as Podcast);
   }
 
   /**

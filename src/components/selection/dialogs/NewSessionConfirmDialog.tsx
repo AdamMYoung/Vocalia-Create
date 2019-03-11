@@ -28,10 +28,10 @@ export default class NewSessionConfirmDialog extends Component<
     this.state = {};
   }
 
-  createSession = () => {
+  createSession = async () => {
     const { api, podcastUid, onClose } = this.props;
 
-    api.createSession(podcastUid);
+    await api.createSession(podcastUid);
     onClose();
   };
 

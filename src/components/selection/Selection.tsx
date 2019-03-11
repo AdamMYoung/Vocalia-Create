@@ -95,7 +95,7 @@ export default class Selection extends Component<
           <PodcastDetailDialog
             api={api}
             open={podcastDetailOpen}
-            podcast={selectedPodcast}
+            podcastUid={selectedPodcast.uid}
             onFinish={() => {
               this.setState({ podcastDetailOpen: false });
             }}
