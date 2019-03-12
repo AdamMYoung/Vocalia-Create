@@ -65,7 +65,7 @@ export default class PodcastSelectedDialog extends Component<
    */
   loadPodcast = async () => {
     const { podcastUid, api } = this.props;
-    this.setState({ newSessionOpen: false });
+    this.setState({ newSessionOpen: false, podcast: null });
 
     var podcast = await api.getPodcastDetail(podcastUid);
     if (podcast) this.setState({ podcast });
