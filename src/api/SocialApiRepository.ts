@@ -14,7 +14,8 @@ export default class SocialApiRepository {
   public async getSignedInUserInfo(accessToken: string): Promise<User | null> {
     return await this.getInjectedFetch(API + FEED, accessToken)
       .then(response => response.json())
-      .then(data => data as User);
+      .then(data => data as User)
+      .catch(() => null);
   }
 
   /**
@@ -24,7 +25,8 @@ export default class SocialApiRepository {
   public async getUserDetailInfo(userId: string): Promise<User | null> {
     return await fetch(API + USER_DETAIL + "?userId=" + userId)
       .then(response => response.json())
-      .then(data => data as User);
+      .then(data => data as User)
+      .catch(() => null);
   }
 
   /**
@@ -34,7 +36,8 @@ export default class SocialApiRepository {
   public async getUserOverviewInfo(userId: string): Promise<User | null> {
     return await fetch(API + USER_OVERVIEW + "?userId=" + userId)
       .then(response => response.json())
-      .then(data => data as User);
+      .then(data => data as User)
+      .catch(() => null);
   }
 
   /**

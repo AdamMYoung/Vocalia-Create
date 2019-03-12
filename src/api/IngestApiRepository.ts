@@ -41,7 +41,8 @@ export default class IngestApiRepository {
   public async getPodcasts(accessToken: string): Promise<Podcast[] | null> {
     return await this.getInjectedFetch(API + PODCASTS, accessToken)
       .then(response => response.json())
-      .then(data => data as Podcast[]);
+      .then(data => data as Podcast[])
+      .catch(() => null);
   }
 
   /**
@@ -58,7 +59,8 @@ export default class IngestApiRepository {
       accessToken
     )
       .then(response => response.json())
-      .then(data => data as Podcast);
+      .then(data => data as Podcast)
+      .catch(() => null);
   }
 
   /**
@@ -106,7 +108,8 @@ export default class IngestApiRepository {
       accessToken
     )
       .then(x => x.json())
-      .then(data => data as Podcast);
+      .then(data => data as Podcast)
+      .catch(() => null);
   }
 
   /**

@@ -20,6 +20,7 @@ interface IInviteProps {
 
 interface IInviteState {
   podcast: Podcast | null;
+  isValid: boolean;
 }
 
 export default class Invite extends Component<IInviteProps, IInviteState> {
@@ -27,7 +28,8 @@ export default class Invite extends Component<IInviteProps, IInviteState> {
     super(props);
 
     this.state = {
-      podcast: null
+      podcast: null,
+      isValid: true
     };
   }
 
@@ -39,6 +41,7 @@ export default class Invite extends Component<IInviteProps, IInviteState> {
 
     var podcast = await api.getInvitePodcastInfo(inviteUid);
     if (podcast) this.setState({ podcast });
+    else this.setState({ isValid: false });
   }
 
   /**
@@ -51,13 +54,29 @@ export default class Invite extends Component<IInviteProps, IInviteState> {
   };
 
   render() {
-    const { podcast } = this.state;
+    const { podcast, isValid } = this.state;
+
+    const InvalidLink = (
+      <React.Fragment>
+        <DialogTitle>Invalid Link</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            The link provided may have expired or is invalid.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <LinkContainer to="/">
+            <Button color="primary">Close</Button>
+          </LinkContainer>
+        </DialogActions>
+      </React.Fragment>
+    );
 
     return (
       <Dialog open={true}>
-        {podcast && (
+        {podcast && isValid && (
           <React.Fragment>
-            <DialogTitle>{"Join Podcast"}</DialogTitle>
+            <DialogTitle>Join Podcast</DialogTitle>
             <DialogContent style={{ display: "flex" }}>
               <img style={{ height: 80, width: 80 }} src={podcast.imageUrl} />
               <DialogContentText>
@@ -90,6 +109,7 @@ export default class Invite extends Component<IInviteProps, IInviteState> {
             </DialogActions>
           </React.Fragment>
         )}
+        {!isValid && InvalidLink}
       </Dialog>
     );
   }
