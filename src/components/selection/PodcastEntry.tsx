@@ -69,12 +69,21 @@ class PodcastEntry extends Component<IEntryProps, IEntryState> {
             image={podcast.imageUrl}
             className={classes.image}
           />
+
+          <CardContent>
+            <Typography
+              variant="h6"
+              style={{
+                fontSize: 14,
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis"
+              }}
+            >
+              {podcast.name}
+            </Typography>
+          </CardContent>
         </CardActionArea>
-        <CardContent>
-          <Typography variant="h6" style={{ fontSize: 14 }}>
-            {podcast.name}
-          </Typography>
-        </CardContent>
       </Card>
     );
   }
