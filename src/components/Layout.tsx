@@ -15,6 +15,7 @@ import Editor from "./editor/Editor";
 import Record from "./record/Record";
 import Login from "./Login";
 import Selection from "./selection/Selection";
+import Invite from "./invite/Invite";
 
 /**
  * State information for the application.
@@ -114,6 +115,17 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
           }
         />
 
+        <Route
+          path="/invite/:id"
+          render={props =>
+            auth.isAuthenticated() ? (
+              <Invite api={api} inviteUid={props.match.params.id} />
+            ) : (
+              <Login auth={auth} />
+            )
+          }
+        />
+
         <PrivateRoute
           path="/edit"
           isAuthenticated={auth.isAuthenticated}
@@ -137,6 +149,8 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
             return <Login auth={this.state.auth} />;
           }}
         />
+
+        <Redirect to="/selection" />
       </Switch>
     );
 

@@ -47,13 +47,15 @@ export default class InviteLinkDialog extends Component<
   generateInvite = async () => {
     const { api, podcastUid } = this.props;
     const { expiry, hasExpiry } = this.state;
+    this.setState({ hasInvite: true });
 
     var invite = await api.createInviteLink(
       podcastUid,
       hasExpiry ? expiry : null
     );
 
-    if (invite) this.setState({ hasInvite: true, inviteCode: invite });
+    if (invite) this.setState({ inviteCode: invite });
+    else this.setState({ hasInvite: false });
   };
 
   render() {

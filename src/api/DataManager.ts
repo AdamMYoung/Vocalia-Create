@@ -117,6 +117,21 @@ export default class DataManager {
   }
 
   /**
+   * Gets the podcast attached to the invite.
+   * @param inviteLink Invitation link recieved.
+   */
+  public async getInvitePodcastInfo(
+    inviteLink: string
+  ): Promise<Podcast | null> {
+    if (this.accessToken)
+      return await this.ingest.getInvitePodcastInfo(
+        this.accessToken,
+        inviteLink
+      );
+    return null;
+  }
+
+  /**
    * Creates an invite link to add others to a podcast.
    * @param podcastUid Podcast to get invite link for.
    * @param expiry Date when the link should expire (optional).

@@ -5,6 +5,7 @@ const PODCAST = "podcast";
 const PODCASTS = "podcasts";
 const SESSION = "session";
 const INVITE = "invite";
+const INVITE_INFO = "invite/info";
 
 export default class IngestApiRepository {
   /**
@@ -89,6 +90,23 @@ export default class IngestApiRepository {
       accessToken,
       "DELETE"
     );
+  }
+
+  /**
+   * Gets the podcast attached to the invite.
+   * @param accessToken Token for API access.
+   * @param inviteLink Invitation link recieved.
+   */
+  async getInvitePodcastInfo(
+    accessToken: string,
+    inviteLink: string
+  ): Promise<Podcast | null> {
+    return await this.getInjectedFetch(
+      API + INVITE_INFO + "?inviteLink=" + inviteLink,
+      accessToken
+    )
+      .then(x => x.json())
+      .then(data => data as Podcast);
   }
 
   /**
