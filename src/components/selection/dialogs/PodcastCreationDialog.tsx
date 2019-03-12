@@ -23,6 +23,7 @@ interface IPodcastCreationDialogState {
   podcastDescription: string;
   podcastImage: File | null;
   podcastImagePath: string;
+  canSubmit: boolean;
 }
 
 export default class PodcastCreationDialog extends Component<
@@ -36,7 +37,8 @@ export default class PodcastCreationDialog extends Component<
       podcastName: "",
       podcastDescription: "",
       podcastImage: null,
-      podcastImagePath: ""
+      podcastImagePath: "",
+      canSubmit: false
     };
   }
 
@@ -62,6 +64,8 @@ export default class PodcastCreationDialog extends Component<
   submitPodcast = () => {
     const { api, onFinish } = this.props;
     const { podcastName, podcastDescription, podcastImage } = this.state;
+
+    this.setState({ canSubmit: false });
 
     if (podcastImage) {
       var reader = new FileReader();
@@ -89,11 +93,14 @@ export default class PodcastCreationDialog extends Component<
       podcastName,
       podcastDescription,
       podcastImagePath,
-      podcastImage
+      podcastImage,
+      canSubmit
     } = this.state;
 
-    const canSubmit =
-      podcastName.length > 0 && podcastDescription.length > 0 && podcastImage;
+    const isDisabled =
+      podcastName.length > 0 &&
+      podcastDescription.length > 0 &&
+      podcastImage != null;
 
     return (
       <Dialog open={open} onClose={onFinish}>
@@ -105,7 +112,10 @@ export default class PodcastCreationDialog extends Component<
               buttonText="Select a Logo"
               label="Images must be square, and under 5mb."
               singleImage={true}
-              onChange={this.imageSelected}
+              onChange={e => {
+                this.imageSelected(e);
+                this.setState({ canSubmit: isDisabled });
+              }}
               imgExtension={[".jpg", ".png"]}
               maxFileSize={5242880}
               withPreview={true}
@@ -129,7 +139,12 @@ export default class PodcastCreationDialog extends Component<
               margin="normal"
               value={podcastName}
               fullWidth
-              onChange={e => this.setState({ podcastName: e.target.value })}
+              onChange={e =>
+                this.setState({
+                  podcastName: e.target.value,
+                  canSubmit: isDisabled
+                })
+              }
             />
             <TextField
               label="Description"
@@ -138,7 +153,10 @@ export default class PodcastCreationDialog extends Component<
               fullWidth
               value={podcastDescription}
               onChange={e =>
-                this.setState({ podcastDescription: e.target.value })
+                this.setState({
+                  podcastDescription: e.target.value,
+                  canSubmit: isDisabled
+                })
               }
             />
           </form>
