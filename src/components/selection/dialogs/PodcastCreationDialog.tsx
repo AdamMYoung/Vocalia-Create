@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import ImageUploader from "react-images-upload";
 import { PodcastUpload } from "../../../utility/types";
+import { delay } from "q";
 
 interface IPodcastCreationDialogProps {
   api: DataManager;
@@ -66,10 +67,10 @@ export default class PodcastCreationDialog extends Component<
       var reader = new FileReader();
       var fileType = podcastImage.name.match(/\.[0-9a-z]+$/i);
 
-      reader.onload = () => {
+      reader.onload = async () => {
         var imageResult = reader.result as string;
 
-        api.createPodcast({
+        await api.createPodcast({
           name: podcastName,
           description: podcastDescription,
           imageData: imageResult.split(",")[1],

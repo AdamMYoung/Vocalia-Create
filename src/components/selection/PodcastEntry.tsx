@@ -21,12 +21,20 @@ const styles = (theme: Theme) =>
   createStyles({
     paper: {
       [theme.breakpoints.down("xs")]: {
-        width: 100,
+        width: 120,
         margin: 3
       },
       [theme.breakpoints.up("sm")]: {
-        width: 160,
+        width: 180,
         margin: 4
+      }
+    },
+    image: {
+      [theme.breakpoints.down("xs")]: {
+        height: 120
+      },
+      [theme.breakpoints.up("sm")]: {
+        height: 180
       }
     }
   });
@@ -56,11 +64,17 @@ class PodcastEntry extends Component<IEntryProps, IEntryState> {
     return (
       <Card className={classes.paper} onClick={onSelected}>
         <CardActionArea>
-          <CardMedia component="img" image={podcast.imageUrl} />
-          <CardContent>
-            <Typography variant="h6">{podcast.name}</Typography>
-          </CardContent>
+          <CardMedia
+            component="img"
+            image={podcast.imageUrl}
+            className={classes.image}
+          />
         </CardActionArea>
+        <CardContent>
+          <Typography variant="h6" style={{ fontSize: 14 }}>
+            {podcast.name}
+          </Typography>
+        </CardContent>
       </Card>
     );
   }
