@@ -78,6 +78,7 @@ export default class PodcastSelectedDialog extends Component<
     return (
       <React.Fragment>
         <Dialog open={open} onClose={onFinish}>
+          <p />
           {podcast && (
             <React.Fragment>
               <DialogTitle disableTypography={true}>

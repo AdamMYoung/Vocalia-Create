@@ -98,15 +98,15 @@ export default class InviteLinkDialog extends Component<
           </form>
         </DialogContent>
         <DialogActions>
+          <Button color="primary" onClick={onClose}>
+            {hasInvite ? "Close" : "Cancel"}
+          </Button>
           <Button
             color="primary"
             onClick={this.generateInvite}
             disabled={hasInvite}
           >
             Create
-          </Button>
-          <Button color="primary" onClick={onClose}>
-            {hasInvite ? "Close" : "Cancel"}
           </Button>
         </DialogActions>
       </Dialog>
