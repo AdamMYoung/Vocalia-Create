@@ -103,7 +103,6 @@ export default class Chat extends Component<IChatProps, IChatState> {
 
     return (
       <div style={{ padding: 12 }}>
-        <Typography variant="h6">Current Users</Typography>
         <List>
           {Object.values(userStreams).map(s => (
             <ChatUser key={s.id} stream={s} user={userInfo[s.tag]} />
