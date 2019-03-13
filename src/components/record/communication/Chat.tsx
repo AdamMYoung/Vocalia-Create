@@ -3,6 +3,7 @@ import WebRTC from "../../../stream/WebRTC";
 import { UserStream, User } from "../../../utility/types";
 import DataManager from "../../../api/DataManager";
 import ChatUser from "./ChatUser";
+import { Grid, List, Typography } from "@material-ui/core";
 
 interface IChatProps {
   sessionId: string | null;
@@ -96,11 +97,19 @@ export default class Chat extends Component<IChatProps, IChatState> {
     const { userStreams, userInfo } = this.state;
 
     return (
-      <div style={{ padding: 12 }}>
-        {Object.values(userStreams).map(s => (
-          <ChatUser key={s.id} stream={s} user={userInfo[s.tag]} />
-        ))}
-      </div>
+      <Grid container style={{ padding: 12 }}>
+        <Grid item xs={8}>
+          <Typography variant="h6">Current Users</Typography>
+          <List>
+            {Object.values(userStreams).map(s => (
+              <ChatUser key={s.id} stream={s} user={userInfo[s.tag]} />
+            ))}
+          </List>
+        </Grid>
+        <Grid item xs={4}>
+          <div />
+        </Grid>
+      </Grid>
     );
   }
 }

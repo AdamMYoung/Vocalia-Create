@@ -1,7 +1,17 @@
 import React, { Component } from "react";
 import { UserStream, User } from "../../../utility/types";
-import { Avatar, Typography, IconButton } from "@material-ui/core";
+import {
+  Avatar,
+  Typography,
+  IconButton,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListItemSecondaryAction,
+  Divider
+} from "@material-ui/core";
 import { VolumeMute, VolumeUp } from "@material-ui/icons";
+import { Slider } from "@material-ui/lab";
 
 interface IChatUserProps {
   stream: UserStream;
@@ -41,24 +51,22 @@ export default class ChatUser extends Component<
 
   render() {
     const { user } = this.props;
-    const { isMuted, audio } = this.state;
+    const { isMuted } = this.state;
 
     const VolumeIcon = isMuted ? <VolumeMute /> : <VolumeUp />;
 
     return (
-      <div style={{ width: "100%", display: "flex" }}>
-        <Avatar src={user.pictureUrl} style={{ margin: "auto 0" }} />
-        <Typography
-          variant="h6"
-          color="inherit"
-          style={{ margin: "auto 0", paddingLeft: 8 }}
-        >
-          {user.firstName + " " + user.lastName}
+      <ListItem divider>
+        <ListItemAvatar>
+          <Avatar src={user.pictureUrl} style={{ margin: "auto 0" }} />
+        </ListItemAvatar>
+        <ListItemText primary={user.firstName + " " + user.lastName} />
+        <ListItemSecondaryAction>
           <IconButton style={{ margin: 6 }} onClick={this.onToggleMute}>
             {VolumeIcon}
           </IconButton>
-        </Typography>
-      </div>
+        </ListItemSecondaryAction>
+      </ListItem>
     );
   }
 }

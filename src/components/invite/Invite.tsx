@@ -11,8 +11,6 @@ import {
   DialogActions
 } from "@material-ui/core";
 import { Redirect } from "react-router";
-import { LinkContainer } from "react-router-bootstrap";
-import { throws } from "assert";
 
 interface IInviteProps {
   inviteUid: string;
