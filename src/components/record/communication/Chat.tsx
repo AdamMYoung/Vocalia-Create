@@ -93,23 +93,23 @@ export default class Chat extends Component<IChatProps, IChatState> {
     if (webRTC) webRTC.disconnectFromPeers();
   };
 
+  shouldComponentUpdate = (nextProps: IChatProps) => {
+    if (this.props.sessionId == nextProps.sessionId) return false;
+    return true;
+  };
+
   render() {
     const { userStreams, userInfo } = this.state;
 
     return (
-      <Grid container style={{ padding: 12 }}>
-        <Grid item xs={8}>
-          <Typography variant="h6">Current Users</Typography>
-          <List>
-            {Object.values(userStreams).map(s => (
-              <ChatUser key={s.id} stream={s} user={userInfo[s.tag]} />
-            ))}
-          </List>
-        </Grid>
-        <Grid item xs={4}>
-          <div />
-        </Grid>
-      </Grid>
+      <div style={{ padding: 12 }}>
+        <Typography variant="h6">Current Users</Typography>
+        <List>
+          {Object.values(userStreams).map(s => (
+            <ChatUser key={s.id} stream={s} user={userInfo[s.tag]} />
+          ))}
+        </List>
+      </div>
     );
   }
 }

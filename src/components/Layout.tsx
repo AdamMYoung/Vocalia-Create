@@ -89,14 +89,14 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
       <Switch>
         <Route
           exact
-          path="/record/:podcast/:session/"
+          path="/record/:podcastId/:sessionId/"
           render={props =>
             auth.isAuthenticated() ? (
               <Record
                 api={api}
                 isMobile={isMobile}
-                podcastName={props.match.params.podcast}
-                sessionId={props.match.params.session}
+                podcastId={props.match.params.podcastId}
+                sessionId={props.match.params.sessionId}
               />
             ) : (
               <Login auth={auth} />

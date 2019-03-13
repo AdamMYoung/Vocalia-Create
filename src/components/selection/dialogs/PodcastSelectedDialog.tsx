@@ -144,7 +144,7 @@ export default class PodcastSelectedDialog extends Component<
                 {podcast.sessions.length > 0 ? (
                   <LinkContainer
                     to={
-                      "/record/" + podcast.name + "/" + podcast.sessions[0].uid
+                      "/record/" + podcast.uid + "/" + podcast.sessions[0].uid
                     }
                   >
                     <Button onClick={this.props.onFinish} color="primary">

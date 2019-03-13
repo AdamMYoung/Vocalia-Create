@@ -2,57 +2,61 @@ import React, { Component } from "react";
 import DataManager from "../../api/DataManager";
 import { Grid, Toolbar, Typography, Divider } from "@material-ui/core";
 import Chat from "./communication/Chat";
+import { Podcast } from "../../utility/types";
+import Info from "./info/Info";
 
 interface IRecordProps {
   api: DataManager;
   isMobile: boolean;
   sessionId: string | null;
-  podcastName: string | null;
+  podcastId: string | null;
 }
 
 interface IRecordState {
   dialogOpen: boolean;
-  selectedSession: string | null;
+  currentPodcast: Podcast | null;
 }
 
 export default class Record extends Component<IRecordProps, IRecordState> {
   constructor(props: IRecordProps) {
     super(props);
 
-    const { sessionId } = this.props;
-
     this.state = {
       dialogOpen: false,
-      selectedSession: sessionId
+      currentPodcast: null
     };
+
+    this.loadPodcast();
   }
 
-  componentWillReceiveProps = (props: IRecordProps) => {
-    if (this.props.sessionId != props.sessionId)
-      this.setState({ selectedSession: props.sessionId });
+  /**
+   * Loads the selected podcast from the API.
+   */
+  private loadPodcast = async () => {
+    const { podcastId, api } = this.props;
+
+    if (podcastId) {
+      console.log(podcastId);
+      var currentPodcast = await api.getPodcastDetail(podcastId);
+      this.setState({ currentPodcast });
+    }
   };
 
   render() {
-    const { api, isMobile, podcastName } = this.props;
-    const { selectedSession } = this.state;
+    const { api, isMobile, sessionId } = this.props;
+    const { currentPodcast } = this.state;
 
     return (
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <div>
-            <Toolbar variant={isMobile ? "regular" : "dense"}>
-              <Typography
-                variant="h6"
-                color="inherit"
-                noWrap
-                style={{ flexGrow: 1 }}
-              >
-                {podcastName}
-              </Typography>
-            </Toolbar>
-            <Divider />
-            <Chat api={api} sessionId={selectedSession} />
+            <Chat api={api} sessionId={sessionId} />
           </div>
+        </Grid>
+        <Grid item xs={4}>
+          {currentPodcast && (
+            <Info isMobile={isMobile} podcast={currentPodcast} />
+          )}
         </Grid>
       </Grid>
     );
