@@ -26,7 +26,7 @@ export default class Info extends Component<IInfoProps> {
           </Typography>
         </Toolbar>
         <Divider />
-        <div style={{ display: "flex", flexWrap: "wrap", margin: 8 }}>
+        <div style={{ display: "flex", margin: 8 }}>
           <img
             style={{ height: 100, width: 100, margin: 8 }}
             src={podcast.imageUrl}
