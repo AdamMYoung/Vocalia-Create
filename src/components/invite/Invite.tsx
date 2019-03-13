@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { Redirect } from "react-router";
 import { LinkContainer } from "react-router-bootstrap";
+import { throws } from "assert";
 
 interface IInviteProps {
   inviteUid: string;
@@ -21,6 +22,7 @@ interface IInviteProps {
 interface IInviteState {
   podcast: Podcast | null;
   isValid: boolean;
+  shouldRedirect: boolean;
 }
 
 export default class Invite extends Component<IInviteProps, IInviteState> {
@@ -29,7 +31,8 @@ export default class Invite extends Component<IInviteProps, IInviteState> {
 
     this.state = {
       podcast: null,
-      isValid: true
+      isValid: true,
+      shouldRedirect: false
     };
   }
 
@@ -51,10 +54,15 @@ export default class Invite extends Component<IInviteProps, IInviteState> {
     const { api, inviteUid } = this.props;
 
     await api.acceptInviteLink(inviteUid);
+    this.setState({ shouldRedirect: true });
+  };
+
+  redirect = () => {
+    this.setState({ shouldRedirect: true });
   };
 
   render() {
-    const { podcast, isValid } = this.state;
+    const { podcast, isValid, shouldRedirect } = this.state;
 
     const InvalidLink = (
       <React.Fragment>
@@ -65,9 +73,9 @@ export default class Invite extends Component<IInviteProps, IInviteState> {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <LinkContainer to="/">
-            <Button color="primary">Close</Button>
-          </LinkContainer>
+          <Button color="primary" onClick={this.redirect}>
+            Close
+          </Button>
         </DialogActions>
       </React.Fragment>
     );
@@ -93,22 +101,22 @@ export default class Invite extends Component<IInviteProps, IInviteState> {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <LinkContainer to="/">
-                <Button color="primary">Decline</Button>
-              </LinkContainer>
-              <LinkContainer to="/">
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    this.acceptInvite();
-                  }}
-                >
-                  Accept
-                </Button>
-              </LinkContainer>
+              <Button color="primary" onClick={this.redirect}>
+                Decline
+              </Button>
+              <Button
+                color="primary"
+                onClick={() => {
+                  this.acceptInvite();
+                }}
+              >
+                Accept
+              </Button>
             </DialogActions>
           </React.Fragment>
         )}
+        {shouldRedirect && <Redirect to="/" />}
+
         {!isValid && InvalidLink}
       </Dialog>
     );
