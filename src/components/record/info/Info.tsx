@@ -11,8 +11,6 @@ export default class Info extends Component<IInfoProps> {
   render() {
     const { podcast, isMobile } = this.props;
 
-    console.log(podcast);
-
     return (
       <div>
         <Toolbar variant={isMobile ? "regular" : "dense"}>

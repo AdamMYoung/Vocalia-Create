@@ -10,8 +10,6 @@ import {
   Switch
 } from "react-router";
 import Navigation from "./navigation/Navigation";
-import Publish from "./publish/Publish";
-import Editor from "./editor/Editor";
 import Record from "./record/Record";
 import Login from "./Login";
 import Selection from "./selection/Selection";
@@ -124,17 +122,6 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
               <Login auth={auth} />
             )
           }
-        />
-
-        <PrivateRoute
-          path="/edit"
-          isAuthenticated={auth.isAuthenticated}
-          component={() => <Editor />}
-        />
-        <PrivateRoute
-          path="/publish"
-          isAuthenticated={auth.isAuthenticated}
-          component={() => <Publish />}
         />
 
         <Route
