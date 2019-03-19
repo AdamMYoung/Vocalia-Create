@@ -19,6 +19,7 @@
     "@types/webrtc": "0.0.24",
     "auth0-js": "^9.10.0",
     "date-fns": "^2.0.0-alpha.27",
+    "idb-keyval": "^3.1.0",
     "material-ui-pickers": "^2.2.4",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

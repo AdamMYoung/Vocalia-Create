@@ -8,7 +8,7 @@ export interface Podcast {
 }
 
 export interface PodcastUpload {
-  uid: string;
+  uid?: string;
   name: string;
   description: string;
   imageData: string;
