@@ -47,7 +47,8 @@ const styles = (theme: Theme) =>
     content: {
       flexGrow: 1,
       [theme.breakpoints.up("sm")]: {
-        marginLeft: drawerWidth + 10,
+        marginLeft: drawerWidth,
+        paddingLeft: 10,
         width: `calc(100% - ${drawerWidth}px)`
       }
     },
