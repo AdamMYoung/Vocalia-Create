@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import DataManager from "../../../../../data/api/DataManager";
-import { Podcast, User } from "../../../../../utility/types";
 import DetailDialogView from "./DetailDialogView";
 import NewInviteDialogViewModel from "../newInvite/NewInviteDialogViewModel";
 import NewSessionDialogViewModel from "../newSession/NewSessionDialogViewModel";
+import { User, Podcast } from "../../../utility/types";
+import DataManager from "../../../data/api/DataManager";
 
 interface IProps {
   api: DataManager;

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { User } from "../../../../utility/types";
 import {
   ListItem,
   ListItemAvatar,
@@ -9,6 +8,7 @@ import {
   IconButton
 } from "@material-ui/core";
 import { VolumeMute, VolumeUp } from "@material-ui/icons";
+import { User } from "../../../../../utility/types";
 
 interface IProps {
   user: User;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { User } from "../../../../../../utility/types";
 import { Avatar, Typography, Fade } from "@material-ui/core";
+import { User } from "../../../../utility/types";
 
 interface IProps {
   users: User[];

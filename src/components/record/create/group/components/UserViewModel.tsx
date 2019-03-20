@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { User, UserStream } from "../../../../utility/types";
 import UserView from "./UserView";
+import { User, UserStream } from "../../../../../utility/types";
 
 interface IProps {
   stream: UserStream;

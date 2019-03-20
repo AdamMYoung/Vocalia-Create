@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Podcast } from "../../../../../../utility/types";
 import {
   Typography,
   IconButton,
@@ -9,6 +8,7 @@ import {
   WithStyles
 } from "@material-ui/core";
 import { Share } from "@material-ui/icons";
+import { Podcast } from "../../../../utility/types";
 
 /**
  * CSS Styles of the browser

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import DataManager from "../../../../../data/api/DataManager";
+import DataManager from "../../../data/api/DataManager";
 import NewPodcastDialogView from "./NewPodcastDialogView";
 
 interface IProps {

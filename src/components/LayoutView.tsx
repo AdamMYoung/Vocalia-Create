@@ -8,8 +8,8 @@ import NavigationViewModel from "./navigation/NavigationViewModel";
 import OptionsViewModel from "./options/OptionsViewModel";
 import LoginViewModel from "./LoginViewModel";
 import SelectionViewModel from "./record/selection/SelectionViewModel";
-import InviteViewModel from "./record/invite/InviteViewModel";
-import GroupViewModel from "./record/group/GroupViewModel";
+import InviteViewModel from "./invite/InviteViewModel";
+import CreateViewModel from "./record/create/CreateViewModel";
 
 interface IProps {
   isMobile: boolean;
@@ -31,8 +31,9 @@ export default class LayoutView extends Component<IProps> {
             exact
             path="/record/:podcastId/:sessionId/"
             render={props => (
-              <GroupViewModel
+              <CreateViewModel
                 {...this.props}
+                podcastId={props.match.params.podcastId}
                 sessionId={props.match.params.sessionId}
               />
             )}

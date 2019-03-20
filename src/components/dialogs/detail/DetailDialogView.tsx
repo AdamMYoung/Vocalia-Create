@@ -10,11 +10,11 @@ import {
   Button,
   Typography
 } from "@material-ui/core";
-import { Podcast, User } from "../../../../../utility/types";
 import PodcastInfoView from "./elements/PodcastInfoView";
 import UsersView from "./elements/UsersView";
 import TimeAgo from "react-timeago";
 import { LinkContainer } from "react-router-bootstrap";
+import { Podcast, User } from "../../../utility/types";
 
 interface IProps {
   podcast: Podcast;

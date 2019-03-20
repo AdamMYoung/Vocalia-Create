@@ -8,7 +8,7 @@ import {
   Typography,
   Dialog
 } from "@material-ui/core";
-import { Podcast } from "../../../utility/types";
+import { Podcast } from "../../utility/types";
 import { Redirect } from "react-router";
 
 interface IProps {
