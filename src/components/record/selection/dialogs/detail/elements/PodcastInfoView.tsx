@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { User, Podcast } from "../../../../../../utility/types";
+import { Podcast } from "../../../../../../utility/types";
 import {
-  Avatar,
   Typography,
   IconButton,
   createStyles,
@@ -16,7 +15,7 @@ import { Share } from "@material-ui/icons";
  */
 const styles = (theme: Theme) =>
   createStyles({
-    root: { display: "flex", maxHeight: 250 },
+    root: { display: "flex", maxHeight: 200 },
     text: {
       display: "inline",
       paddingLeft: 15,

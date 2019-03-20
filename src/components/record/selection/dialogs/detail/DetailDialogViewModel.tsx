@@ -8,6 +8,7 @@ import NewSessionDialogViewModel from "../newSession/NewSessionDialogViewModel";
 interface IProps {
   api: DataManager;
   podcast: Podcast;
+  isMobile: boolean;
   onClose: () => void;
 }
 
@@ -94,12 +95,14 @@ export default class DetailDialogViewModel extends Component<IProps, IState> {
   /**
    * Called when the new session dialog should be closed.
    */
-  private onCloseNewSession = () => {
+  private onCloseNewSession = async () => {
     this.setState({ isNewSessionDialogOpen: false });
+    await this.loadPodcast();
   };
 
   render() {
     const { podcast, isInviteDialogOpen, isNewSessionDialogOpen } = this.state;
+    const { api } = this.props;
     return (
       <DetailDialogView
         podcast={podcast}
@@ -111,13 +114,15 @@ export default class DetailDialogViewModel extends Component<IProps, IState> {
         {isInviteDialogOpen && (
           <NewInviteDialogViewModel
             onClose={this.onCloseInvite}
-            {...this.props}
+            api={api}
+            podcast={podcast}
           />
         )}
         {isNewSessionDialogOpen && (
           <NewSessionDialogViewModel
             onClose={this.onCloseNewSession}
-            {...this.props}
+            api={api}
+            podcast={podcast}
           />
         )}
       </DetailDialogView>

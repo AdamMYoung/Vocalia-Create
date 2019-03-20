@@ -39,10 +39,7 @@ const styles = (theme: Theme) =>
       }
     },
     title: {
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-        display: "block"
-      }
+      display: "block"
     },
     content: {
       flexGrow: 1,

@@ -19,6 +19,7 @@ import { LinkContainer } from "react-router-bootstrap";
 interface IProps {
   podcast: Podcast;
   users: User[];
+  isMobile: boolean;
   sessionUrl: string;
   onClose: () => void;
   onNewSession: () => void;
@@ -27,25 +28,26 @@ interface IProps {
 
 export default class DetailDialogView extends Component<IProps> {
   render() {
-    const { podcast, onClose, sessionUrl, onNewSession } = this.props;
+    const { podcast, onClose, sessionUrl, onNewSession, isMobile } = this.props;
     const hasSession = podcast.sessions.length > 0;
 
     return (
       <React.Fragment>
-        <Dialog open onClose={onClose}>
+        <Dialog open onClose={onClose} fullScreen={isMobile}>
           <DialogTitle disableTypography>
             <PodcastInfoView {...this.props} />
           </DialogTitle>
           <DialogContent style={{ paddingTop: 5 }}>
             <UsersView {...this.props} />
             <Typography variant="h6" style={{ minWidth: 300 }}>
-              Session
+              Current Session
             </Typography>
             <List style={{ minHeight: 60 }}>
               {hasSession && (
                 <ListItem>
                   <ListItemText
                     primary={<TimeAgo date={podcast.sessions[0].date} />}
+                    secondary={podcast.sessions[0].uid}
                   />
                 </ListItem>
               )}

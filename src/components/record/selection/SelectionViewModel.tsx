@@ -67,8 +67,9 @@ export default class SelectionViewModel extends Component<IProps, IState> {
   /**
    * Called when the new podcast dialog should be closed.
    */
-  private onCloseNewPodcast = () => {
+  private onCloseNewPodcast = async () => {
     this.setState({ createNewPodcast: false });
+    await this.loadPodcasts();
   };
 
   render() {
