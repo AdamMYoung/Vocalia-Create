@@ -25,10 +25,7 @@ export default class GroupView extends Component<IProps> {
     );
 
     return (
-      <div style={{ padding: 12 }}>
-        <Typography variant="h6">Current Members</Typography>
-        {Object.values(userStreams).length > 0 ? streams : noUsers}
-      </div>
+      <div>{Object.values(userStreams).length > 0 ? streams : noUsers}</div>
     );
   }
 }
