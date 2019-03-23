@@ -76,9 +76,7 @@ export default class Auth {
     this.onTokenChanged(this.accessToken);
     this.scheduleRenewal();
 
-    // navigate to the home route
-    var path = localStorage.getItem("path");
-    this.routeProps.history.push(path != null ? path : "/browse/top");
+    this.routeProps.history.push("/selection");
   };
 
   /**
@@ -89,10 +87,8 @@ export default class Auth {
 
     this.auth0.checkSession({}, (err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        console.log("Renewed Session!");
         this.setSession(authResult);
       } else if (err) {
-        console.log("Can't renew session, redirecting...");
         this.clearSignIn();
         this.login();
       }
