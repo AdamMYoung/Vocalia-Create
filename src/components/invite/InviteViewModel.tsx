@@ -18,6 +18,8 @@ export default class InviteViewModel extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    console.log("Opened invite view model");
+
     this.state = {
       podcast: null,
       isValid: true,

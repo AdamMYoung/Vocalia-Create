@@ -4,6 +4,7 @@ import DataManager from "../../../data/api/DataManager";
 import { Grid, Divider, Typography } from "@material-ui/core";
 import GroupViewModel from "./group/GroupViewModel";
 import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
+import ControlViewModel from "./control/ControlViewModel";
 
 interface IProps {
   api: DataManager;
@@ -16,10 +17,13 @@ export default class CreateView extends Component<IProps> {
   render() {
     return (
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography variant="h6">Current Podcast</Typography>
           <PodcastInfoView {...this.props} />
           <Divider style={{ marginTop: 16 }} />
+        </Grid>
+        <Grid item xs={6}>
+          <ControlViewModel />
         </Grid>
         <Grid item xs={12}>
           <GroupViewModel {...this.props} />

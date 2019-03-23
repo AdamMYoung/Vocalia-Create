@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import DataManager from "../data/api/DataManager";
-import { Slide } from "@material-ui/core";
 import { Route, Switch, Redirect } from "react-router";
 import Callback from "../data/auth/Callback";
 import Auth from "../data/auth/Auth";
 import NavigationViewModel from "./navigation/NavigationViewModel";
 import OptionsViewModel from "./options/OptionsViewModel";
-import LoginViewModel from "./LoginView";
 import SelectionViewModel from "./record/selection/SelectionViewModel";
 import InviteViewModel from "./invite/InviteViewModel";
 import CreateViewModel from "./record/create/CreateViewModel";
@@ -55,6 +53,7 @@ export default class LayoutView extends Component<IProps> {
           />
 
           <Route
+            exact
             path="/invite/:id"
             render={props => (
               <InviteViewModel
