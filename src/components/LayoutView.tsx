@@ -6,10 +6,11 @@ import Callback from "../data/auth/Callback";
 import Auth from "../data/auth/Auth";
 import NavigationViewModel from "./navigation/NavigationViewModel";
 import OptionsViewModel from "./options/OptionsViewModel";
-import LoginViewModel from "./LoginViewModel";
+import LoginViewModel from "./LoginView";
 import SelectionViewModel from "./record/selection/SelectionViewModel";
 import InviteViewModel from "./invite/InviteViewModel";
 import CreateViewModel from "./record/create/CreateViewModel";
+import LoginView from "./LoginView";
 
 interface IProps {
   isMobile: boolean;
@@ -22,7 +23,7 @@ interface IProps {
 
 export default class LayoutView extends Component<IProps> {
   render() {
-    const { auth } = this.props;
+    const { auth, isAuthenticated } = this.props;
 
     const route = (
       <React.Fragment>
@@ -77,10 +78,10 @@ export default class LayoutView extends Component<IProps> {
       </React.Fragment>
     );
 
-    return auth.isAuthenticated() ? (
-      <NavigationViewModel {...this.props}>{route}</NavigationViewModel>
-    ) : (
-      <LoginViewModel {...this.props} />
+    return (
+      <NavigationViewModel {...this.props}>
+        {isAuthenticated ? route : <LoginView />}
+      </NavigationViewModel>
     );
   }
 }

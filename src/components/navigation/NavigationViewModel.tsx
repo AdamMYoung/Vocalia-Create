@@ -5,6 +5,7 @@ import NavigationView from "./NavigationView";
 interface IProps {
   api: DataManager;
   isMobile: boolean;
+  isAuthenticated: boolean;
   onAuth: () => void;
 }
 
@@ -48,7 +49,6 @@ export default class NavigationViewModel extends Component<IProps, IState> {
 
     return (
       <NavigationView
-        isAuthenticated={Boolean(api.accessToken)}
         onAddToHome={this.onAddToHome}
         setDrawer={this.setDrawer}
         {...this.props}

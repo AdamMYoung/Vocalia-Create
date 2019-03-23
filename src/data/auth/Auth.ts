@@ -78,7 +78,7 @@ export default class Auth {
 
     // navigate to the home route
     var path = localStorage.getItem("path");
-    this.routeProps.history.replace(path != null ? path : "/browse/top");
+    this.routeProps.history.push(path != null ? path : "/browse/top");
   };
 
   /**
@@ -89,8 +89,10 @@ export default class Auth {
 
     this.auth0.checkSession({}, (err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
+        console.log("Renewed Session!");
         this.setSession(authResult);
       } else if (err) {
+        console.log("Can't renew session, redirecting...");
         this.clearSignIn();
         this.login();
       }
@@ -134,7 +136,9 @@ export default class Auth {
   logout = () => {
     this.clearSignIn();
     this.onTokenChanged(null);
-    this.auth0.logout({ returnTo: process.env.REACT_APP_AUTH_HOME });
+    this.auth0.logout({
+      returnTo: process.env.REACT_APP_AUTH_HOME
+    });
   };
 
   /**
@@ -151,6 +155,7 @@ export default class Auth {
     // Check whether the current time is past the
     // access token's expiry time.
     let expiresAt = this.expiresAt as number;
-    return new Date().getTime() < expiresAt;
+    if (expiresAt) return new Date().getTime() < expiresAt;
+    else return null;
   };
 }
