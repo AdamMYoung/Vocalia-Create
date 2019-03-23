@@ -50,7 +50,7 @@ export default class InviteView extends Component<IProps> {
         <DialogTitle>Join Podcast</DialogTitle>
         <DialogContent style={{ display: "flex" }}>
           <img style={{ height: 80, width: 80 }} src={podcast.imageUrl} />
-          <DialogContentText>
+          <DialogContentText component="span">
             <div
               style={{
                 paddingLeft: 15,
