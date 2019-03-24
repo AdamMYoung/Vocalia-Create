@@ -14,31 +14,12 @@ export class AudioManager {
     })
     .build();
 
-  public webRtc: WebRTC | null = null;
-  public recorder: AudioRecorder | null = null;
+  public webRtc: WebRTC;
+  public recorder: AudioRecorder;
 
   constructor() {
     this.hub.start();
-    this.getMedia().then(this.createAudioElements);
+    this.webRtc = new WebRTC(this.hub);
+    this.recorder = new AudioRecorder();
   }
-
-  /**
-   * Creates all audio elements from the provided stream.
-   */
-  private createAudioElements = (stream: MediaStream | null) => {
-    if (stream) {
-      this.webRtc = new WebRTC();
-      this.recorder = new AudioRecorder(stream);
-    }
-  };
-
-  /**
-   * Prompts the user for local device access.
-   */
-  private getMedia = async (): Promise<MediaStream> => {
-    return await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false
-    });
-  };
 }

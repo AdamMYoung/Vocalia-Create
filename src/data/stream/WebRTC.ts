@@ -68,21 +68,11 @@ interface UserConnection {
 }
 
 /**
- * SignalR signalling server connection information.
- */
-const hub = new signalR.HubConnectionBuilder()
-  .configureLogging(signalR.LogLevel.Information)
-  .withUrl(process.env.REACT_APP_INGEST_SIGNALR_URL as string, {
-    skipNegotiation: true,
-    transport: signalR.HttpTransportType.WebSockets
-  })
-  .build();
-
-/**
  * Class to manage WebRTC connection establishment and handling.
  */
 export default class WebRTC {
   private connections: { [id: string]: UserConnection } = {};
+  private hub: signalR.HubConnection;
 
   /**
    * Fired when a new audio source track has been established.
@@ -94,8 +84,8 @@ export default class WebRTC {
    */
   public onTrackRemoved: (peerId: string) => void = () => {};
 
-  constructor() {
-    hub.start();
+  constructor(hub: signalR.HubConnection) {
+    this.hub = hub;
 
     //Called when group members has been recieved.
     hub.on("onMembersAcquired", (users: UserDetails[]) => {
@@ -126,8 +116,8 @@ export default class WebRTC {
    * Connects to the specified groupId.
    */
   public connect = (name: string, groupId: string) => {
-    hub.invoke("joinGroup", name, groupId);
-    hub.invoke("queryGroupMembers");
+    this.hub.invoke("joinGroup", name, groupId);
+    this.hub.invoke("queryGroupMembers");
   };
 
   /**
@@ -135,7 +125,7 @@ export default class WebRTC {
    */
   public disconnectFromPeers = () => {
     Object.values(this.connections).forEach(c => c.connection.close());
-    hub.stop();
+    this.hub.stop();
   };
 
   /**
@@ -168,7 +158,7 @@ export default class WebRTC {
     connection: RTCPeerConnection
   ) => {
     connection.setLocalDescription(description).then(() => {
-      hub.invoke("sendOffer", JSON.stringify(description), user.id);
+      this.hub.invoke("sendOffer", JSON.stringify(description), user.id);
     });
   };
 
@@ -207,7 +197,7 @@ export default class WebRTC {
     sender: UserDetails
   ) => {
     connection.setLocalDescription(answer).then(() => {
-      hub.invoke("sendAnswer", JSON.stringify(answer), sender.id);
+      this.hub.invoke("sendAnswer", JSON.stringify(answer), sender.id);
     });
   };
 
@@ -247,6 +237,6 @@ export default class WebRTC {
     peerId: string
   ) => {
     if (event.candidate)
-      hub.send("newCandidate", JSON.stringify(event.candidate), peerId);
+      this.hub.send("newCandidate", JSON.stringify(event.candidate), peerId);
   };
 }

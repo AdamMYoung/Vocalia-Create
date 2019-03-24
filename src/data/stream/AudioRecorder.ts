@@ -1,7 +1,13 @@
 export class AudioRecorder {
-  stream: MediaStream;
+  constructor() {}
 
-  constructor(stream: MediaStream) {
-    this.stream = stream;
-  }
+  /**
+   * Prompts the user for local device access.
+   */
+  private getMedia = async (): Promise<MediaStream> => {
+    return await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false
+    });
+  };
 }

@@ -3,6 +3,7 @@ import GroupView from "./GroupView";
 import DataManager from "../../../../data/api/DataManager";
 import WebRTC from "../../../../data/stream/WebRTC";
 import { User, UserStream } from "../../../../utility/types";
+import { AudioManager } from "../../../../data/stream/AudioManager";
 
 interface IProps {
   sessionId: string;
@@ -10,7 +11,7 @@ interface IProps {
 }
 
 interface IState {
-  webRtc: WebRTC | null;
+  audioManager: AudioManager;
   currentUser: User | null;
   userStreams: { [id: string]: UserStream };
   userInfo: { [id: string]: User };
@@ -20,22 +21,35 @@ export default class GroupViewModel extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    const audioManager = new AudioManager();
+
     this.state = {
-      webRtc: null,
+      audioManager: audioManager,
       currentUser: null,
       userStreams: {},
       userInfo: {}
     };
 
-    this.setupWebRTC();
+    const { api, sessionId } = this.props;
+    const { webRtc } = audioManager;
+
+    webRtc.onTrackAdded = this.onTrackAdded;
+    webRtc.onTrackRemoved = this.onTrackRemoved;
+
+    api.getSignedInUserInfo().then(currentUser => {
+      if (currentUser && sessionId) {
+        webRtc.connect(currentUser.userUID, sessionId);
+        this.setState({ currentUser });
+      }
+    });
   }
 
   /**
    * Disconnects from the current WebRTC connections.
    */
   componentWillUnmount() {
-    const { webRtc } = this.state;
-    if (webRtc) webRtc.disconnectFromPeers();
+    const { webRtc } = this.state.audioManager;
+    webRtc.disconnectFromPeers();
   }
 
   /**
@@ -43,11 +57,12 @@ export default class GroupViewModel extends Component<IProps, IState> {
    * @param oldProps Previous props.
    */
   componentDidUpdate(oldProps: IProps) {
-    const { webRtc, currentUser } = this.state;
+    const { currentUser } = this.state;
+    const { webRtc } = this.state.audioManager;
     const { sessionId } = this.props;
 
     if (this.props.sessionId == oldProps.sessionId) {
-      if (webRtc && currentUser && sessionId) {
+      if (currentUser && sessionId) {
         if (this.props.sessionId != sessionId) {
           webRtc.disconnectFromPeers();
           webRtc.connect(currentUser.userUID, sessionId);
@@ -55,24 +70,6 @@ export default class GroupViewModel extends Component<IProps, IState> {
       }
     }
   }
-
-  /**
-   * Creates the WebRTC connection object.
-   */
-  private setupWebRTC = () => {
-    const { api, sessionId } = this.props;
-
-    var webRtc = new WebRTC();
-    webRtc.onTrackAdded = this.onTrackAdded;
-    webRtc.onTrackRemoved = this.onTrackRemoved;
-
-    api.getSignedInUserInfo().then(currentUser => {
-      if (currentUser && sessionId) {
-        webRtc.connect(currentUser.userUID, sessionId);
-        this.setState({ currentUser, webRtc });
-      }
-    });
-  };
 
   /**
    * Called when a track has been added.
