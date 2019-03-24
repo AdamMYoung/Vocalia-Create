@@ -83,6 +83,7 @@ const hub = new signalR.HubConnectionBuilder()
  */
 export default class WebRTC {
   private connections: { [id: string]: UserConnection } = {};
+  private outgoingStreams: MediaStream[] = [];
 
   /**
    * Fired when a new audio source track has been established.
@@ -135,6 +136,7 @@ export default class WebRTC {
    */
   public disconnectFromPeers = () => {
     Object.values(this.connections).forEach(c => c.connection.close());
+    this.outgoingStreams.forEach(s => s.getTracks().forEach(t => t.stop()));
     hub.stop();
   };
 
@@ -142,7 +144,10 @@ export default class WebRTC {
    * Starts building a connection to the specified target ID.
    */
   private establishConnection = (user: UserDetails) => {
-    this.getMedia().then(e => this.buildOffer(e, user));
+    this.getMedia().then(e => {
+      this.buildOffer(e, user);
+      this.outgoingStreams.push(e);
+    });
   };
 
   /**

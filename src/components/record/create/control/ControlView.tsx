@@ -4,17 +4,28 @@ import { Typography, Grid, Button } from "@material-ui/core";
 interface IProps {
   duration: string;
   isRecording: boolean;
+  isPaused: boolean;
+  toggleRecording: () => void;
+  togglePaused: () => void;
 }
 
 export default class ControlView extends Component<IProps> {
   render() {
-    const { duration, isRecording } = this.props;
+    const {
+      duration,
+      isRecording,
+      isPaused,
+      toggleRecording,
+      togglePaused
+    } = this.props;
 
     return (
       <div>
         <Grid container>
           <Grid item xs={4}>
-            <Button fullWidth>Start Recording</Button>
+            <Button fullWidth onClick={toggleRecording}>
+              {(isRecording ? "Stop" : "Start") + " Recording"}
+            </Button>
           </Grid>
           <Grid item xs={4}>
             <Typography
@@ -28,7 +39,9 @@ export default class ControlView extends Component<IProps> {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Button fullWidth>Pause</Button>
+            <Button fullWidth disabled={!isRecording} onClick={togglePaused}>
+              {isPaused ? "Resume" : "Pause"}
+            </Button>
           </Grid>
         </Grid>
       </div>
