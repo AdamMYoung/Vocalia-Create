@@ -1,19 +1,9 @@
 import React, { Component } from "react";
-import {
-  Typography,
-  IconButton,
-  TextField,
-  Grid,
-  Button
-} from "@material-ui/core";
-import { Stop, Pause, PlayArrow } from "@material-ui/icons";
+import { Typography, Grid, Button } from "@material-ui/core";
 
 interface IProps {
   duration: string;
   isRecording: boolean;
-  onToggleRecording: () => void;
-  onStopRecording: () => void;
-  onStartRecording: () => void;
 }
 
 export default class ControlView extends Component<IProps> {
