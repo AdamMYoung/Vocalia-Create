@@ -22,23 +22,31 @@ export default class ControlView extends Component<IProps> {
     return (
       <div>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid
+            item
+            xs={4}
+            style={{ display: "flex", verticalAlign: "center" }}
+          >
             <Button fullWidth onClick={toggleRecording}>
               {(isRecording ? "Stop" : "Start") + " Recording"}
             </Button>
           </Grid>
-          <Grid item xs={4}>
-            <Typography
-              variant="h6"
-              style={{
-                paddingTop: 2,
-                textAlign: "center"
-              }}
-            >
-              {duration}
-            </Typography>
+          <Grid
+            item
+            xs={4}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <Typography variant="h6">{duration}</Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid
+            item
+            xs={4}
+            style={{ display: "flex", verticalAlign: "center" }}
+          >
             <Button fullWidth disabled={!isRecording} onClick={togglePaused}>
               {isPaused ? "Resume" : "Pause"}
             </Button>

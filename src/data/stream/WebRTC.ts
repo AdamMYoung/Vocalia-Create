@@ -111,7 +111,6 @@ export default class WebRTC {
     //Called when an answer has been recieved.
     hub.on("onAnswer", (answer: string, senderDetails: UserDetails) => {
       var user = this.connections[senderDetails.id];
-
       user.connection.setRemoteDescription(JSON.parse(answer));
     });
 

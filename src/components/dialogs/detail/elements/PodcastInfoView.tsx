@@ -18,11 +18,11 @@ const styles = (theme: Theme) =>
     root: { display: "flex", maxHeight: 200 },
     text: {
       display: "inline",
+      overflowY: "scroll",
       paddingLeft: 15,
       maxHeight: 250
     },
     description: {
-      overflow: "auto",
       maxHeight: 200
     },
     content: {
@@ -57,6 +57,7 @@ class PodcastInfoView extends Component<IProps> {
               <p className={classes.description}>{podcast.description}</p>
             </div>
           </div>
+
           <div>
             <IconButton onClick={onInvite}>
               <Share />

@@ -67,6 +67,6 @@ export class AudioRecorder {
    * Called when new microphone data is available.
    */
   private onRecievedAudioData = (event: BlobEvent) => {
-    console.log(event.data);
+    console.log(event.data); //Push blobs to server.
   };
 }
