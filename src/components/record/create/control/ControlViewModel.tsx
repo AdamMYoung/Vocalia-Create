@@ -51,7 +51,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
     const { api, sessionId } = this.props;
 
     var blobData = {
-      timestamp: event.timeStamp,
+      timestamp: Date.now() / 1000,
       sessionUid: sessionId,
       data: event.data
     } as BlobUpload;

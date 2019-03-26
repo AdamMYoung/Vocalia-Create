@@ -18,7 +18,7 @@ const styles = (theme: Theme) =>
     root: { display: "flex", maxHeight: 200 },
     text: {
       display: "inline",
-      overflowY: "scroll",
+      overflowY: "auto",
       paddingLeft: 15,
       maxHeight: 250
     },
