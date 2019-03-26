@@ -46,6 +46,12 @@ export interface User {
   followers: User[];
 }
 
+export interface BlobUpload {
+  timestamp: number;
+  sessionUid: string;
+  data: Blob;
+}
+
 export interface UserDetails {
   id: string;
   tag: string;

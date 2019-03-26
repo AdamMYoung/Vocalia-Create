@@ -2,8 +2,13 @@ import React, { Component } from "react";
 import ControlView from "./ControlView";
 import moment from "moment";
 import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
+import DataManager from "../../../../data/api/DataManager";
+import { BlobUpload } from "../../../../utility/types";
 
-interface IProps {}
+interface IProps {
+  api: DataManager;
+  sessionId: string;
+}
 
 interface IState {
   duration: number;
@@ -16,9 +21,12 @@ export default class ControlViewModel extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    var recorder = new AudioRecorder();
+    recorder.onRecievedAudioData = this.onRecievedAudioData;
+
     this.state = {
       duration: 0,
-      recorder: new AudioRecorder(),
+      recorder: recorder,
       isRecording: false,
       isPaused: false
     };
@@ -34,6 +42,21 @@ export default class ControlViewModel extends Component<IProps, IState> {
       .startOf("day")
       .seconds(duration)
       .format("H:mm:ss");
+  };
+
+  /**
+   * Called when mic data has been recieved.
+   */
+  private onRecievedAudioData = async (event: BlobEvent) => {
+    const { api, sessionId } = this.props;
+
+    var blobData = {
+      timestamp: event.timeStamp,
+      sessionUid: sessionId,
+      data: event.data
+    } as BlobUpload;
+
+    await api.pushMediaData(blobData);
   };
 
   /**

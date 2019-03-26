@@ -1,10 +1,16 @@
-import { Podcast, Session, PodcastUpload } from "../../utility/types";
+import {
+  Podcast,
+  Session,
+  PodcastUpload,
+  BlobUpload
+} from "../../utility/types";
 
 const API = process.env.REACT_APP_INGEST_API_URL;
 const PODCAST = "podcast";
 const PODCASTS = "podcasts";
 const SESSION = "session";
 const INVITE = "invite";
+const RECORD = "record";
 const INVITE_INFO = "invite/info";
 
 export default class IngestApiRepository {
@@ -142,6 +148,27 @@ export default class IngestApiRepository {
       accessToken,
       "PUT"
     );
+  }
+
+  /**
+   * Adds the specified media data to the database.
+   * @param accessToken Access token for API access.
+   * @param data Data to push.
+   */
+  public async pushMediaData(accessToken: string, data: BlobUpload) {
+    var headers = new Headers({
+      Authorization: "Bearer " + accessToken
+    });
+    var formData = new FormData();
+    formData.append("timestamp", Math.round(data.timestamp).toString());
+    formData.append("sessionUid", data.sessionUid);
+    formData.append("data", data.data);
+
+    await fetch(API + RECORD, {
+      headers: headers,
+      method: "POST",
+      body: formData
+    });
   }
 
   /**

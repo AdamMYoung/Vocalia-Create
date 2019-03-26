@@ -22,7 +22,7 @@ export default class CreateView extends Component<IProps> {
           <PodcastInfoView {...this.props} />
           <Divider />
           <div style={{ margin: 8 }}>
-            <ControlViewModel />
+            <ControlViewModel {...this.props} />
           </div>
           <Divider />
         </Grid>

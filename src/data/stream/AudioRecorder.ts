@@ -5,6 +5,8 @@ export class AudioRecorder {
   public isRecording: boolean = false;
   public isPaused: boolean = false;
 
+  public onRecievedAudioData: (event: BlobEvent) => void = () => {};
+
   /**
    * Pauses the recording session.
    */
@@ -61,12 +63,5 @@ export class AudioRecorder {
    */
   private getMedia = (): Promise<MediaStream> => {
     return navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-  };
-
-  /**
-   * Called when new microphone data is available.
-   */
-  private onRecievedAudioData = (event: BlobEvent) => {
-    console.log(event.data); //Push blobs to server.
   };
 }

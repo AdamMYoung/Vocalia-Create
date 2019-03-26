@@ -1,6 +1,12 @@
 import IngestApiRepository from "./IngestApiRepository";
 import SocialApiRepository from "./SocialApiRepository";
-import { User, Podcast, Session, PodcastUpload } from "../../utility/types";
+import {
+  User,
+  Podcast,
+  Session,
+  PodcastUpload,
+  BlobUpload
+} from "../../utility/types";
 
 export default class DataManager {
   private ingest: IngestApiRepository = new IngestApiRepository();
@@ -160,5 +166,14 @@ export default class DataManager {
       await this.ingest.acceptInviteLink(this.accessToken, groupUID);
 
     return null;
+  }
+
+  /**
+   * Adds the specified media data to the database.
+   * @param data Data to push.
+   */
+  public async pushMediaData(data: BlobUpload) {
+    if (this.accessToken)
+      await this.ingest.pushMediaData(this.accessToken, data);
   }
 }
