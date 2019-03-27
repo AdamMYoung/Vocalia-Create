@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DataManager from "../../../data/api/DataManager";
-import { Podcast } from "../../../utility/types";
+import { Podcast, User } from "../../../utility/types";
 import CreateView from "./CreateView";
 import * as signalR from "@aspnet/signalr";
 import NewInviteDialogViewModel from "../../dialogs/newInvite/NewInviteDialogViewModel";
@@ -13,6 +13,7 @@ interface IProps {
 
 interface IState {
   podcast: Podcast | null;
+  currentUser: User | null;
   isInviteOpen: boolean;
 }
 
@@ -33,6 +34,7 @@ export default class CreateViewModel extends Component<IProps, IState> {
 
     this.state = {
       podcast: null,
+      currentUser: null,
       isInviteOpen: false
     };
   }
@@ -45,8 +47,10 @@ export default class CreateViewModel extends Component<IProps, IState> {
     this.loadPodcast();
     hub.start().then(() => {
       api.getSignedInUserInfo().then(currentUser => {
-        if (currentUser)
+        if (currentUser) {
+          this.setState({ currentUser });
           hub.invoke("joinGroup", currentUser.userUID, sessionId);
+        }
       });
     });
   }
@@ -88,12 +92,14 @@ export default class CreateViewModel extends Component<IProps, IState> {
   };
 
   render() {
-    const { podcast, isInviteOpen } = this.state;
+    const { podcast, currentUser, isInviteOpen } = this.state;
 
     return (
-      podcast && (
+      podcast &&
+      currentUser && (
         <CreateView
           {...this.props}
+          currentUser={currentUser}
           hub={hub}
           podcast={podcast}
           onInvite={this.onInvite}

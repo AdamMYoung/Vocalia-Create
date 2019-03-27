@@ -3,6 +3,7 @@ import { Typography, Grid, Button } from "@material-ui/core";
 
 interface IProps {
   duration: string;
+  accessLevel: number;
   isRecording: boolean;
   isPaused: boolean;
   toggleRecording: () => void;
@@ -13,6 +14,7 @@ export default class ControlView extends Component<IProps> {
   render() {
     const {
       duration,
+      accessLevel,
       isRecording,
       isPaused,
       toggleRecording,
@@ -27,7 +29,11 @@ export default class ControlView extends Component<IProps> {
             xs={4}
             style={{ display: "flex", verticalAlign: "center" }}
           >
-            <Button fullWidth onClick={toggleRecording}>
+            <Button
+              fullWidth
+              onClick={toggleRecording}
+              disabled={accessLevel <= 1}
+            >
               {(isRecording ? "Stop" : "Start") + " Recording"}
             </Button>
           </Grid>
@@ -47,7 +53,11 @@ export default class ControlView extends Component<IProps> {
             xs={4}
             style={{ display: "flex", verticalAlign: "center" }}
           >
-            <Button fullWidth disabled={!isRecording} onClick={togglePaused}>
+            <Button
+              fullWidth
+              disabled={!isRecording || accessLevel < 1}
+              onClick={togglePaused}
+            >
               {isPaused ? "Resume" : "Pause"}
             </Button>
           </Grid>

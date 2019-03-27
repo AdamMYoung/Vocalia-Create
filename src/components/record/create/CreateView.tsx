@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Podcast } from "../../../utility/types";
+import { Podcast, User } from "../../../utility/types";
 import DataManager from "../../../data/api/DataManager";
 import { Grid, Divider, Typography, TextField } from "@material-ui/core";
 import GroupViewModel from "./group/GroupViewModel";
@@ -7,9 +7,10 @@ import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
 import ControlViewModel from "./control/ControlViewModel";
 
 interface IProps {
+  sessionId: string;
   api: DataManager;
   podcast: Podcast;
-  sessionId: string;
+  currentUser: User;
   hub: signalR.HubConnection;
   onInvite: () => void;
 }

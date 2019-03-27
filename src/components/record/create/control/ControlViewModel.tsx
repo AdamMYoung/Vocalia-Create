@@ -4,17 +4,20 @@ import moment from "moment";
 
 import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
 import DataManager from "../../../../data/api/DataManager";
-import { BlobUpload } from "../../../../utility/types";
+import { BlobUpload, Podcast, User } from "../../../../utility/types";
 import GroupManager from "../../../../data/stream/GroupManager";
 
 interface IProps {
-  api: DataManager;
   sessionId: string;
+  api: DataManager;
+  podcast: Podcast;
+  currentUser: User;
   hub: signalR.HubConnection;
 }
 
 interface IState {
   duration: number;
+  accessLevel: number;
   recorder: AudioRecorder;
   group: GroupManager;
   isRecording: boolean;
@@ -37,12 +40,31 @@ export default class ControlViewModel extends Component<IProps, IState> {
 
     this.state = {
       duration: 0,
+      accessLevel: this.getAccessLevel(),
       recorder: recorder,
       group: group,
       isRecording: false,
       isPaused: false
     };
   }
+
+  /**
+   * Gets the access level for the specified user.
+   */
+  private getAccessLevel = (): number => {
+    const { podcast, currentUser } = this.props;
+
+    var isAdmin =
+      podcast.members.filter(x => x.uid == currentUser.userUID && x.isAdmin)
+        .length > 0;
+
+    var isUser =
+      podcast.members.filter(x => x.uid == currentUser.userUID).length > 0;
+
+    if (isAdmin) return 2;
+    else if (isUser) return 1;
+    else return 0;
+  };
 
   /**
    * Gets the duration time formatted as a string.
