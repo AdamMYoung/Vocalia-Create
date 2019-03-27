@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import DataManager from "../../../data/api/DataManager";
 import { Podcast } from "../../../utility/types";
 import CreateView from "./CreateView";
+import * as signalR from "@aspnet/signalr";
 import NewInviteDialogViewModel from "../../dialogs/newInvite/NewInviteDialogViewModel";
 
 interface IProps {
@@ -14,6 +15,17 @@ interface IState {
   podcast: Podcast | null;
   isInviteOpen: boolean;
 }
+
+/**
+ * SignalR signalling server connection information.
+ */
+const hub = new signalR.HubConnectionBuilder()
+  .configureLogging(signalR.LogLevel.Information)
+  .withUrl(process.env.REACT_APP_INGEST_SIGNALR_URL as string, {
+    skipNegotiation: true,
+    transport: signalR.HttpTransportType.WebSockets
+  })
+  .build();
 
 export default class CreateViewModel extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -29,7 +41,14 @@ export default class CreateViewModel extends Component<IProps, IState> {
    * Loads the podcast information passed.
    */
   componentWillMount() {
+    const { api, sessionId } = this.props;
     this.loadPodcast();
+    hub.start().then(() => {
+      api.getSignedInUserInfo().then(currentUser => {
+        if (currentUser)
+          hub.invoke("joinGroup", currentUser.userUID, sessionId);
+      });
+    });
   }
 
   /**
@@ -38,6 +57,10 @@ export default class CreateViewModel extends Component<IProps, IState> {
    */
   componentDidUpdate(prevProps: IProps) {
     if (this.props.podcastId != prevProps.podcastId) this.loadPodcast();
+  }
+
+  componentWillUnmount() {
+    hub.stop();
   }
 
   /**
@@ -69,7 +92,12 @@ export default class CreateViewModel extends Component<IProps, IState> {
 
     return (
       podcast && (
-        <CreateView {...this.props} podcast={podcast} onInvite={this.onInvite}>
+        <CreateView
+          {...this.props}
+          hub={hub}
+          podcast={podcast}
+          onInvite={this.onInvite}
+        >
           {isInviteOpen && (
             <NewInviteDialogViewModel
               {...this.props}

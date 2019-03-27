@@ -10,6 +10,7 @@ interface IProps {
   api: DataManager;
   podcast: Podcast;
   sessionId: string;
+  hub: signalR.HubConnection;
   onInvite: () => void;
 }
 

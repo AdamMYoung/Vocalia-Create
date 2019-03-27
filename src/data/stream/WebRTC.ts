@@ -68,22 +68,12 @@ interface UserConnection {
 }
 
 /**
- * SignalR signalling server connection information.
- */
-const hub = new signalR.HubConnectionBuilder()
-  .configureLogging(signalR.LogLevel.Information)
-  .withUrl(process.env.REACT_APP_INGEST_SIGNALR_URL as string, {
-    skipNegotiation: true,
-    transport: signalR.HttpTransportType.WebSockets
-  })
-  .build();
-
-/**
  * Class to manage WebRTC connection establishment and handling.
  */
 export default class WebRTC {
   private connections: { [id: string]: UserConnection } = {};
   private outgoingStreams: MediaStream[] = [];
+  private hub: signalR.HubConnection;
 
   /**
    * Fired when a new audio source track has been established.
@@ -95,27 +85,27 @@ export default class WebRTC {
    */
   public onTrackRemoved: (peerId: string) => void = () => {};
 
-  constructor() {
-    hub.start();
+  constructor(hub: signalR.HubConnection) {
+    this.hub = hub;
 
     //Called when group members has been recieved.
-    hub.on("onMembersAcquired", (users: UserDetails[]) => {
+    this.hub.on("onMembersAcquired", (users: UserDetails[]) => {
       users.forEach(key => this.establishConnection(key));
     });
 
     //Called when an offer has been recieved.
-    hub.on("onOffer", (offer: string, senderDetails: UserDetails) => {
+    this.hub.on("onOffer", (offer: string, senderDetails: UserDetails) => {
       this.answer(JSON.parse(offer), senderDetails);
     });
 
     //Called when an answer has been recieved.
-    hub.on("onAnswer", (answer: string, senderDetails: UserDetails) => {
+    this.hub.on("onAnswer", (answer: string, senderDetails: UserDetails) => {
       var user = this.connections[senderDetails.id];
       user.connection.setRemoteDescription(JSON.parse(answer));
     });
 
     //Called when a candidate has been recieved.
-    hub.on("onCandidate", (candidate: string, senderId: string) => {
+    this.hub.on("onCandidate", (candidate: string, senderId: string) => {
       this.connections[senderId].connection.addIceCandidate(
         new RTCIceCandidate(JSON.parse(candidate))
       );
@@ -123,11 +113,10 @@ export default class WebRTC {
   }
 
   /**
-   * Connects to the specified groupId.
+   * Connects to the specified session.
    */
-  public connect = (name: string, groupId: string) => {
-    hub.invoke("joinGroup", name, groupId);
-    hub.invoke("queryGroupMembers");
+  public connect = () => {
+    this.hub.invoke("queryGroupMembers");
   };
 
   /**
@@ -136,7 +125,6 @@ export default class WebRTC {
   public disconnectFromPeers = () => {
     Object.values(this.connections).forEach(c => c.connection.close());
     this.outgoingStreams.forEach(s => s.getTracks().forEach(t => t.stop()));
-    hub.stop();
   };
 
   /**
@@ -172,7 +160,7 @@ export default class WebRTC {
     connection: RTCPeerConnection
   ) => {
     connection.setLocalDescription(description).then(() => {
-      hub.invoke("sendOffer", JSON.stringify(description), user.id);
+      this.hub.invoke("sendOffer", JSON.stringify(description), user.id);
     });
   };
 
@@ -211,7 +199,7 @@ export default class WebRTC {
     sender: UserDetails
   ) => {
     connection.setLocalDescription(answer).then(() => {
-      hub.invoke("sendAnswer", JSON.stringify(answer), sender.id);
+      this.hub.invoke("sendAnswer", JSON.stringify(answer), sender.id);
     });
   };
 
@@ -251,6 +239,6 @@ export default class WebRTC {
     peerId: string
   ) => {
     if (event.candidate)
-      hub.send("newCandidate", JSON.stringify(event.candidate), peerId);
+      this.hub.send("newCandidate", JSON.stringify(event.candidate), peerId);
   };
 }

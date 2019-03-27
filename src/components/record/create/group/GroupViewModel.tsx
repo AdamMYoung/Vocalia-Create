@@ -7,11 +7,11 @@ import { User, UserStream } from "../../../../utility/types";
 interface IProps {
   sessionId: string;
   api: DataManager;
+  hub: signalR.HubConnection;
 }
 
 interface IState {
   webRtc: WebRTC | null;
-  currentUser: User | null;
   userStreams: { [id: string]: UserStream };
   userInfo: { [id: string]: User };
 }
@@ -22,7 +22,6 @@ export default class GroupViewModel extends Component<IProps, IState> {
 
     this.state = {
       webRtc: null,
-      currentUser: null,
       userStreams: {},
       userInfo: {}
     };
@@ -43,15 +42,12 @@ export default class GroupViewModel extends Component<IProps, IState> {
    * @param oldProps Previous props.
    */
   componentDidUpdate(oldProps: IProps) {
-    const { webRtc, currentUser } = this.state;
-    const { sessionId } = this.props;
+    const { webRtc } = this.state;
 
     if (this.props.sessionId == oldProps.sessionId) {
-      if (webRtc && currentUser && sessionId) {
-        if (this.props.sessionId != sessionId) {
-          webRtc.disconnectFromPeers();
-          webRtc.connect(currentUser.userUID, sessionId);
-        }
+      if (webRtc) {
+        webRtc.disconnectFromPeers();
+        webRtc.connect();
       }
     }
   }
@@ -60,16 +56,16 @@ export default class GroupViewModel extends Component<IProps, IState> {
    * Creates the WebRTC connection object.
    */
   private setupWebRTC = () => {
-    const { api, sessionId } = this.props;
+    const { api, hub, sessionId } = this.props;
 
-    var webRtc = new WebRTC();
+    var webRtc = new WebRTC(hub);
     webRtc.onTrackAdded = this.onTrackAdded;
     webRtc.onTrackRemoved = this.onTrackRemoved;
 
     api.getSignedInUserInfo().then(currentUser => {
       if (currentUser && sessionId) {
-        webRtc.connect(currentUser.userUID, sessionId);
-        this.setState({ currentUser, webRtc });
+        webRtc.connect();
+        this.setState({ webRtc });
       }
     });
   };
