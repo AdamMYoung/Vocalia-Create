@@ -18,6 +18,8 @@ interface IState {
 }
 
 export default class ControlViewModel extends Component<IProps, IState> {
+  incrementer: NodeJS.Timeout | null = null;
+
   constructor(props: IProps) {
     super(props);
 
@@ -60,11 +62,41 @@ export default class ControlViewModel extends Component<IProps, IState> {
   };
 
   /**
+   * Starts the duration timer.
+   */
+  private startDurationTimer = () => {
+    this.incrementer = setInterval(() => {
+      this.setState({ duration: this.state.duration + 1 });
+    }, 1000);
+  };
+
+  /**
+   * Stops the duration timer.
+   */
+  private stopDurationTimer = () => {
+    if (this.incrementer) clearInterval(this.incrementer);
+  };
+
+  /**
+   * Clears the duration timer.
+   */
+  private clearDurationTimer = () => {
+    this.stopDurationTimer();
+    this.setState({ duration: 0 });
+  };
+
+  /**
    * Toggles the recording status.
    */
   private toggleRecording = () => {
     const { recorder } = this.state;
-    recorder.isRecording ? recorder.stop() : recorder.start();
+    if (recorder.isRecording) {
+      recorder.stop();
+      this.clearDurationTimer();
+    } else {
+      recorder.start();
+      this.startDurationTimer();
+    }
     this.setState({
       isRecording: recorder.isRecording,
       isPaused: recorder.isPaused
@@ -76,7 +108,13 @@ export default class ControlViewModel extends Component<IProps, IState> {
    */
   private togglePaused = () => {
     const { recorder } = this.state;
-    recorder.isPaused ? recorder.resume() : recorder.pause();
+    if (recorder.isPaused) {
+      recorder.resume();
+      this.startDurationTimer();
+    } else {
+      recorder.pause();
+      this.stopDurationTimer();
+    }
     this.setState({ isPaused: recorder.isPaused });
   };
 
