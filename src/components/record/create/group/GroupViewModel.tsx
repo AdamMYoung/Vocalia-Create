@@ -44,7 +44,7 @@ export default class GroupViewModel extends Component<IProps, IState> {
   componentDidUpdate(oldProps: IProps) {
     const { webRtc } = this.state;
 
-    if (this.props.sessionId == oldProps.sessionId) {
+    if (this.props.sessionId != oldProps.sessionId) {
       if (webRtc) {
         webRtc.disconnectFromPeers();
         webRtc.connect();

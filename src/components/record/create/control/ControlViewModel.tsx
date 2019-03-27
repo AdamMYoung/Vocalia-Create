@@ -69,11 +69,9 @@ export default class ControlViewModel extends Component<IProps, IState> {
    * Updates the recording status.
    */
   private updateRecording = (isRecording: boolean) => {
-    console.log("Update Recording");
     const { recorder } = this.state;
     isRecording ? recorder.start() : recorder.stop();
     this.setState({ isRecording });
-    console.log("Get Recording State", isRecording);
   };
 
   /**
