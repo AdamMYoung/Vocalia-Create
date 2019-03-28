@@ -27,17 +27,9 @@ export default class GroupManager {
   }
 
   /**
-   * Stops the current hub connection.
-   */
-  public stop = () => {
-    this.hub.stop();
-  };
-
-  /**
    * Updates the paused status.
    */
   public setPaused = (isPaused: boolean) => {
-    console.log("Toggling paused");
     this.hub.invoke("setPaused", isPaused);
   };
 
@@ -45,7 +37,6 @@ export default class GroupManager {
    * Updates the recording status.
    */
   public setRecording = (isRecording: boolean) => {
-    console.log("Toggling recording");
     this.hub.invoke("setRecording", isRecording);
   };
 }

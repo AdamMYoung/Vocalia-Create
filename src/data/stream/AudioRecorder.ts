@@ -2,9 +2,6 @@ export class AudioRecorder {
   private micStream: MediaStream | null = null;
   private recorder: MediaRecorder | null = null;
 
-  public isRecording: boolean = false;
-  public isPaused: boolean = false;
-
   public onRecievedAudioData: (event: BlobEvent) => void = () => {};
 
   /**
@@ -13,7 +10,6 @@ export class AudioRecorder {
   public pause = () => {
     if (this.recorder && this.recorder.state != "inactive")
       this.recorder.pause();
-    this.isPaused = true;
   };
 
   /**
@@ -22,28 +18,26 @@ export class AudioRecorder {
   public resume = () => {
     if (this.recorder && this.recorder.state != "inactive")
       this.recorder.resume();
-    this.isPaused = false;
   };
 
   /**
    * Starts recording the mic audio.
    */
   public start = () => {
+    console.log("Starting recording");
     this.getRecorder().then(recorder => {
       this.recorder = recorder;
       recorder.start(1000);
     });
-    this.isRecording = true;
   };
 
   /**
    * Stops recording the incoming mic audio.
    */
   public stop = () => {
-    if (this.recorder) this.recorder.stop();
+    this.recorder = null;
+
     if (this.micStream) this.micStream.getTracks().forEach(t => t.stop());
-    this.isRecording = false;
-    this.isPaused = false;
   };
 
   /**
@@ -54,6 +48,7 @@ export class AudioRecorder {
       this.micStream = m;
       var recorder = new MediaRecorder(m);
       recorder.ondataavailable = e => this.onRecievedAudioData(e);
+
       return recorder;
     });
   }

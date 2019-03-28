@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ControlView from "./ControlView";
-import moment from "moment";
+import moment, { duration } from "moment";
 
 import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
 import DataManager from "../../../../data/api/DataManager";
@@ -49,6 +49,14 @@ export default class ControlViewModel extends Component<IProps, IState> {
   }
 
   /**
+   * Called when the component will unmount from the view.
+   */
+  componentWillUnmount() {
+    const { recorder } = this.state;
+    recorder.stop();
+  }
+
+  /**
    * Gets the access level for the specified user.
    */
   private getAccessLevel = (): number => {
@@ -92,7 +100,13 @@ export default class ControlViewModel extends Component<IProps, IState> {
    */
   private updateRecording = (isRecording: boolean) => {
     const { recorder } = this.state;
-    isRecording ? recorder.start() : recorder.stop();
+    if (isRecording) {
+      recorder.start();
+    } else {
+      this.setState({ duration: 0 });
+      recorder.stop();
+    }
+
     this.setState({ isRecording });
   };
 
