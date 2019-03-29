@@ -1,4 +1,4 @@
-import { User, Listen } from "../../utility/types";
+import { User } from "../../utility/types";
 
 const API = process.env.REACT_APP_SOCIAL_API_URL;
 const USER_DETAIL = "user/detail";

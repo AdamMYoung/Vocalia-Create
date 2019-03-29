@@ -5,8 +5,7 @@ import {
   DialogContent,
   List,
   DialogActions,
-  Button,
-  Card
+  Button
 } from "@material-ui/core";
 import OptionsListToggleView from "./elements/OptionsListToggleView";
 

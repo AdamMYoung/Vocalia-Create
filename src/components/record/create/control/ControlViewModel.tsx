@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import ControlView from "./ControlView";
-import moment, { duration } from "moment";
-
+import moment from "moment";
 import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
 import DataManager from "../../../../data/api/DataManager";
-import { BlobUpload, Podcast, User } from "../../../../utility/types";
+import { Podcast, User } from "../../../../utility/types";
 import GroupManager from "../../../../data/stream/GroupManager";
 
 interface IProps {
@@ -132,13 +131,11 @@ export default class ControlViewModel extends Component<IProps, IState> {
   private onRecievedAudioData = async (event: BlobEvent) => {
     const { api, sessionId } = this.props;
 
-    var blobData = {
+    await api.pushMediaData({
       timestamp: Date.now() / 1000,
       sessionUid: sessionId,
       data: event.data
-    } as BlobUpload;
-
-    await api.pushMediaData(blobData);
+    });
   };
 
   render() {

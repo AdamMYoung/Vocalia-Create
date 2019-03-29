@@ -1,9 +1,4 @@
-import {
-  Podcast,
-  Session,
-  PodcastUpload,
-  BlobUpload
-} from "../../utility/types";
+import { Podcast, PodcastUpload, BlobUpload } from "../../utility/types";
 
 const API = process.env.REACT_APP_INGEST_API_URL;
 const PODCAST = "podcast";
