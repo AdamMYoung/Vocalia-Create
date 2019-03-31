@@ -4,6 +4,12 @@ import { Podcast, User } from "../../../utility/types";
 import CreateView from "./CreateView";
 import * as signalR from "@aspnet/signalr";
 import NewInviteDialogViewModel from "../../dialogs/newInvite/NewInviteDialogViewModel";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent
+} from "@material-ui/core";
 
 interface IProps {
   api: DataManager;
@@ -94,25 +100,26 @@ export default class CreateViewModel extends Component<IProps, IState> {
   render() {
     const { podcast, currentUser, isInviteOpen } = this.state;
 
-    return (
-      podcast &&
-      currentUser && (
-        <CreateView
-          {...this.props}
-          currentUser={currentUser}
-          hub={hub}
-          podcast={podcast}
-          onInvite={this.onInvite}
-        >
-          {isInviteOpen && (
-            <NewInviteDialogViewModel
-              {...this.props}
-              podcast={podcast}
-              onClose={this.onInviteClose}
-            />
-          )}
-        </CreateView>
-      )
+    return podcast && currentUser ? (
+      <CreateView
+        {...this.props}
+        currentUser={currentUser}
+        hub={hub}
+        podcast={podcast}
+        onInvite={this.onInvite}
+      >
+        {isInviteOpen && (
+          <NewInviteDialogViewModel
+            {...this.props}
+            podcast={podcast}
+            onClose={this.onInviteClose}
+          />
+        )}
+      </CreateView>
+    ) : (
+      <Dialog open>
+        <DialogTitle>Loading Session...</DialogTitle>
+      </Dialog>
     );
   }
 }
