@@ -5,7 +5,7 @@ import Callback from "../data/auth/Callback";
 import Auth from "../data/auth/Auth";
 import NavigationViewModel from "./navigation/NavigationViewModel";
 import OptionsViewModel from "./options/OptionsViewModel";
-import SelectionViewModel from "./record/selection/SelectionViewModel";
+import SelectionViewModel from "./record/selection/RecordSelectionViewModel";
 import InviteViewModel from "./invite/InviteViewModel";
 import CreateViewModel from "./record/create/CreateViewModel";
 import LoginView from "./LoginView";

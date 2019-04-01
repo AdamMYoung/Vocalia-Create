@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Podcast } from "../../../../utility/types";
+
 import { Grid } from "@material-ui/core";
 import SelectionEntryView from "./SelectionEntryView";
+import { Podcast } from "../../utility/types";
 
 interface IProps {
   isMobile: boolean;

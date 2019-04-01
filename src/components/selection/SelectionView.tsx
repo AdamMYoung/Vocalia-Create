@@ -1,18 +1,23 @@
 import React, { Component } from "react";
 import { Grid, Toolbar, Typography, Button } from "@material-ui/core";
-import SelectionEntryListView from "./elements/SelectionEntryListView";
-import { Podcast } from "../../../utility/types";
+import { Podcast } from "../../utility/types";
+import SelectionEntryListView from "./SelectionEntryListView";
 
 interface IProps {
   isMobile: boolean;
   podcasts: Podcast[];
+  canCreateNewPodcast: boolean;
   onPodcastSelected: (podcast: Podcast) => void;
-  onNewPodcast: () => void;
+  onNewPodcast?: () => void;
 }
 
 export default class SelectionView extends Component<IProps> {
+  public static defaultProps = {
+    canCreateNewPodcast: true
+  };
+
   render() {
-    const { onNewPodcast } = this.props;
+    const { onNewPodcast, canCreateNewPodcast } = this.props;
 
     return (
       <Grid>
@@ -20,7 +25,9 @@ export default class SelectionView extends Component<IProps> {
           <Typography style={{ flexGrow: 1 }} variant="h6">
             Podcasts
           </Typography>
-          <Button onClick={onNewPodcast}>New Podcast</Button>
+          {canCreateNewPodcast && (
+            <Button onClick={onNewPodcast}>New Podcast</Button>
+          )}
         </Toolbar>
         <SelectionEntryListView {...this.props} />
         {this.props.children}
