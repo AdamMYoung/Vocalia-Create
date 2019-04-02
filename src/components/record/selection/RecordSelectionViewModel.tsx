@@ -16,7 +16,10 @@ interface IState {
   createNewPodcast: boolean;
 }
 
-export default class SelectionViewModel extends Component<IProps, IState> {
+export default class RecordSelectionViewModel extends Component<
+  IProps,
+  IState
+> {
   constructor(props: IProps) {
     super(props);
 
@@ -79,6 +82,7 @@ export default class SelectionViewModel extends Component<IProps, IState> {
       <SelectionView
         {...this.state}
         {...this.props}
+        title="Record"
         onPodcastSelected={this.onPodcastSelected}
         onNewPodcast={this.onNewPodcast}
       >

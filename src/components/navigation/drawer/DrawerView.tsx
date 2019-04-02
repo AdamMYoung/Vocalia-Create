@@ -90,19 +90,19 @@ class DrawerView extends Component<IProps> {
         <Divider />
         <List>
           <DrawerElementView
-            route="/selection"
+            route="/record/selection"
             title="Record"
             icon={<Mic />}
             onClick={() => setDrawer(false)}
           />
           <DrawerElementView
-            route="/edit"
+            route="/editor/selection"
             title="Edit"
             icon={<Edit />}
             onClick={() => setDrawer(false)}
           />
           <DrawerElementView
-            route="/publish"
+            route="/publish/selection"
             title="Publish"
             icon={<Publish />}
             onClick={() => setDrawer(false)}

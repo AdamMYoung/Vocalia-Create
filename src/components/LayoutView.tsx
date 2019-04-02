@@ -5,10 +5,11 @@ import Callback from "../data/auth/Callback";
 import Auth from "../data/auth/Auth";
 import NavigationViewModel from "./navigation/NavigationViewModel";
 import OptionsViewModel from "./options/OptionsViewModel";
-import SelectionViewModel from "./record/selection/RecordSelectionViewModel";
+import RecordSelectionViewModel from "./record/selection/RecordSelectionViewModel";
 import InviteViewModel from "./invite/InviteViewModel";
 import CreateViewModel from "./record/create/CreateViewModel";
 import LoginView from "./LoginView";
+import EditorSelectionViewModel from "./editor/selection/EditorSelectionViewModel";
 
 interface IProps {
   isMobile: boolean;
@@ -39,9 +40,16 @@ export default class LayoutView extends Component<IProps> {
           />
 
           <Route
-            path="/selection"
+            path="/record/selection"
             render={() => {
-              return <SelectionViewModel {...this.props} />;
+              return <RecordSelectionViewModel {...this.props} />;
+            }}
+          />
+
+          <Route
+            path="/editor/selection"
+            render={() => {
+              return <EditorSelectionViewModel {...this.props} />;
             }}
           />
 
@@ -63,7 +71,7 @@ export default class LayoutView extends Component<IProps> {
             )}
           />
 
-          <Redirect to="/selection" />
+          <Redirect to="/record/selection" />
         </Switch>
 
         <Route
