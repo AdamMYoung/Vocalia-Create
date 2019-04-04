@@ -150,12 +150,14 @@ export default class ControlViewModel extends Component<IProps, IState> {
    */
   private onRecievedAudioData = async (event: BlobEvent) => {
     const { api, sessionId } = this.props;
+    const { isRecording } = this.state;
 
-    await api.pushMediaData({
-      timestamp: Date.now() / 1000,
-      sessionUid: sessionId,
-      data: event.data
-    });
+    if (isRecording)
+      await api.pushMediaData({
+        timestamp: Date.now() / 1000,
+        sessionUid: sessionId,
+        data: event.data
+      });
   };
 
   render() {
