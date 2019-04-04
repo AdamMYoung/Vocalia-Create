@@ -4,6 +4,7 @@ const API = process.env.REACT_APP_INGEST_API_URL;
 const PODCAST = "podcast";
 const PODCASTS = "podcasts";
 const SESSION = "session";
+const SESSION_COMPLETE = "session/complete";
 const INVITE = "invite";
 const RECORD = "record";
 const INVITE_INFO = "invite/info";
@@ -32,6 +33,19 @@ export default class IngestApiRepository {
       API + SESSION + "?sessionUid=" + sessionUid,
       accessToken,
       "DELETE"
+    );
+  }
+
+  /**
+   * Finishes the specified session.
+   * @param accessToken Token for API access.
+   * @param sessionUid UID of the session.
+   */
+  public async finishSession(accessToken: string, sessionUid: string) {
+    await this.getInjectedFetch(
+      API + SESSION_COMPLETE + "?sessionUid=" + sessionUid,
+      accessToken,
+      "PUT"
     );
   }
 

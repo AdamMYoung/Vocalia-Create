@@ -117,6 +117,15 @@ export default class DataManager {
   }
 
   /**
+   * Finishes the specified session.
+   * @param sessionId UID of the session.
+   */
+  public async finishSession(sessionId: string) {
+    if (this.accessToken)
+      await this.ingest.finishSession(this.accessToken, sessionId);
+  }
+
+  /**
    * Gets the podcast attached to the invite.
    * @param inviteLink Invitation link recieved.
    */

@@ -5,6 +5,7 @@ import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
 import DataManager from "../../../../data/api/DataManager";
 import { Podcast, User } from "../../../../utility/types";
 import GroupManager from "../../../../data/stream/GroupManager";
+import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDialogView";
 
 interface IProps {
   sessionId: string;
@@ -21,6 +22,7 @@ interface IState {
   group: GroupManager;
   isRecording: boolean;
   isPaused: boolean;
+  isConfirmDialogOpen: boolean;
 }
 
 export default class ControlViewModel extends Component<IProps, IState> {
@@ -43,7 +45,8 @@ export default class ControlViewModel extends Component<IProps, IState> {
       recorder: recorder,
       group: group,
       isRecording: false,
-      isPaused: false
+      isPaused: false,
+      isConfirmDialogOpen: false
     };
   }
 
@@ -122,7 +125,23 @@ export default class ControlViewModel extends Component<IProps, IState> {
    */
   private setRecording = () => {
     const { group, isRecording } = this.state;
+    if (!isRecording == true) {
+      group.setRecording(!isRecording);
+    } else {
+      this.setState({ isConfirmDialogOpen: true });
+    }
+  };
+
+  /**
+   * Stops recording the current podcast.
+   */
+  private onStopRecording = () => {
+    const { group, isRecording } = this.state;
+    const { api, sessionId } = this.props;
+
+    api.finishSession(sessionId);
     group.setRecording(!isRecording);
+    this.setState({ isConfirmDialogOpen: false });
   };
 
   /**
@@ -139,13 +158,24 @@ export default class ControlViewModel extends Component<IProps, IState> {
   };
 
   render() {
+    const { isConfirmDialogOpen } = this.state;
+
     return (
-      <ControlView
-        {...this.state}
-        duration={this.getDurationText()}
-        togglePaused={this.setPaused}
-        toggleRecording={this.setRecording}
-      />
+      <div>
+        <ControlView
+          {...this.state}
+          duration={this.getDurationText()}
+          togglePaused={this.setPaused}
+          toggleRecording={this.setRecording}
+        />
+        {isConfirmDialogOpen && (
+          <ConfirmationDialogView
+            title="Finish Recording"
+            subtitle="Are you sure you want to end recording?"
+            onConfirm={this.onStopRecording}
+          />
+        )}
+      </div>
     );
   }
 }

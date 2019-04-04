@@ -41,3 +41,24 @@ export interface UserStream {
   tag: string;
   stream: MediaStream;
 }
+
+export interface Listen {
+  userUID: string;
+  userName: string;
+  rssUrl: string;
+  episodeUrl: string;
+  episodeName: string;
+  date: Date;
+  isCompleted: boolean;
+}
+
+export interface User {
+  userUID: string;
+  userTag: string;
+  firstName: string;
+  lastName: string;
+  pictureUrl: string;
+  listens: Listen[];
+  following: User[];
+  followers: User[];
+}
