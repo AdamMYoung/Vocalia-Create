@@ -46,7 +46,9 @@ export default class DetailDialogView extends Component<IProps> {
               {hasSession && (
                 <ListItem>
                   <ListItemText
-                    primary={<TimeAgo date={podcast.sessions[0].date} />}
+                    primary={
+                      <TimeAgo date={podcast.sessions[0].date + " UTC"} />
+                    }
                     secondary={podcast.sessions[0].uid}
                   />
                 </ListItem>

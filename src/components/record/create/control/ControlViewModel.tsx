@@ -136,11 +136,12 @@ export default class ControlViewModel extends Component<IProps, IState> {
    * Stops recording the current podcast.
    */
   private onStopRecording = () => {
-    const { group, isRecording } = this.state;
+    const { group, recorder, isRecording } = this.state;
     const { api, sessionId } = this.props;
 
     api.finishSession(sessionId);
     group.setRecording(!isRecording);
+    recorder.stop();
     this.setState({ isConfirmDialogOpen: false });
   };
 
@@ -173,6 +174,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
             title="Finish Recording"
             subtitle="Are you sure you want to end recording?"
             onConfirm={this.onStopRecording}
+            onDeny={() => this.setState({ isConfirmDialogOpen: false })}
           />
         )}
       </div>

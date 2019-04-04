@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import DetailDialogView from "./DetailDialogView";
 import NewInviteDialogViewModel from "../newInvite/NewInviteDialogViewModel";
-import NewSessionDialogViewModel from "../newSession/NewSessionDialogViewModel";
 import { User, Podcast } from "../../../utility/types";
 import DataManager from "../../../data/api/DataManager";
+import ConfirmationDialogView from "../confirmation/ConfirmationDialogView";
 
 interface IProps {
   api: DataManager;
@@ -93,11 +93,14 @@ export default class DetailDialogViewModel extends Component<IProps, IState> {
   };
 
   /**
-   * Called when the new session dialog should be closed.
+   * Creates a new session for the selected podcast.
    */
-  private onCloseNewSession = async () => {
-    this.setState({ isNewSessionDialogOpen: false });
-    await this.loadPodcast();
+  private onCreateSession = async () => {
+    const { api, podcast } = this.props;
+    await api
+      .createSession(podcast.uid)
+      .then(() => this.loadPodcast())
+      .then(() => this.setState({ isNewSessionDialogOpen: false }));
   };
 
   render() {
@@ -119,10 +122,11 @@ export default class DetailDialogViewModel extends Component<IProps, IState> {
           />
         )}
         {isNewSessionDialogOpen && (
-          <NewSessionDialogViewModel
-            onClose={this.onCloseNewSession}
-            api={api}
-            podcast={podcast}
+          <ConfirmationDialogView
+            title="Create Session"
+            subtitle="Are you sure you want to create a new session?"
+            onConfirm={this.onCreateSession}
+            onDeny={() => this.setState({ isNewSessionDialogOpen: false })}
           />
         )}
       </DetailDialogView>
