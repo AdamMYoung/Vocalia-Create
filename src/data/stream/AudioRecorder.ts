@@ -31,8 +31,9 @@ export class AudioRecorder {
    * Starts recording the mic audio.
    */
   public start = () => {
-    if (this.recorder && this.recorder.state != "recording")
+    if (this.recorder && this.recorder.state != "recording") {
       this.recorder.start(1000);
+    }
   };
 
   /**
