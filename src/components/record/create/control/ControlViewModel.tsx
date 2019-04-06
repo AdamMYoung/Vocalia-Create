@@ -18,7 +18,7 @@ interface IProps {
 interface IState {
   duration: number;
   accessLevel: number;
-  recorder: AudioRecorder;
+  recorder: AudioRecorder | null;
   group: GroupManager;
   isRecording: boolean;
   isPaused: boolean;
@@ -26,13 +26,8 @@ interface IState {
 }
 
 export default class ControlViewModel extends Component<IProps, IState> {
-  incrementer: NodeJS.Timeout | null = null;
-
   constructor(props: IProps) {
     super(props);
-
-    var recorder = new AudioRecorder();
-    recorder.onRecievedAudioData = this.onRecievedAudioData;
 
     var group = new GroupManager(props.hub);
     group.onPauseChanged = isPaused => this.updatePaused(isPaused);
@@ -42,7 +37,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
     this.state = {
       duration: 0,
       accessLevel: this.getAccessLevel(),
-      recorder: recorder,
+      recorder: null,
       group: group,
       isRecording: false,
       isPaused: false,
@@ -50,12 +45,18 @@ export default class ControlViewModel extends Component<IProps, IState> {
     };
   }
 
+  componentDidMount() {
+    var recorder = new AudioRecorder();
+    recorder.onRecievedAudioData = this.onRecievedAudioData;
+    this.setState({ recorder });
+  }
+
   /**
    * Called when the component will unmount from the view.
    */
   componentWillUnmount() {
     const { recorder } = this.state;
-    recorder.stop();
+    if (recorder) recorder.stop();
   }
 
   /**
@@ -93,8 +94,10 @@ export default class ControlViewModel extends Component<IProps, IState> {
    */
   private updatePaused = (isPaused: boolean) => {
     const { recorder } = this.state;
-    isPaused ? recorder.pause() : recorder.start();
-    this.setState({ isPaused });
+    if (recorder) {
+      isPaused ? recorder.pause() : recorder.start();
+      this.setState({ isPaused });
+    }
   };
 
   /**
@@ -102,11 +105,13 @@ export default class ControlViewModel extends Component<IProps, IState> {
    */
   private updateRecording = (isRecording: boolean) => {
     const { recorder } = this.state;
-    if (isRecording) {
-      recorder.start();
-    } else {
-      this.setState({ duration: 0 });
-      recorder.stop();
+    if (recorder) {
+      if (isRecording) {
+        recorder.start();
+      } else {
+        this.setState({ duration: 0 });
+        recorder.stop();
+      }
     }
 
     this.setState({ isRecording });
@@ -141,23 +146,21 @@ export default class ControlViewModel extends Component<IProps, IState> {
 
     api.finishSession(sessionId);
     group.setRecording(!isRecording);
-    recorder.stop();
+    if (recorder) recorder.stop();
     this.setState({ isConfirmDialogOpen: false });
   };
 
   /**
    * Called when mic data has been recieved.
    */
-  private onRecievedAudioData = async (event: BlobEvent) => {
+  private onRecievedAudioData = async (blob: Blob) => {
     const { api, sessionId } = this.props;
-    const { isRecording } = this.state;
 
-    if (isRecording)
-      await api.pushMediaData({
-        timestamp: Date.now() / 1000,
-        sessionUid: sessionId,
-        data: event.data
-      });
+    await api.pushMediaData({
+      timestamp: Date.now() / 1000,
+      sessionUid: sessionId,
+      data: blob
+    });
   };
 
   render() {

@@ -1,8 +1,15 @@
+import { tr } from "date-fns/esm/locale";
+
 export class AudioRecorder {
   private micStream: MediaStream | null = null;
   private recorder: MediaRecorder | null = null;
+  private parts: BlobPart[] = [];
 
-  public onRecievedAudioData: (event: BlobEvent) => void = () => {};
+  public onRecievedAudioData: (event: Blob) => void = () => {};
+
+  constructor() {
+    this.getRecorder().then(recorder => (this.recorder = recorder));
+  }
 
   /**
    * Pauses the recording session.
@@ -24,11 +31,8 @@ export class AudioRecorder {
    * Starts recording the mic audio.
    */
   public start = () => {
-    console.log("Starting recording");
-    this.getRecorder().then(recorder => {
-      this.recorder = recorder;
-      recorder.start(1000);
-    });
+    if (this.recorder && this.recorder.state != "recording")
+      this.recorder.start(1000);
   };
 
   /**
@@ -36,7 +40,6 @@ export class AudioRecorder {
    */
   public stop = () => {
     if (this.micStream) this.micStream.getTracks().forEach(t => t.stop());
-    if (this.recorder) this.recorder.stop();
     this.recorder = null;
   };
 
@@ -47,8 +50,11 @@ export class AudioRecorder {
     return this.getMedia().then(m => {
       this.micStream = m;
       var recorder = new MediaRecorder(m);
-      recorder.ondataavailable = e => this.onRecievedAudioData(e);
-
+      recorder.ondataavailable = e => {
+        if (e.data.size > 0) {
+          this.onRecievedAudioData(e.data);
+        }
+      };
       return recorder;
     });
   }
