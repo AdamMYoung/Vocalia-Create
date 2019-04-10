@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import DetailDialogView from "./DetailDialogView";
 import NewInviteDialogViewModel from "../newInvite/NewInviteDialogViewModel";
-import { User, Podcast } from "../../../utility/types";
 import DataManager from "../../../data/api/DataManager";
 import ConfirmationDialogView from "../confirmation/ConfirmationDialogView";
+import { User } from "../../../models/User";
+import { Podcast } from "../../../models/Podcast";
 
 interface IProps {
   api: DataManager;

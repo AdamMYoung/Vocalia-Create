@@ -8,7 +8,7 @@ import {
   IconButton
 } from "@material-ui/core";
 import { VolumeMute, VolumeUp } from "@material-ui/icons";
-import { User } from "../../../../../utility/types";
+import { User } from "../../../../../models/User";
 
 interface IProps {
   user: User;

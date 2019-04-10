@@ -1,6 +1,7 @@
 import * as signalR from "@aspnet/signalr";
-import { UserDetails, UserStream } from "../../utility/types";
 import "webrtc-adapter";
+import { UserDetails } from "../../models/UserDetails";
+import { UserStream } from "../../models/UserStream";
 
 /**
  * Options to offer to the other client.

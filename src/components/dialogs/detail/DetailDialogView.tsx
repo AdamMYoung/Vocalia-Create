@@ -14,7 +14,8 @@ import PodcastInfoView from "./elements/PodcastInfoView";
 import UsersView from "./elements/UsersView";
 import TimeAgo from "react-timeago";
 import { LinkContainer } from "react-router-bootstrap";
-import { Podcast, User } from "../../../utility/types";
+import { Podcast } from "../../../models/Podcast";
+import { User } from "../../../models/User";
 
 interface IProps {
   podcast: Podcast;

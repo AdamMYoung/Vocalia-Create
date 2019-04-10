@@ -10,7 +10,7 @@ import {
   CardContent,
   Typography
 } from "@material-ui/core";
-import { Podcast } from "../../utility/types";
+import { Podcast } from "../../models/Podcast";
 
 /**
  * CSS Styles of the browser

@@ -3,9 +3,10 @@ import ControlView from "./ControlView";
 import moment from "moment";
 import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
 import DataManager from "../../../../data/api/DataManager";
-import { Podcast, User } from "../../../../utility/types";
 import GroupManager from "../../../../data/stream/GroupManager";
 import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDialogView";
+import { Podcast } from "../../../../models/Podcast";
+import { User } from "../../../../models/User";
 
 interface IProps {
   sessionId: string;

@@ -8,7 +8,7 @@ import {
   WithStyles
 } from "@material-ui/core";
 import { Share } from "@material-ui/icons";
-import { Podcast } from "../../../../utility/types";
+import { Podcast } from "../../../../models/Podcast";
 
 /**
  * CSS Styles of the browser

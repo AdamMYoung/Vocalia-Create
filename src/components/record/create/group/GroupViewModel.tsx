@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import GroupView from "./GroupView";
 import DataManager from "../../../../data/api/DataManager";
 import WebRTC from "../../../../data/stream/WebRTC";
-import { User, UserStream } from "../../../../utility/types";
+import { UserStream } from "../../../../models/UserStream";
+import { User } from "../../../../models/User";
 
 interface IProps {
   sessionId: string;

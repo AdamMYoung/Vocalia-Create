@@ -1,4 +1,7 @@
-import { Podcast, PodcastUpload, BlobUpload } from "../../utility/types";
+import { getInjectedFetch } from "./ApiUtils";
+import { Podcast } from "../../models/Podcast";
+import { PodcastUpload } from "../../models/PodcastUpload";
+import { BlobUpload } from "../../models/BlobUpload";
 
 const API = process.env.REACT_APP_INGEST_API_URL;
 const PODCAST = "podcast";
@@ -16,7 +19,7 @@ export default class IngestApiRepository {
    * @param podcastUid UID of the podcast.
    */
   public async createSession(accessToken: string, podcastUid: string) {
-    await this.getInjectedFetch(
+    await getInjectedFetch(
       API + SESSION + "?podcastUid=" + podcastUid,
       accessToken,
       "POST"
@@ -29,7 +32,7 @@ export default class IngestApiRepository {
    * @param sessionUid UID of the session.
    */
   public async deleteSession(accessToken: string, sessionUid: string) {
-    await this.getInjectedFetch(
+    await getInjectedFetch(
       API + SESSION + "?sessionUid=" + sessionUid,
       accessToken,
       "DELETE"
@@ -42,7 +45,7 @@ export default class IngestApiRepository {
    * @param sessionUid UID of the session.
    */
   public async finishSession(accessToken: string, sessionUid: string) {
-    await this.getInjectedFetch(
+    await getInjectedFetch(
       API + SESSION_COMPLETE + "?sessionUid=" + sessionUid,
       accessToken,
       "PUT"
@@ -54,7 +57,7 @@ export default class IngestApiRepository {
    * @param accessToken Token for API access.
    */
   public async getPodcasts(accessToken: string): Promise<Podcast[] | null> {
-    return await this.getInjectedFetch(API + PODCASTS, accessToken)
+    return await getInjectedFetch(API + PODCASTS, accessToken)
       .then(response => response.json())
       .then(data => data as Podcast[])
       .catch(() => null);
@@ -69,7 +72,7 @@ export default class IngestApiRepository {
     accessToken: string,
     podcastUid: string
   ): Promise<Podcast | null> {
-    return await this.getInjectedFetch(
+    return await getInjectedFetch(
       API + PODCAST + "?podcastUid=" + podcastUid,
       accessToken
     )
@@ -84,7 +87,7 @@ export default class IngestApiRepository {
    * @param podcast Podcast to add.
    */
   public async createPodcast(accessToken: string, podcast: PodcastUpload) {
-    await this.getInjectedFetch(API + PODCAST, accessToken, "POST", podcast);
+    await getInjectedFetch(API + PODCAST, accessToken, "POST", podcast);
   }
 
   /**
@@ -93,7 +96,7 @@ export default class IngestApiRepository {
    * @param podcast Podcast to update.
    */
   public async editPodcast(accessToken: string, podcast: PodcastUpload) {
-    await this.getInjectedFetch(API + PODCAST, accessToken, "PUT", podcast);
+    await getInjectedFetch(API + PODCAST, accessToken, "PUT", podcast);
   }
 
   /**
@@ -102,7 +105,7 @@ export default class IngestApiRepository {
    * @param podcastUid Podcast to delete.
    */
   public async deletePodcast(accessToken: string, podcastUid: string) {
-    await this.getInjectedFetch(
+    await getInjectedFetch(
       API + PODCAST + "?podcastUid=" + podcastUid,
       accessToken,
       "DELETE"
@@ -118,7 +121,7 @@ export default class IngestApiRepository {
     accessToken: string,
     inviteLink: string
   ): Promise<Podcast | null> {
-    return await this.getInjectedFetch(
+    return await getInjectedFetch(
       API + INVITE_INFO + "?inviteLink=" + inviteLink,
       accessToken
     )
@@ -141,7 +144,7 @@ export default class IngestApiRepository {
     var query = API + INVITE + "?podcastUid=" + podcastUid;
     if (expiry) query = query + "&expiry=" + expiry;
 
-    return await this.getInjectedFetch(query, accessToken)
+    return await getInjectedFetch(query, accessToken)
       .then(response => response.json())
       .then(data => data as string);
   }
@@ -152,7 +155,7 @@ export default class IngestApiRepository {
    * @param inviteLink GUID for invites.
    */
   public async acceptInviteLink(accessToken: string, inviteLink: string) {
-    await this.getInjectedFetch(
+    await getInjectedFetch(
       API + INVITE + "?inviteLink=" + inviteLink,
       accessToken,
       "PUT"
@@ -178,33 +181,5 @@ export default class IngestApiRepository {
       method: "POST",
       body: formData
     });
-  }
-
-  /**
-   * Injects a fetch object with access token headers and returns it.
-   * @param url Path to query.
-   * @param accessToken Access token to verify users.
-   */
-  private getInjectedFetch(
-    url: string,
-    accessToken: string | null,
-    queryType: string = "GET",
-    body: {} | null = null
-  ) {
-    var headers = new Headers({
-      "content-type": "application/json",
-      Authorization: "Bearer " + accessToken
-    });
-
-    return accessToken != null
-      ? fetch(url, {
-          headers: headers,
-          method: queryType,
-          body: body != null ? JSON.stringify(body) : null
-        })
-      : fetch(url, {
-          method: queryType,
-          body: body != null ? JSON.stringify(body) : null
-        });
   }
 }

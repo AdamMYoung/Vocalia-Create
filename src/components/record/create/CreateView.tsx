@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Podcast, User } from "../../../utility/types";
 import DataManager from "../../../data/api/DataManager";
 import { Grid, Divider, Typography } from "@material-ui/core";
 import GroupViewModel from "./group/GroupViewModel";
 import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
 import ControlViewModel from "./control/ControlViewModel";
+import { Podcast } from "../../../models/Podcast";
+import { User } from "../../../models/User";
 
 interface IProps {
   sessionId: string;

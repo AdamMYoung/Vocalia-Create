@@ -8,8 +8,8 @@ import {
   Typography,
   Dialog
 } from "@material-ui/core";
-import { Podcast } from "../../utility/types";
 import { Redirect } from "react-router";
+import { Podcast } from "../../models/Podcast";
 
 interface IProps {
   podcast: Podcast | null;

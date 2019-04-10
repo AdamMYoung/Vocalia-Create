@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { UserStream, User } from "../../../../utility/types";
 import { List, Typography } from "@material-ui/core";
 import UserViewModel from "./components/UserViewModel";
+import { UserStream } from "../../../../models/UserStream";
+import { User } from "../../../../models/User";
 
 interface IProps {
   userStreams: { [id: string]: UserStream };
