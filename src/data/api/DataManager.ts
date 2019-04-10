@@ -4,11 +4,15 @@ import { User } from "../../models/User";
 import { Podcast } from "../../models/Podcast";
 import { PodcastUpload } from "../../models/PodcastUpload";
 import { BlobUpload } from "../../models/BlobUpload";
+import EditorApiRepository from "./EditorApiRepository";
 
 export default class DataManager {
   private ingest: IngestApiRepository = new IngestApiRepository();
   private social: SocialApiRepository = new SocialApiRepository();
+  private editor: EditorApiRepository = new EditorApiRepository();
   accessToken: string | null = null;
+
+  //  Social Repo
 
   /**
    * Gets the signed in user's timeline.
@@ -53,6 +57,8 @@ export default class DataManager {
     if (this.accessToken)
       await this.social.removeFollow(this.accessToken, userId);
   }
+
+  //  Podcast Repo
 
   /**
    * Gets all podcasts belonging to the specified group UID.
@@ -181,5 +187,18 @@ export default class DataManager {
   public async pushMediaData(data: BlobUpload) {
     if (this.accessToken)
       await this.ingest.pushMediaData(this.accessToken, data);
+  }
+
+  //  Editor Repo
+
+  /**
+   * Returns all edit streams of the current session.
+   * @param sessionUID UID of the session.
+   */
+  public async getEditStreams(sessionUID: string) {
+    if (this.accessToken)
+      await this.editor.getSessionStreamsAsync(this.accessToken, sessionUID);
+
+    return null;
   }
 }
