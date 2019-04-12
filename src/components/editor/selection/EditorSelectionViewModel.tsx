@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import SelectionView from "../../selection/SelectionView";
 import DataManager from "../../../data/api/DataManager";
 import { Podcast } from "../../../models/Podcast";
+import DetailDialogViewModel from "../../dialogs/detail/DetailDialogViewModel";
+import EditorDetailDialogView from "./dialog/EditorDetailDialogView";
+import EditorDetailDialogViewModel from "./dialog/EditorDetailDialogViewModel";
 
 interface IProps {
   api: DataManager;
@@ -39,6 +42,7 @@ export default class EditorSelectionViewModel extends Component<
   private loadPodcasts = async () => {
     const { api } = this.props;
     var podcasts = await api.getEditablePodcasts();
+    console.log(podcasts);
     if (podcasts) this.setState({ podcasts });
   };
 
@@ -49,7 +53,15 @@ export default class EditorSelectionViewModel extends Component<
     this.setState({ currentPodcast });
   };
 
+  /**
+   * Closes the dialog view model.
+   */
+  private onCloseDetail = () => {
+    this.setState({ currentPodcast: null });
+  };
+
   render() {
+    const { currentPodcast } = this.state;
     return (
       <SelectionView
         {...this.props}
@@ -57,7 +69,15 @@ export default class EditorSelectionViewModel extends Component<
         title="Editor"
         canCreateNewPodcast={false}
         onPodcastSelected={this.onPodcastSelected}
-      />
+      >
+        {currentPodcast && (
+          <EditorDetailDialogViewModel
+            {...this.props}
+            podcast={currentPodcast}
+            onClose={this.onCloseDetail}
+          />
+        )}
+      </SelectionView>
     );
   }
 }

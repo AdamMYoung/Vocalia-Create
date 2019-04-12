@@ -37,7 +37,7 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
   podcast: Podcast;
-  onInvite: () => void;
+  onInvite?: () => void;
 }
 
 class PodcastInfoView extends Component<IProps> {
@@ -58,11 +58,13 @@ class PodcastInfoView extends Component<IProps> {
             </div>
           </div>
 
-          <div>
-            <IconButton onClick={onInvite}>
-              <Share />
-            </IconButton>
-          </div>
+          {onInvite && (
+            <div>
+              <IconButton onClick={onInvite}>
+                <Share />
+              </IconButton>
+            </div>
+          )}
         </div>
       </Typography>
     );

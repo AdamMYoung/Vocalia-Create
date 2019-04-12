@@ -197,7 +197,10 @@ export default class DataManager {
    */
   public async getEditStreams(sessionUID: string) {
     if (this.accessToken)
-      await this.editor.getSessionStreamsAsync(this.accessToken, sessionUID);
+      return await this.editor.getSessionStreamsAsync(
+        this.accessToken,
+        sessionUID
+      );
 
     return null;
   }
@@ -206,7 +209,8 @@ export default class DataManager {
    * Returns all editable podcasts.
    */
   public async getEditablePodcasts() {
-    if (this.accessToken) await this.editor.getPodcasts(this.accessToken);
+    if (this.accessToken)
+      return await this.editor.getPodcasts(this.accessToken);
 
     return null;
   }
@@ -217,7 +221,7 @@ export default class DataManager {
    */
   public async getEditorPodcastDetail(podcastUid: string) {
     if (this.accessToken)
-      await this.editor.getPodcast(this.accessToken, podcastUid);
+      return await this.editor.getPodcast(this.accessToken, podcastUid);
 
     return null;
   }
