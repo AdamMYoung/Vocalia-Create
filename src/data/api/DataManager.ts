@@ -1,9 +1,9 @@
 import IngestApiRepository from "./IngestApiRepository";
 import SocialApiRepository from "./SocialApiRepository";
-import { User } from "../../models/User";
-import { Podcast } from "../../models/Podcast";
-import { PodcastUpload } from "../../models/PodcastUpload";
-import { BlobUpload } from "../../models/BlobUpload";
+import { User } from "../../models/social/User";
+import { Podcast } from "../../models/ingest/IngestPodcast";
+import { PodcastUpload } from "../../models/ingest/PodcastUpload";
+import { BlobUpload } from "../../models/ingest/BlobUpload";
 import EditorApiRepository from "./EditorApiRepository";
 
 export default class DataManager {
@@ -198,6 +198,26 @@ export default class DataManager {
   public async getEditStreams(sessionUID: string) {
     if (this.accessToken)
       await this.editor.getSessionStreamsAsync(this.accessToken, sessionUID);
+
+    return null;
+  }
+
+  /**
+   * Returns all editable podcasts.
+   */
+  public async getEditablePodcasts() {
+    if (this.accessToken) await this.editor.getPodcasts(this.accessToken);
+
+    return null;
+  }
+
+  /**
+   * Returns detail about the specified podcast.
+   * @param podcastUid UID of the podcast.
+   */
+  public async getEditorPodcastDetail(podcastUid: string) {
+    if (this.accessToken)
+      await this.editor.getPodcast(this.accessToken, podcastUid);
 
     return null;
   }
