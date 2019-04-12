@@ -1,7 +1,7 @@
 import { getInjectedFetch } from "./ApiUtils";
 import { Podcast } from "../../models/Podcast";
-import { PodcastUpload } from "../../models/PodcastUpload";
-import { BlobUpload } from "../../models/BlobUpload";
+import { PodcastUpload } from "../../models/ingest/PodcastUpload";
+import { BlobUpload } from "../../models/ingest/BlobUpload";
 
 const API = process.env.REACT_APP_INGEST_API_URL;
 const PODCAST = "podcast";

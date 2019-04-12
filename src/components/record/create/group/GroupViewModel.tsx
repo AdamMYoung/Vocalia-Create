@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import GroupView from "./GroupView";
 import DataManager from "../../../../data/api/DataManager";
 import WebRTC from "../../../../data/stream/WebRTC";
-import { UserStream } from "../../../../models/UserStream";
+import { UserStream } from "../../../../models/ingest/UserStream";
 import { User } from "../../../../models/User";
 
 interface IProps {

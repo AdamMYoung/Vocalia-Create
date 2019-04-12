@@ -38,7 +38,7 @@ export default class EditorSelectionViewModel extends Component<
    */
   private loadPodcasts = async () => {
     const { api } = this.props;
-    var podcasts = await api.getPodcasts();
+    var podcasts = await api.getEditablePodcasts();
     if (podcasts) this.setState({ podcasts });
   };
 

@@ -1,4 +1,4 @@
-import { Listen } from "./Listen";
+import { Listen } from "./social/Listen";
 
 export class User {
   userUID: string;
