@@ -1,16 +1,18 @@
 import React, { Component } from "react";
-import DataManager from "../../../../data/api/DataManager";
 import { EditStream } from "../../../../models/editor/EditStream";
 import TrackView from "./TrackView";
-import { Typography } from "@material-ui/core";
 
 interface IProps {
   stream: EditStream;
+  playbackPosition: number;
+  paused: boolean;
+  onUpdatePlaybackPosition: (playbackPosition: number) => void;
+  onUpdateDisplayPosition: (playbackPosition: number) => void;
 }
 
 interface IState {
   audioBuffer: AudioBuffer | null;
-  position: number;
+  sliderPosition: number;
   audioElement: HTMLAudioElement;
 }
 
@@ -20,12 +22,12 @@ export default class TrackViewModel extends Component<IProps, IState> {
 
     var audio = document.createElement("audio");
     audio.src = props.stream.mediaUrl;
+    audio.ontimeupdate = this.onUpdateDisplay;
     audio.load();
-    audio.play();
 
     this.state = {
       audioBuffer: null,
-      position: 0,
+      sliderPosition: 0,
       audioElement: audio
     };
   }
@@ -49,16 +51,38 @@ export default class TrackViewModel extends Component<IProps, IState> {
   };
 
   /**
+   * Called when external scrubbing has occurred.
+   * @param oldProps Old properties of the track model.
+   */
+  componentDidUpdate(oldProps: IProps) {
+    const { playbackPosition, paused } = this.props;
+    const { audioElement, audioBuffer } = this.state;
+
+    if (oldProps.playbackPosition != playbackPosition) {
+      console.log(playbackPosition);
+      audioElement.currentTime = playbackPosition;
+      if (audioBuffer)
+        this.setState({
+          sliderPosition: audioElement.currentTime / audioBuffer.duration
+        });
+    }
+
+    if (oldProps.paused != paused) {
+      if (paused) audioElement.pause();
+      else audioElement.play();
+    }
+  }
+
+  /**
    * Called when the slider position has changed.
    */
   private onPositionChanged = (position: number) => {
-    const { audioElement, audioBuffer } = this.state;
+    const { audioBuffer } = this.state;
+    const { onUpdatePlaybackPosition } = this.props;
 
     if (audioBuffer) {
       var newPosition = audioBuffer.duration * position;
-
-      audioElement.currentTime = newPosition;
-      this.setState({ position });
+      onUpdatePlaybackPosition(newPosition);
     }
   };
 
@@ -70,8 +94,18 @@ export default class TrackViewModel extends Component<IProps, IState> {
 
     if (audioBuffer) {
       var newPosition = audioElement.currentTime / audioBuffer.duration;
-      this.setState({ position: newPosition });
+      this.setState({ sliderPosition: newPosition });
     }
+  };
+
+  /**
+   * Called to update the display time.
+   */
+  private onUpdateDisplay = () => {
+    const { onUpdateDisplayPosition } = this.props;
+    const { audioElement } = this.state;
+
+    onUpdateDisplayPosition(audioElement.currentTime);
   };
 
   render() {

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import ControlView from "./ControlView";
-import moment from "moment";
 import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
 import DataManager from "../../../../data/api/DataManager";
 import GroupManager from "../../../../data/stream/GroupManager";
 import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDialogView";
 import { Podcast } from "../../../../models/Podcast";
 import { User } from "../../../../models/User";
+import getDurationText from "../../../../utility/TextUtils";
 
 interface IProps {
   sessionId: string;
@@ -76,18 +76,6 @@ export default class ControlViewModel extends Component<IProps, IState> {
     if (isAdmin) return 2;
     else if (isUser) return 1;
     else return 0;
-  };
-
-  /**
-   * Gets the duration time formatted as a string.
-   */
-  private getDurationText = (): string => {
-    const { duration } = this.state;
-
-    return moment("2015-01-01")
-      .startOf("day")
-      .seconds(duration)
-      .format("H:mm:ss");
   };
 
   /**
@@ -165,13 +153,13 @@ export default class ControlViewModel extends Component<IProps, IState> {
   };
 
   render() {
-    const { isConfirmDialogOpen } = this.state;
+    const { isConfirmDialogOpen, duration } = this.state;
 
     return (
       <div>
         <ControlView
           {...this.state}
-          duration={this.getDurationText()}
+          duration={getDurationText(duration)}
           togglePaused={this.setPaused}
           toggleRecording={this.setRecording}
         />

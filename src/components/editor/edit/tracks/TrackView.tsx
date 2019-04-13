@@ -7,13 +7,18 @@ import { Typography, Card } from "@material-ui/core";
 interface IProps {
   stream: EditStream;
   audioBuffer: AudioBuffer | null;
-  position: number;
+  sliderPosition: number;
   onPositionChanged: (position: number) => void;
 }
 
 export default class TrackView extends Component<IProps> {
   render() {
-    const { audioBuffer, stream, position, onPositionChanged } = this.props;
+    const {
+      audioBuffer,
+      stream,
+      sliderPosition,
+      onPositionChanged
+    } = this.props;
 
     return (
       <Card style={{ marginTop: 5, padding: 5 }}>
@@ -34,7 +39,7 @@ export default class TrackView extends Component<IProps> {
             plot="line"
             // redraw waveform on window size change (default: true)
             responsive={true}
-            position={position}
+            position={sliderPosition}
             // Optionally handle user manually changing position (0 - 1)
             onPositionChange={(pos: number) => onPositionChanged(pos)}
             showPosition={true}
