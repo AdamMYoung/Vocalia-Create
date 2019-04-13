@@ -32,6 +32,7 @@
     "react-scripts": "^2.1.8",
     "react-timeago": "^4.4.0",
     "typescript": "3.3.1",
+    "waveform-react": "^0.2.3",
     "webrtc-adapter": "^7.2.1"
   },
   "scripts": {
@@ -49,5 +50,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/wavesurfer": "git+https://github.com/d10221/wavesurfer-typescript.git"
+  }
 }

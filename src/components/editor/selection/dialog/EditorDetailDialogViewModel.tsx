@@ -55,15 +55,24 @@ export default class EditorDetailDialogViewModel extends Component<
    * Called when a session has been selected to delete.
    */
   private onDeleteSession = (sessionUid: string) => {
-    this.setState({ deletionSession: sessionUid });
+    this.setState({ deletionSession: sessionUid, isDeleteSessionOpen: true });
   };
 
-  private onDeleteConfirmation = () => {
+  /**
+   * Deletes the session from the editor API.
+   */
+  private onDeleteConfirmation = async () => {
     const { api } = this.props;
     const { deletionSession } = this.state;
-    //api.deleteEditSession(deletionSession);
+    console.log(deletionSession);
+    if (deletionSession) await api.deleteEditSession(deletionSession);
+    await this.loadPodcast();
+    this.onCancelDeletion();
   };
 
+  /**
+   * Closes the deletion window.
+   */
   private onCancelDeletion = () => {
     this.setState({ isDeleteSessionOpen: false, deletionSession: null });
   };
@@ -79,8 +88,8 @@ export default class EditorDetailDialogViewModel extends Component<
       >
         {isDeleteSessionOpen && (
           <ConfirmationDialogView
-            title="Create Session"
-            subtitle="Are you sure you want to create a new session?"
+            title="Delete Recording"
+            subtitle="Are you sure you want to delete this recording?"
             onConfirm={this.onDeleteConfirmation}
             onDeny={this.onCancelDeletion}
           />

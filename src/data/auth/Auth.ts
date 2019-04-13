@@ -74,8 +74,6 @@ export default class Auth {
     this.idToken = authResult.idToken as string;
     this.expiresAt = expiresAt;
 
-    console.log(this.accessToken);
-
     this.onTokenChanged(this.accessToken);
     this.scheduleRenewal();
 

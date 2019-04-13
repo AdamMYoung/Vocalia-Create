@@ -225,4 +225,13 @@ export default class DataManager {
 
     return null;
   }
+
+  /**
+   * Deletes the edit session from the database if authorized.
+   * @param sessionUid UID of the session.
+   */
+  public async deleteEditSession(sessionUid: string) {
+    if (this.accessToken)
+      await this.editor.deleteEditSession(this.accessToken, sessionUid);
+  }
 }

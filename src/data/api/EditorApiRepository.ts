@@ -4,6 +4,7 @@ import { Podcast } from "../../models/Podcast";
 
 const API = process.env.REACT_APP_EDITOR_API_URL;
 const STREAMS = "streams";
+const SESSION = "session";
 const PODCASTS = "podcasts";
 const PODCAST = "podcast";
 
@@ -53,5 +54,18 @@ export default class EditorApiRepository {
       .then(response => response.json())
       .then(data => data as Podcast)
       .catch(() => null);
+  }
+
+  /**
+   * Deletes the edit session from the database if authorized.
+   * @param sessionUid UID of the session.
+   * @param accesToken Access token for API access.
+   */
+  public async deleteEditSession(accessToken: string, sessionUid: string) {
+    await getInjectedFetch(
+      API + SESSION + "?sessionUid=" + sessionUid,
+      accessToken,
+      "DELETE"
+    );
   }
 }

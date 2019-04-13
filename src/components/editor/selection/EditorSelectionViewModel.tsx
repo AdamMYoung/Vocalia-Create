@@ -56,8 +56,9 @@ export default class EditorSelectionViewModel extends Component<
   /**
    * Closes the dialog view model.
    */
-  private onCloseDetail = () => {
+  private onCloseDetail = async () => {
     this.setState({ currentPodcast: null });
+    await this.loadPodcasts();
   };
 
   render() {
