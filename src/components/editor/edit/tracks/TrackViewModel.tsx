@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { EditStream } from "../../../../models/editor/EditStream";
 import TrackView from "./TrackView";
 
 interface IProps {
-  stream: EditStream;
   playbackPosition: number;
   paused: boolean;
   onUpdatePlaybackPosition: (playbackPosition: number) => void;
@@ -21,7 +19,7 @@ export default class TrackViewModel extends Component<IProps, IState> {
     super(props);
 
     var audio = document.createElement("audio");
-    audio.src = props.stream.mediaUrl;
+
     audio.ontimeupdate = this.onUpdateDisplay;
     audio.load();
 
@@ -36,6 +34,7 @@ export default class TrackViewModel extends Component<IProps, IState> {
    * Loads audio from the url and stores it in a buffer.
    */
   componentDidMount = async () => {
+    /*
     const { stream } = this.props;
 
     const response = await fetch(stream.mediaUrl);
@@ -48,6 +47,7 @@ export default class TrackViewModel extends Component<IProps, IState> {
     setInterval(() => {
       this.onProgressChanged();
     }, 30);
+    */
   };
 
   /**

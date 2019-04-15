@@ -1,17 +1,16 @@
 import React, { Component } from "react";
-import DataManager from "../../../data/api/DataManager";
-import { EditStream } from "../../../models/editor/EditStream";
-import TrackViewModel from "./tracks/TrackViewModel";
 import { Grid, Typography, Divider } from "@material-ui/core";
 import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
 import { Podcast } from "../../../models/Podcast";
 import ControlsView from "./controls/ControlsView";
+import UserTrackViewModel from "./user/UserTrackViewModel";
+import UserTrack from "../../../models/editor/UserTrack";
 
 interface IProps {
   paused: boolean;
   playbackPosition: number;
   displayPosition: string;
-  streams: EditStream[];
+  tracks: UserTrack[];
   podcast: Podcast;
 
   onRewind: () => void;
@@ -23,7 +22,7 @@ interface IProps {
 
 export default class EditView extends Component<IProps> {
   render() {
-    const { streams, displayPosition } = this.props;
+    const { tracks } = this.props;
 
     return (
       <Grid container>
@@ -37,10 +36,16 @@ export default class EditView extends Component<IProps> {
           <Divider />
         </Grid>
 
-        <Typography variant="h6">User Streams</Typography>
-        {streams.map(s => (
-          <TrackViewModel key={s.userUID} stream={s} {...this.props} />
-        ))}
+        <div>
+          <Typography variant="h6">User Streams</Typography>
+          {tracks.map(track => (
+            <UserTrackViewModel
+              key={track.userUid}
+              track={track}
+              {...this.props}
+            />
+          ))}
+        </div>
       </Grid>
     );
   }

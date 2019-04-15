@@ -17,8 +17,14 @@ export default class GroupManager {
    */
   public onRecordingChanged: (isRecording: boolean) => void = () => {};
 
+  /**
+   * Called when the session has ended.
+   */
+  public onSessionEnd: () => void = () => {};
+
   constructor(hub: signalR.HubConnection) {
     this.hub = hub;
+    this.hub.on("onSessionEnd", () => this.onSessionEnd());
     this.hub.on("onTimeChanged", duration => this.onTimeChanged(duration));
     this.hub.on("onPauseChanged", isPaused => this.onPauseChanged(isPaused));
     this.hub.on("onRecordingChanged", isRecording =>
@@ -38,5 +44,12 @@ export default class GroupManager {
    */
   public setRecording = (isRecording: boolean) => {
     this.hub.invoke("setRecording", isRecording);
+  };
+
+  /**
+   * Invokes the end of the session.
+   */
+  public setSessionEnd = () => {
+    this.hub.invoke("setSessionEnd");
   };
 }

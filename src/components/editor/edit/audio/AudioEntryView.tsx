@@ -1,30 +1,23 @@
 import React, { Component } from "react";
+import { Card, CardContent } from "@material-ui/core";
 import Waveform from "waveform-react";
 import { drawerWidth } from "../../../../utility/constants";
-import { Typography, Card } from "@material-ui/core";
+import AudioEntry from "../../../../models/editor/AudioEntry";
 
 interface IProps {
-  audioBuffer: AudioBuffer | null;
-  sliderPosition: number;
-  onPositionChanged: (position: number) => void;
+  entry: AudioEntry;
 }
 
-export default class TrackView extends Component<IProps> {
+export default class AudioEntryView extends Component<IProps> {
   render() {
-    const {
-      audioBuffer,
-
-      sliderPosition,
-      onPositionChanged
-    } = this.props;
+    const { entry } = this.props;
 
     return (
-      <Card style={{ marginTop: 5, padding: 5 }}>
-        <Typography>{""}</Typography>
-        <div style={{ height: 50 }}>
+      <Card style={{ height: 50 }}>
+        <CardContent>
           <Waveform
             // Audio buffer
-            buffer={audioBuffer}
+            buffer={entry.buffer}
             // waveform height
             height={50}
             markerStyle={{
@@ -37,10 +30,6 @@ export default class TrackView extends Component<IProps> {
             plot="line"
             // redraw waveform on window size change (default: true)
             responsive={true}
-            position={sliderPosition}
-            // Optionally handle user manually changing position (0 - 1)
-            onPositionChange={(pos: number) => onPositionChanged(pos)}
-            showPosition={true}
             waveStyle={{
               // animate waveform on draw (default: true)
               animate: true,
@@ -52,7 +41,7 @@ export default class TrackView extends Component<IProps> {
             // waveform width
             width={window.innerWidth - drawerWidth - 30}
           />
-        </div>
+        </CardContent>
       </Card>
     );
   }

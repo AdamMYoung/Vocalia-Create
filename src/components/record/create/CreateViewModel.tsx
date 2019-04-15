@@ -6,6 +6,7 @@ import NewInviteDialogViewModel from "../../dialogs/newInvite/NewInviteDialogVie
 import { Dialog, DialogTitle } from "@material-ui/core";
 import { Podcast } from "../../../models/Podcast";
 import { User } from "../../../models/User";
+import { SessionClip } from "../../../models/SessionClip";
 
 interface IProps {
   api: DataManager;
@@ -16,6 +17,7 @@ interface IProps {
 interface IState {
   podcast: Podcast | null;
   currentUser: User | null;
+  clips: SessionClip[];
   isInviteOpen: boolean;
 }
 
@@ -37,6 +39,7 @@ export default class CreateViewModel extends Component<IProps, IState> {
     this.state = {
       podcast: null,
       currentUser: null,
+      clips: [],
       isInviteOpen: false
     };
   }
@@ -47,6 +50,7 @@ export default class CreateViewModel extends Component<IProps, IState> {
   componentWillMount() {
     const { api, sessionId } = this.props;
     this.loadPodcast();
+    this.onClipsChanged();
     hub.start().then(() => {
       api.getSignedInUserInfo().then(currentUser => {
         if (currentUser) {
@@ -65,6 +69,9 @@ export default class CreateViewModel extends Component<IProps, IState> {
     if (this.props.podcastId != prevProps.podcastId) this.loadPodcast();
   }
 
+  /**
+   * Called when the window is being disposed.
+   */
   componentWillUnmount() {
     hub.stop();
   }
@@ -93,8 +100,18 @@ export default class CreateViewModel extends Component<IProps, IState> {
     this.setState({ isInviteOpen: false });
   };
 
+  /**
+   * Called when the clips have changed.
+   */
+  private onClipsChanged = async () => {
+    const { api, sessionId } = this.props;
+
+    var clips = await api.getClips(sessionId);
+    if (clips) this.setState({ clips });
+  };
+
   render() {
-    const { podcast, currentUser, isInviteOpen } = this.state;
+    const { podcast, currentUser, clips, isInviteOpen } = this.state;
 
     return podcast && currentUser ? (
       <CreateView
@@ -102,7 +119,9 @@ export default class CreateViewModel extends Component<IProps, IState> {
         currentUser={currentUser}
         hub={hub}
         podcast={podcast}
+        clips={clips}
         onInvite={this.onInvite}
+        onClipsChanged={this.onClipsChanged}
       >
         {isInviteOpen && (
           <NewInviteDialogViewModel

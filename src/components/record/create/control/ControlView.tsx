@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import { Typography, Grid, Button } from "@material-ui/core";
+import { Typography, Grid, Button, Divider } from "@material-ui/core";
 
 interface IProps {
   duration: string;
   accessLevel: number;
   isRecording: boolean;
   isPaused: boolean;
+
   toggleRecording: () => void;
   togglePaused: () => void;
+  endSession: () => void;
 }
 
 export default class ControlView extends Component<IProps> {
@@ -18,12 +20,26 @@ export default class ControlView extends Component<IProps> {
       isRecording,
       isPaused,
       toggleRecording,
-      togglePaused
+      togglePaused,
+      endSession
     } = this.props;
 
     return (
       <div>
         <Grid container>
+          <Grid
+            item
+            xs={12}
+            style={{ display: "flex", verticalAlign: "center" }}
+          >
+            <Button fullWidth onClick={endSession} disabled={accessLevel <= 1}>
+              End Recording Session
+            </Button>
+          </Grid>
+          <Grid item xs={12} style={{ padding: 8 }}>
+            <Divider />
+          </Grid>
+
           <Grid
             item
             xs={4}
@@ -34,7 +50,7 @@ export default class ControlView extends Component<IProps> {
               onClick={toggleRecording}
               disabled={accessLevel <= 1}
             >
-              {(isRecording ? "Stop" : "Start") + " Recording"}
+              {(isRecording ? "Stop" : "Start New ") + " Clip"}
             </Button>
           </Grid>
           <Grid

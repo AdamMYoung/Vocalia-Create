@@ -40,8 +40,8 @@ export class AudioRecorder {
    * Stops recording the incoming mic audio.
    */
   public stop = () => {
-    if (this.micStream) this.micStream.getTracks().forEach(t => t.stop());
-    this.recorder = null;
+    if (this.recorder && this.recorder.state != "inactive")
+      this.recorder.stop();
   };
 
   /**

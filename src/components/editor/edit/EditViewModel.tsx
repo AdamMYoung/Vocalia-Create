@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import DataManager from "../../../data/api/DataManager";
 import EditView from "./EditView";
-import { EditStream } from "../../../models/editor/EditStream";
 import { Podcast } from "../../../models/Podcast";
-import getDurationText from "../../../utility/TextUtils";
+import { getDurationText } from "../../../utility/TextUtils";
+import UserTrack from "../../../models/editor/UserTrack";
 
 interface IProps {
   api: DataManager;
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 interface IState {
-  streams: EditStream[];
+  tracks: UserTrack[];
   podcast: Podcast | null;
   paused: boolean;
   playbackPosition: number;
@@ -24,7 +24,7 @@ export default class EditViewModel extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      streams: [],
+      tracks: [],
       podcast: null,
       paused: true,
       displayPosition: 0,
@@ -45,9 +45,7 @@ export default class EditViewModel extends Component<IProps, IState> {
    */
   private loadStreams = async () => {
     const { api, sessionId } = this.props;
-    var streams = await api.getEditStreams(sessionId);
-
-    if (streams) this.setState({ streams });
+    var tracks = await api.getEditStreams(sessionId);
   };
 
   /**
@@ -106,20 +104,12 @@ export default class EditViewModel extends Component<IProps, IState> {
   };
 
   render() {
-    const {
-      podcast,
-      streams,
-      paused,
-      playbackPosition,
-      displayPosition
-    } = this.state;
+    const { podcast, displayPosition } = this.state;
     return (
       podcast && (
         <EditView
-          podcast={podcast}
-          streams={streams}
-          paused={paused}
-          playbackPosition={playbackPosition}
+          {...this.state}
+          podcast={podcast as Podcast}
           displayPosition={getDurationText(displayPosition)}
           onUpdatePlaybackPosition={this.onUpdatePlaybackPosition}
           onUpdateDisplayPosition={this.onUpdateDisplayPosition}

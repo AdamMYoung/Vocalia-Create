@@ -5,6 +5,7 @@ import { User } from "../../models/User";
 import { PodcastUpload } from "../../models/ingest/PodcastUpload";
 import { Podcast } from "../../models/Podcast";
 import { BlobUpload } from "../../models/ingest/BlobUpload";
+import { SessionClip } from "../../models/SessionClip";
 
 export default class DataManager {
   private ingest: IngestApiRepository = new IngestApiRepository();
@@ -12,7 +13,7 @@ export default class DataManager {
   private editor: EditorApiRepository = new EditorApiRepository();
   accessToken: string | null = null;
 
-  //  Social Repo
+  //  Social
 
   /**
    * Gets the signed in user's timeline.
@@ -58,7 +59,7 @@ export default class DataManager {
       await this.social.removeFollow(this.accessToken, userId);
   }
 
-  //  Podcast Repo
+  //  Podcast
 
   /**
    * Gets all podcasts belonging to the specified group UID.
@@ -107,6 +108,8 @@ export default class DataManager {
       await this.ingest.deletePodcast(this.accessToken, podcastUid);
   }
 
+  // Session
+
   /**
    * Creates a new session for the specified podcast.
    * @param podcastUid UID of the podcast.
@@ -126,13 +129,46 @@ export default class DataManager {
   }
 
   /**
-   * Finishes the specified session.
+   * Completes the specified session.
    * @param sessionId UID of the session.
    */
-  public async finishSession(sessionId: string) {
+  public async completeSession(sessionId: string) {
     if (this.accessToken)
-      await this.ingest.finishSession(this.accessToken, sessionId);
+      await this.ingest.completeSession(this.accessToken, sessionId);
   }
+
+  // Clips
+
+  /**
+   * Finishes the current clip being recorded at the session.
+   * @param sessionId UID of the session.
+   */
+  public async finishClip(sessionId: string) {
+    if (this.accessToken)
+      await this.ingest.finishClip(this.accessToken, sessionId);
+  }
+
+  /**
+   * Gets all clips for the specified session.
+   * @param sessionId UID of the session.
+   */
+  public async getClips(sessionId: string): Promise<SessionClip[] | null> {
+    if (this.accessToken)
+      return await this.ingest.getClips(this.accessToken, sessionId);
+
+    return null;
+  }
+
+  /**
+   * Deletes the specified clip.
+   * @param clipId UID of the clip.
+   */
+  public async deleteClip(clipId: string) {
+    if (this.accessToken)
+      await this.ingest.deleteClip(this.accessToken, clipId);
+  }
+
+  // Invites
 
   /**
    * Gets the podcast attached to the invite.

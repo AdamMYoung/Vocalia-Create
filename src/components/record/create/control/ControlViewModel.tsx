@@ -6,7 +6,7 @@ import GroupManager from "../../../../data/stream/GroupManager";
 import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDialogView";
 import { Podcast } from "../../../../models/Podcast";
 import { User } from "../../../../models/User";
-import getDurationText from "../../../../utility/TextUtils";
+import { getDurationText } from "../../../../utility/TextUtils";
 
 interface IProps {
   sessionId: string;
@@ -14,6 +14,8 @@ interface IProps {
   podcast: Podcast;
   currentUser: User;
   hub: signalR.HubConnection;
+
+  onClipsChanged: () => void;
 }
 
 interface IState {
@@ -117,25 +119,31 @@ export default class ControlViewModel extends Component<IProps, IState> {
   /**
    * Sets the recording status.
    */
-  private setRecording = () => {
+  private setRecording = async () => {
     const { group, isRecording } = this.state;
-    if (!isRecording == true) {
-      group.setRecording(!isRecording);
-    } else {
-      this.setState({ isConfirmDialogOpen: true });
+    const { api, sessionId, onClipsChanged } = this.props;
+
+    group.setRecording(!isRecording);
+
+    if (isRecording == true) {
+      await api.finishClip(sessionId);
+      onClipsChanged();
     }
   };
 
   /**
-   * Stops recording the current podcast.
+   * Opens the end session dialog.
    */
-  private onStopRecording = () => {
-    const { group, recorder, isRecording } = this.state;
-    const { api, sessionId } = this.props;
+  private onOpenEndSessionDialog = () => {
+    this.setState({ isConfirmDialogOpen: true });
+  };
 
-    api.finishSession(sessionId);
-    group.setRecording(!isRecording);
-    if (recorder) recorder.stop();
+  /**
+   * Ends the current session.
+   */
+  private onEndSession = () => {
+    const { group } = this.state;
+    group.setSessionEnd();
     this.setState({ isConfirmDialogOpen: false });
   };
 
@@ -162,12 +170,13 @@ export default class ControlViewModel extends Component<IProps, IState> {
           duration={getDurationText(duration)}
           togglePaused={this.setPaused}
           toggleRecording={this.setRecording}
+          endSession={this.onOpenEndSessionDialog}
         />
         {isConfirmDialogOpen && (
           <ConfirmationDialogView
-            title="Finish Recording"
-            subtitle="Are you sure you want to end recording?"
-            onConfirm={this.onStopRecording}
+            title="End Session"
+            subtitle="Are you sure you want to end the current session?"
+            onConfirm={this.onEndSession}
             onDeny={() => this.setState({ isConfirmDialogOpen: false })}
           />
         )}

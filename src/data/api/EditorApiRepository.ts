@@ -1,6 +1,6 @@
 import { getInjectedFetch } from "./ApiUtils";
-import { EditStream } from "../../models/editor/EditStream";
 import { Podcast } from "../../models/Podcast";
+import UserTrack from "../../models/editor/UserTrack";
 
 const API = process.env.REACT_APP_EDITOR_API_URL;
 const STREAMS = "streams";
@@ -17,13 +17,13 @@ export default class EditorApiRepository {
   public async getSessionStreamsAsync(
     accessToken: string,
     sessionUid: string
-  ): Promise<EditStream[] | null> {
+  ): Promise<UserTrack[] | null> {
     return await getInjectedFetch(
       API + STREAMS + "?sessionUid=" + sessionUid,
       accessToken
     )
       .then(response => response.json())
-      .then(data => data as EditStream[])
+      .then(data => data as UserTrack[])
       .catch(() => null);
   }
 
