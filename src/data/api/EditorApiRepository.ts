@@ -1,6 +1,7 @@
 import { getInjectedFetch } from "./ApiUtils";
 import { Podcast } from "../../models/Podcast";
 import UserTrack from "../../models/editor/UserTrack";
+import AudioEntry from "../../models/editor/AudioEntry";
 
 const API = process.env.REACT_APP_EDITOR_API_URL;
 const STREAMS = "streams";

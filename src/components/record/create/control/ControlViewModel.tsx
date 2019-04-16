@@ -7,6 +7,7 @@ import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDi
 import { Podcast } from "../../../../models/Podcast";
 import { User } from "../../../../models/User";
 import { getDurationText } from "../../../../utility/TextUtils";
+import SessionEndDialog from "../SessionEndDialog";
 
 interface IProps {
   sessionId: string;
@@ -26,6 +27,7 @@ interface IState {
   isRecording: boolean;
   isPaused: boolean;
   isConfirmDialogOpen: boolean;
+  isSessionFinished: boolean;
 }
 
 export default class ControlViewModel extends Component<IProps, IState> {
@@ -36,6 +38,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
     group.onPauseChanged = isPaused => this.updatePaused(isPaused);
     group.onRecordingChanged = isRecording => this.updateRecording(isRecording);
     group.onTimeChanged = duration => this.setState({ duration });
+    group.onSessionEnd = () => this.setState({ isSessionFinished: true });
 
     this.state = {
       duration: 0,
@@ -44,7 +47,8 @@ export default class ControlViewModel extends Component<IProps, IState> {
       group: group,
       isRecording: false,
       isPaused: false,
-      isConfirmDialogOpen: false
+      isConfirmDialogOpen: false,
+      isSessionFinished: false
     };
   }
 
@@ -86,7 +90,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
   private updatePaused = (isPaused: boolean) => {
     const { recorder } = this.state;
     if (recorder) {
-      isPaused ? recorder.pause() : recorder.start();
+      isPaused ? recorder.pause() : recorder.resume();
       this.setState({ isPaused });
     }
   };
@@ -143,7 +147,9 @@ export default class ControlViewModel extends Component<IProps, IState> {
    */
   private onEndSession = () => {
     const { group } = this.state;
+    const { api, sessionId } = this.props;
     group.setSessionEnd();
+    api.completeSession(sessionId);
     this.setState({ isConfirmDialogOpen: false });
   };
 
@@ -161,7 +167,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
   };
 
   render() {
-    const { isConfirmDialogOpen, duration } = this.state;
+    const { isConfirmDialogOpen, isSessionFinished, duration } = this.state;
 
     return (
       <div>
@@ -180,6 +186,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
             onDeny={() => this.setState({ isConfirmDialogOpen: false })}
           />
         )}
+        {isSessionFinished && <SessionEndDialog />}
       </div>
     );
   }

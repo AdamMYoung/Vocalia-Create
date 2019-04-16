@@ -46,6 +46,10 @@ export default class EditViewModel extends Component<IProps, IState> {
   private loadStreams = async () => {
     const { api, sessionId } = this.props;
     var tracks = await api.getEditStreams(sessionId);
+
+    if (tracks) {
+      this.setState({ tracks });
+    }
   };
 
   /**

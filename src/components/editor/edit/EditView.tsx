@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Grid, Typography, Divider } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Divider,
+  Card,
+  CardContent
+} from "@material-ui/core";
 import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
 import { Podcast } from "../../../models/Podcast";
 import ControlsView from "./controls/ControlsView";
@@ -26,26 +32,31 @@ export default class EditView extends Component<IProps> {
 
     return (
       <Grid container>
-        <Grid item xs={12} style={{ padding: 12 }}>
-          <Typography variant="h6">Current Podcast</Typography>
-          <PodcastInfoView {...this.props} />
-          <Divider />
-          <div style={{ margin: 8 }}>
-            <ControlsView {...this.props} />
-          </div>
-          <Divider />
+        <Grid item xs={12}>
+          <Card style={{ margin: 4 }}>
+            <CardContent>
+              <Typography variant="h6">Current Podcast</Typography>
+              <PodcastInfoView {...this.props} />
+              <Divider />
+              <div style={{ margin: 8 }}>
+                <ControlsView {...this.props} />
+              </div>
+              <Divider />
+            </CardContent>
+          </Card>
         </Grid>
 
-        <div>
-          <Typography variant="h6">User Streams</Typography>
-          {tracks.map(track => (
-            <UserTrackViewModel
-              key={track.userUid}
-              track={track}
-              {...this.props}
-            />
-          ))}
-        </div>
+        <Grid item xs={12}>
+          <Typography variant="h6" style={{ textAlign: "center" }}>
+            Recordings
+          </Typography>
+        </Grid>
+
+        {tracks.map(track => (
+          <Grid key={track.userUid} item xs={12}>
+            <UserTrackViewModel track={track} {...this.props} />
+          </Grid>
+        ))}
       </Grid>
     );
   }

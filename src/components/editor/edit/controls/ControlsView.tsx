@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Button, Typography } from "@material-ui/core";
+import { Grid, Button, Typography, Divider } from "@material-ui/core";
 
 interface IProps {
   paused: boolean;
@@ -48,6 +48,9 @@ export default class ControlsView extends Component<IProps> {
             <Button onClick={onForward} fullWidth>
               Forward
             </Button>
+          </Grid>
+          <Grid item xs={12} style={{ padding: 8 }}>
+            <Divider />
           </Grid>
           <Grid
             item
