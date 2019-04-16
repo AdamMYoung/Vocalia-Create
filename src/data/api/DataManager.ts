@@ -143,9 +143,9 @@ export default class DataManager {
    * Finishes the current clip being recorded at the session.
    * @param sessionId UID of the session.
    */
-  public async finishClip(sessionId: string) {
+  public async finishClip(sessionId: string, name: string) {
     if (this.accessToken)
-      await this.ingest.finishClip(this.accessToken, sessionId);
+      await this.ingest.finishClip(this.accessToken, sessionId, name);
   }
 
   /**
@@ -231,12 +231,20 @@ export default class DataManager {
    * Returns all edit streams of the current session.
    * @param sessionUID UID of the session.
    */
-  public async getEditStreams(sessionUID: string) {
+  public async getTimeline(sessionUID: string) {
     if (this.accessToken)
-      return await this.editor.getSessionStreamsAsync(
-        this.accessToken,
-        sessionUID
-      );
+      return await this.editor.getTimeline(this.accessToken, sessionUID);
+
+    return null;
+  }
+
+  /**
+   * Returns all edit streams of the current session.
+   * @param sessionUID UID of the session.
+   */
+  public async getEditorClips(sessionUID: string) {
+    if (this.accessToken)
+      return await this.editor.getClips(this.accessToken, sessionUID);
 
     return null;
   }

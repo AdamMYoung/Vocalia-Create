@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import AudioEntry from "../../../../models/editor/AudioEntry";
+import ClipMedia from "../../../../models/editor/ClipMedia";
 import AudioEntryView from "./AudioEntryView";
 
 interface IProps {
-  entry: AudioEntry;
+  entry: ClipMedia;
 }
 
 interface IState {
@@ -27,7 +27,7 @@ export default class AudioEntryViewModel extends Component<IProps, IState> {
   public loadAudioBuffer = async () => {
     const { entry } = this.props;
 
-    const response = await fetch(entry.url);
+    const response = await fetch(entry.mediaUrl);
     const audioData = await response.arrayBuffer();
 
     new AudioContext().decodeAudioData(audioData, buffer => {

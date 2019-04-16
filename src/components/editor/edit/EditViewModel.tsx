@@ -3,7 +3,7 @@ import DataManager from "../../../data/api/DataManager";
 import EditView from "./EditView";
 import { Podcast } from "../../../models/Podcast";
 import { getDurationText } from "../../../utility/TextUtils";
-import UserTrack from "../../../models/editor/UserTrack";
+import Clip from "../../../models/editor/Clip";
 
 interface IProps {
   api: DataManager;
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 interface IState {
-  tracks: UserTrack[];
+  timeline: Clip[];
   podcast: Podcast | null;
   paused: boolean;
   playbackPosition: number;
@@ -24,7 +24,8 @@ export default class EditViewModel extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      tracks: [],
+      timeline: [],
+
       podcast: null,
       paused: true,
       displayPosition: 0,
@@ -45,10 +46,10 @@ export default class EditViewModel extends Component<IProps, IState> {
    */
   private loadStreams = async () => {
     const { api, sessionId } = this.props;
-    var tracks = await api.getEditStreams(sessionId);
+    var timeline = await api.getTimeline(sessionId);
 
-    if (tracks) {
-      this.setState({ tracks });
+    if (timeline) {
+      this.setState({ timeline });
     }
   };
 

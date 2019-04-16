@@ -8,6 +8,7 @@ import { Podcast } from "../../../../models/Podcast";
 import { User } from "../../../../models/User";
 import { getDurationText } from "../../../../utility/TextUtils";
 import SessionEndDialog from "../SessionEndDialog";
+import { ClipNameDialog } from "../../ClipNameDialog";
 
 interface IProps {
   sessionId: string;
@@ -15,6 +16,7 @@ interface IProps {
   podcast: Podcast;
   currentUser: User;
   hub: signalR.HubConnection;
+  clipNumber: number;
 
   onClipsChanged: () => void;
 }
@@ -27,6 +29,7 @@ interface IState {
   isRecording: boolean;
   isPaused: boolean;
   isConfirmDialogOpen: boolean;
+  isClipFinishedDialogOpen: boolean;
   isSessionFinished: boolean;
 }
 
@@ -48,6 +51,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
       isRecording: false,
       isPaused: false,
       isConfirmDialogOpen: false,
+      isClipFinishedDialogOpen: false,
       isSessionFinished: false
     };
   }
@@ -125,14 +129,20 @@ export default class ControlViewModel extends Component<IProps, IState> {
    */
   private setRecording = async () => {
     const { group, isRecording } = this.state;
-    const { api, sessionId, onClipsChanged } = this.props;
 
     group.setRecording(!isRecording);
 
-    if (isRecording == true) {
-      await api.finishClip(sessionId);
-      onClipsChanged();
-    }
+    if (isRecording == true) this.setState({ isClipFinishedDialogOpen: true });
+  };
+
+  /**
+   * Submits the clip to the database.
+   */
+  private onSubmitClip = async (name: string) => {
+    const { api, sessionId, onClipsChanged } = this.props;
+    await api.finishClip(sessionId, name);
+    onClipsChanged();
+    this.setState({ isClipFinishedDialogOpen: false });
   };
 
   /**
@@ -167,7 +177,12 @@ export default class ControlViewModel extends Component<IProps, IState> {
   };
 
   render() {
-    const { isConfirmDialogOpen, isSessionFinished, duration } = this.state;
+    const {
+      isConfirmDialogOpen,
+      isSessionFinished,
+      isClipFinishedDialogOpen,
+      duration
+    } = this.state;
 
     return (
       <div>
@@ -185,6 +200,9 @@ export default class ControlViewModel extends Component<IProps, IState> {
             onConfirm={this.onEndSession}
             onDeny={() => this.setState({ isConfirmDialogOpen: false })}
           />
+        )}
+        {isClipFinishedDialogOpen && (
+          <ClipNameDialog onAccept={this.onSubmitClip} {...this.props} />
         )}
         {isSessionFinished && <SessionEndDialog />}
       </div>

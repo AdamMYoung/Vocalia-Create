@@ -82,9 +82,13 @@ export default class IngestApiRepository {
    * @param accessToken Token for API access.
    * @param sessionUid UID of the session.
    */
-  public async finishClip(accessToken: string, sessionUid: string) {
+  public async finishClip(
+    accessToken: string,
+    sessionUid: string,
+    name: string
+  ) {
     await getInjectedFetch(
-      API + CLIP + "?sessionUid=" + sessionUid,
+      API + CLIP + "?sessionUid=" + sessionUid + "&clipName=" + name,
       accessToken,
       "PUT"
     );

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Card, CardContent } from "@material-ui/core";
 import Waveform from "waveform-react";
 
 interface IProps {

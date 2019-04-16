@@ -9,14 +9,14 @@ import {
 import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
 import { Podcast } from "../../../models/Podcast";
 import ControlsView from "./controls/ControlsView";
-import UserTrackViewModel from "./user/UserTrackViewModel";
-import UserTrack from "../../../models/editor/UserTrack";
+import Clip from "../../../models/editor/Clip";
+import AudioEntryViewModel from "./audio/AudioEntryViewModel";
 
 interface IProps {
   paused: boolean;
   playbackPosition: number;
   displayPosition: string;
-  tracks: UserTrack[];
+  timeline: Clip[];
   podcast: Podcast;
 
   onRewind: () => void;
@@ -28,7 +28,7 @@ interface IProps {
 
 export default class EditView extends Component<IProps> {
   render() {
-    const { tracks } = this.props;
+    const { timeline } = this.props;
 
     return (
       <Grid container>
@@ -52,10 +52,32 @@ export default class EditView extends Component<IProps> {
           </Typography>
         </Grid>
 
-        {tracks.map(track => (
-          <Grid key={track.userUid} item xs={12}>
-            <UserTrackViewModel track={track} {...this.props} />
+        {timeline.length > 0 && (
+          <Grid item xs={12} style={{ display: "flex" }}>
+            <Card style={{ margin: 4 }}>
+              <CardContent>
+                {timeline[0].entries.map(entry => (
+                  <div style={{ height: 50, margin: 2 }}>{entry.userUid}</div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card style={{ margin: 4 }}>
+              <CardContent style={{ display: "flex", flexWrap: "nowrap" }}>
+                {timeline.map(t =>
+                  t.entries.map(entry => (
+                    <div style={{ height: 50, margin: 2 }}>
+                      <AudioEntryViewModel entry={entry} />
+                    </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
           </Grid>
+        )}
+
+        {timeline.map(track => (
+          <Grid key={track.uid} item xs={12} />
         ))}
       </Grid>
     );

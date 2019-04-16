@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import AudioEntry from "../../../../models/editor/AudioEntry";
+import ClipMedia from "../../../../models/editor/ClipMedia";
 import AudioEntryView from "./AudioEntryView";
 import AudioEntryViewModel from "./AudioEntryViewModel";
 
 interface IProps {
-  entries: AudioEntry[];
+  entries: ClipMedia[];
 }
 
 export default class AudioTrackView extends Component<IProps> {

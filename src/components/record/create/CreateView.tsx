@@ -31,6 +31,8 @@ interface IProps {
 
 export default class CreateView extends Component<IProps> {
   render() {
+    const { clips } = this.props;
+
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -40,7 +42,7 @@ export default class CreateView extends Component<IProps> {
               <PodcastInfoView {...this.props} />
               <Divider />
               <div style={{ margin: 8 }}>
-                <ControlViewModel {...this.props} />
+                <ControlViewModel clipNumber={clips.length} {...this.props} />
               </div>
               <Divider />
             </CardContent>

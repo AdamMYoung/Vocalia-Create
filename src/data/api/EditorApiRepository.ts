@@ -1,10 +1,11 @@
 import { getInjectedFetch } from "./ApiUtils";
 import { Podcast } from "../../models/Podcast";
-import UserTrack from "../../models/editor/UserTrack";
-import AudioEntry from "../../models/editor/AudioEntry";
+import Clip from "../../models/editor/Clip";
+import ClipMedia from "../../models/editor/ClipMedia";
 
 const API = process.env.REACT_APP_EDITOR_API_URL;
-const STREAMS = "streams";
+const TIMELINE = "timeline";
+const CLIPS = "clips";
 const SESSION = "session";
 const PODCASTS = "podcasts";
 const PODCAST = "podcast";
@@ -15,16 +16,34 @@ export default class EditorApiRepository {
    * @param accessToken Access token for API access.
    * @param sessionUid UID of the session.
    */
-  public async getSessionStreamsAsync(
+  public async getTimeline(
     accessToken: string,
     sessionUid: string
-  ): Promise<UserTrack[] | null> {
+  ): Promise<Clip[] | null> {
     return await getInjectedFetch(
-      API + STREAMS + "?sessionUid=" + sessionUid,
+      API + TIMELINE + "?sessionUid=" + sessionUid,
       accessToken
     )
       .then(response => response.json())
-      .then(data => data as UserTrack[])
+      .then(data => data as Clip[])
+      .catch(() => null);
+  }
+
+  /**
+   * Returns all edit streams of the current session.
+   * @param accessToken Access token for API access.
+   * @param sessionUid UID of the session.
+   */
+  public async getClips(
+    accessToken: string,
+    sessionUid: string
+  ): Promise<Clip[] | null> {
+    return await getInjectedFetch(
+      API + CLIPS + "?sessionUid=" + sessionUid,
+      accessToken
+    )
+      .then(response => response.json())
+      .then(data => data as Clip[])
       .catch(() => null);
   }
 

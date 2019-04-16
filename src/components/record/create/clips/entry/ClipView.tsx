@@ -7,7 +7,6 @@ import {
   ListItemSecondaryAction
 } from "@material-ui/core";
 import TimeAgo from "react-timeago";
-import { formatBytes } from "../../../../../utility/TextUtils";
 import { Delete, Stop, PlayArrow } from "@material-ui/icons";
 
 interface IProps {
@@ -30,8 +29,8 @@ export default class ClipView extends Component<IProps> {
           <Delete />
         </IconButton>
         <ListItemText
-          primary={<TimeAgo date={clip.time + " UTC"} />}
-          secondary={formatBytes(clip.size)}
+          primary={clip.name}
+          secondary={<TimeAgo date={clip.time + " UTC"} />}
         />
         <ListItemSecondaryAction>
           <IconButton onClick={() => onPlayPause(clip.mediaUrl)}>
