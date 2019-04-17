@@ -10,13 +10,16 @@ import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
 import { Podcast } from "../../../models/Podcast";
 import ControlsView from "./controls/ControlsView";
 import Clip from "../../../models/editor/Clip";
-import AudioEntryViewModel from "./audio/AudioEntryViewModel";
+import TimelineView from "./timeline/TimelineView";
+import TrayViewModel from "./tray/TrayViewModel";
+import { DropResult } from "react-beautiful-dnd";
 
 interface IProps {
   paused: boolean;
   playbackPosition: number;
   displayPosition: string;
   timeline: Clip[];
+  clips: Clip[];
   podcast: Podcast;
 
   onRewind: () => void;
@@ -24,6 +27,7 @@ interface IProps {
   onPlayPause: () => void;
   onUpdatePlaybackPosition: (playbackPosition: number) => void;
   onUpdateDisplayPosition: (playbackPosition: number) => void;
+  onTimelineDragEnd: (result: DropResult) => void;
 }
 
 export default class EditView extends Component<IProps> {
@@ -35,13 +39,19 @@ export default class EditView extends Component<IProps> {
         <Grid item xs={12}>
           <Card style={{ margin: 4 }}>
             <CardContent>
-              <Typography variant="h6">Current Podcast</Typography>
-              <PodcastInfoView {...this.props} />
-              <Divider />
-              <div style={{ margin: 8 }}>
-                <ControlsView {...this.props} />
-              </div>
-              <Divider />
+              <Grid container>
+                <Grid item xs={12} md={6}>
+                  <PodcastInfoView {...this.props} />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <div
+                    style={{ margin: "0", top: "50%", posiiton: "absolute" }}
+                  >
+                    <ControlsView {...this.props} />
+                  </div>
+                </Grid>
+              </Grid>
             </CardContent>
           </Card>
         </Grid>
@@ -52,33 +62,9 @@ export default class EditView extends Component<IProps> {
           </Typography>
         </Grid>
 
-        {timeline.length > 0 && (
-          <Grid item xs={12} style={{ display: "flex" }}>
-            <Card style={{ margin: 4 }}>
-              <CardContent>
-                {timeline[0].entries.map(entry => (
-                  <div style={{ height: 50, margin: 2 }}>{entry.userUid}</div>
-                ))}
-              </CardContent>
-            </Card>
+        <TimelineView {...this.props} timeline={timeline} />
 
-            <Card style={{ margin: 4 }}>
-              <CardContent style={{ display: "flex", flexWrap: "nowrap" }}>
-                {timeline.map(t =>
-                  t.entries.map(entry => (
-                    <div style={{ height: 50, margin: 2 }}>
-                      <AudioEntryViewModel entry={entry} />
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-
-        {timeline.map(track => (
-          <Grid key={track.uid} item xs={12} />
-        ))}
+        <TrayViewModel {...this.props} />
       </Grid>
     );
   }

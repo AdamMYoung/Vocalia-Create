@@ -1,44 +1,70 @@
 import React, { Component } from "react";
 import ClipMedia from "../../../../models/editor/ClipMedia";
-import AudioEntryView from "./AudioEntryView";
+import WaveSurfer from "wavesurfer.js";
 
 interface IProps {
   entry: ClipMedia;
 }
 
 interface IState {
-  buffer: AudioBuffer | null;
+  waveform: any;
 }
 
 export default class AudioEntryViewModel extends Component<IProps, IState> {
+  private identifier: string;
+
   constructor(props: IProps) {
     super(props);
 
     this.state = {
-      buffer: null
+      waveform: null
     };
 
-    this.loadAudioBuffer();
+    this.identifier = this.generateId(5);
+  }
+
+  componentDidUpdate() {
+    const { waveform } = this.state;
+
+    if (!waveform) this.loadWavesurfer();
+  }
+
+  componentDidMount() {
+    const { waveform } = this.state;
+
+    if (!waveform) this.loadWavesurfer();
   }
 
   /**
-   * Loads the audio buffer for the current entry.
+   * Generates an ID for waveform identification.
    */
-  public loadAudioBuffer = async () => {
+  private generateId = (length: number) => {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    for (var i = 0; i < length; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+  };
+
+  /**
+   * Generates the waveform for the audio file.
+   */
+  private loadWavesurfer = () => {
     const { entry } = this.props;
 
-    const response = await fetch(entry.mediaUrl);
-    const audioData = await response.arrayBuffer();
-
-    new AudioContext().decodeAudioData(audioData, buffer => {
-      this.setState({ buffer });
-      console.log(buffer);
+    var wavesurfer = WaveSurfer.create({
+      container: "#" + this.identifier,
+      waveColor: "blue",
+      hideScrollbar: true
     });
+
+    wavesurfer.load(entry.mediaUrl);
+    this.setState({ waveform: wavesurfer });
   };
 
   render() {
-    const { buffer } = this.state;
-
-    return <AudioEntryView buffer={buffer} />;
+    return <div id={this.identifier} style={{ width: 300 }} />;
   }
 }

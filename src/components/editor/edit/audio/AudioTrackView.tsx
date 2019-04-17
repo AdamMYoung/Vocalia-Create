@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ClipMedia from "../../../../models/editor/ClipMedia";
-import AudioEntryView from "./AudioEntryView";
 import AudioEntryViewModel from "./AudioEntryViewModel";
 
 interface IProps {

@@ -153,8 +153,9 @@ export default class DataManager {
    * @param sessionId UID of the session.
    */
   public async getClips(sessionId: string): Promise<SessionClip[] | null> {
-    if (this.accessToken)
+    if (this.accessToken) {
       return await this.ingest.getClips(this.accessToken, sessionId);
+    }
 
     return null;
   }

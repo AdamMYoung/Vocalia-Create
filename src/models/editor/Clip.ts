@@ -5,19 +5,19 @@ export default class Clip {
   date: Date;
   sessionID: number;
   name: string;
-  entries: ClipMedia[];
+  media: ClipMedia[];
 
   constructor(
     uid: string,
     date: Date,
     sessionID: number,
     name: string,
-    entries: ClipMedia[]
+    media: ClipMedia[]
   ) {
     this.uid = uid;
     this.date = date;
     this.sessionID = sessionID;
     this.name = name;
-    this.entries = entries;
+    this.media = media;
   }
 }

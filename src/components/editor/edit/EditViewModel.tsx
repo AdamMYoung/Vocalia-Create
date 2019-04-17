@@ -4,6 +4,14 @@ import EditView from "./EditView";
 import { Podcast } from "../../../models/Podcast";
 import { getDurationText } from "../../../utility/TextUtils";
 import Clip from "../../../models/editor/Clip";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+  DraggableLocation
+} from "react-beautiful-dnd";
+import { reorder } from "../../../utility/ListUtils";
 
 interface IProps {
   api: DataManager;
@@ -13,6 +21,7 @@ interface IProps {
 
 interface IState {
   timeline: Clip[];
+  clips: Clip[];
   podcast: Podcast | null;
   paused: boolean;
   playbackPosition: number;
@@ -25,7 +34,7 @@ export default class EditViewModel extends Component<IProps, IState> {
 
     this.state = {
       timeline: [],
-
+      clips: [],
       podcast: null,
       paused: true,
       displayPosition: 0,
@@ -37,19 +46,33 @@ export default class EditViewModel extends Component<IProps, IState> {
    * Loads the podcast and edit streams from the API.
    */
   componentWillMount() {
-    this.loadStreams();
+    this.loadTimeline();
     this.loadPodcast();
+    this.loadClips();
   }
 
   /**
    * Loads all edit streams for the specified session.
    */
-  private loadStreams = async () => {
+  private loadTimeline = async () => {
     const { api, sessionId } = this.props;
     var timeline = await api.getTimeline(sessionId);
 
     if (timeline) {
       this.setState({ timeline });
+    }
+  };
+
+  /**
+   * Loads all clips for the specified session.
+   */
+  private loadClips = async () => {
+    const { api, sessionId } = this.props;
+    var clips = await api.getEditorClips(sessionId);
+
+    if (clips) {
+      console.log(clips);
+      this.setState({ clips });
     }
   };
 
@@ -108,20 +131,79 @@ export default class EditViewModel extends Component<IProps, IState> {
     this.setState({ paused: !paused });
   };
 
+  /**
+   * Called when the drag has ended.
+   */
+  private onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+    const { clips, timeline } = this.state;
+
+    if (!destination) return;
+
+    if (source.droppableId == destination.droppableId) {
+      switch (source.droppableId) {
+        case "tray":
+          this.setState({
+            clips: reorder(clips, source.index, destination.index)
+          });
+
+          break;
+        case "timeline":
+          this.setState({
+            timeline: reorder(timeline, source.index, destination.index)
+          });
+          break;
+      }
+    } else {
+      switch (source.droppableId) {
+        case "tray":
+          this.move(clips, timeline, source, destination);
+          break;
+        case "timeline":
+          this.move(timeline, clips, source, destination);
+          break;
+      }
+    }
+  };
+
+  /**
+   * Moves an item from one list to another list.
+   */
+  private move = (
+    source: Clip[],
+    destination: Clip[],
+    droppableSource: DraggableLocation,
+    droppableDestination: DraggableLocation
+  ) => {
+    const sourceClone = Array.from(source);
+    const destClone = Array.from(destination);
+    const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+    destClone.splice(droppableDestination.index, 0, removed);
+
+    this.setState({
+      clips: sourceClone,
+      timeline: destClone
+    });
+  };
+
   render() {
     const { podcast, displayPosition } = this.state;
     return (
       podcast && (
-        <EditView
-          {...this.state}
-          podcast={podcast as Podcast}
-          displayPosition={getDurationText(displayPosition)}
-          onUpdatePlaybackPosition={this.onUpdatePlaybackPosition}
-          onUpdateDisplayPosition={this.onUpdateDisplayPosition}
-          onRewind={this.onRewind}
-          onForward={this.onForward}
-          onPlayPause={this.onPlayPause}
-        />
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <EditView
+            {...this.state}
+            podcast={podcast as Podcast}
+            displayPosition={getDurationText(displayPosition)}
+            onUpdatePlaybackPosition={this.onUpdatePlaybackPosition}
+            onUpdateDisplayPosition={this.onUpdateDisplayPosition}
+            onRewind={this.onRewind}
+            onForward={this.onForward}
+            onPlayPause={this.onPlayPause}
+            onTimelineDragEnd={this.onDragEnd}
+          />
+        </DragDropContext>
       )
     );
   }
