@@ -71,7 +71,6 @@ export default class EditViewModel extends Component<IProps, IState> {
     var clips = await api.getEditorClips(sessionId);
 
     if (clips) {
-      console.log(clips);
       this.setState({ clips });
     }
   };

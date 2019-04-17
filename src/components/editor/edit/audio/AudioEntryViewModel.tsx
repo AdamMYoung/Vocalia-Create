@@ -4,6 +4,7 @@ import WaveSurfer from "wavesurfer.js";
 
 interface IProps {
   entry: ClipMedia;
+  width?: number;
 }
 
 interface IState {
@@ -52,11 +53,11 @@ export default class AudioEntryViewModel extends Component<IProps, IState> {
    * Generates the waveform for the audio file.
    */
   private loadWavesurfer = () => {
-    const { entry } = this.props;
+    const { entry, width } = this.props;
 
     var wavesurfer = WaveSurfer.create({
       container: "#" + this.identifier,
-      waveColor: "blue",
+      waveColor: "#3F51B5",
       hideScrollbar: true
     });
 
@@ -65,6 +66,12 @@ export default class AudioEntryViewModel extends Component<IProps, IState> {
   };
 
   render() {
-    return <div id={this.identifier} style={{ width: 300 }} />;
+    const { width } = this.props;
+    return (
+      <div
+        id={this.identifier}
+        style={{ width: width != undefined ? width : 300 }}
+      />
+    );
   }
 }

@@ -34,5 +34,5 @@ export const getTrayStyle = (isDraggingOver: boolean) => ({
   padding: grid,
   display: "flex",
   overflow: "auto",
-  minWidth: 500
+  minHeight: 100
 });

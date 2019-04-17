@@ -23,7 +23,7 @@ export class ClipNameDialog extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      name: "Session " + props.clipNumber
+      name: "Clip " + props.clipNumber
     };
   }
 

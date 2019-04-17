@@ -36,24 +36,16 @@ export default class EditView extends Component<IProps> {
 
     return (
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={6}>
           <Card style={{ margin: 4 }}>
             <CardContent>
-              <Grid container>
-                <Grid item xs={12} md={6}>
-                  <PodcastInfoView {...this.props} />
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <div
-                    style={{ margin: "0", top: "50%", posiiton: "absolute" }}
-                  >
-                    <ControlsView {...this.props} />
-                  </div>
-                </Grid>
-              </Grid>
+              <PodcastInfoView {...this.props} />
             </CardContent>
           </Card>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <TrayViewModel {...this.props} />
         </Grid>
 
         <Grid item xs={12}>
@@ -63,8 +55,6 @@ export default class EditView extends Component<IProps> {
         </Grid>
 
         <TimelineView {...this.props} timeline={timeline} />
-
-        <TrayViewModel {...this.props} />
       </Grid>
     );
   }
