@@ -4,7 +4,11 @@ import WaveSurfer from "wavesurfer.js";
 
 interface IProps {
   entry: ClipMedia;
+  clipUid: string;
+  currentClipPlaying: string | null;
   width?: number;
+
+  onClipPlay: (clipUid: string) => void;
 }
 
 interface IState {
@@ -24,10 +28,16 @@ export default class AudioEntryViewModel extends Component<IProps, IState> {
     this.identifier = this.generateId(5);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: IProps) {
     const { waveform } = this.state;
+    const { clipUid, currentClipPlaying } = this.props;
 
     if (!waveform) this.loadWavesurfer();
+
+    if (prevProps.currentClipPlaying != currentClipPlaying) {
+      if (clipUid == currentClipPlaying) waveform.play();
+      else waveform.stop();
+    }
   }
 
   componentDidMount() {
@@ -53,7 +63,7 @@ export default class AudioEntryViewModel extends Component<IProps, IState> {
    * Generates the waveform for the audio file.
    */
   private loadWavesurfer = () => {
-    const { entry, width } = this.props;
+    const { entry, onClipPlay, clipUid } = this.props;
 
     var wavesurfer = WaveSurfer.create({
       container: "#" + this.identifier,
@@ -61,7 +71,9 @@ export default class AudioEntryViewModel extends Component<IProps, IState> {
       hideScrollbar: true
     });
 
+    wavesurfer.toggleInteraction();
     wavesurfer.load(entry.mediaUrl);
+    wavesurfer.on("finish", () => onClipPlay(clipUid));
     this.setState({ waveform: wavesurfer });
   };
 

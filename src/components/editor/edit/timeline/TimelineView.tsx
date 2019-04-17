@@ -1,34 +1,23 @@
 import React, { Component } from "react";
 import Clip from "../../../../models/editor/Clip";
-import {
-  Grid,
-  Card,
-  CardContent,
-  Avatar,
-  Typography,
-  AppBar,
-  Toolbar,
-  IconButton
-} from "@material-ui/core";
+import { Grid, Avatar, Typography } from "@material-ui/core";
 import AudioEntryViewModel from "../audio/AudioEntryViewModel";
-import {
-  Droppable,
-  Draggable,
-  DragDropContext,
-  DropResult
-} from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import { getListStyle } from "../../DragDropStyles";
-import { PlayArrow } from "@material-ui/icons";
+import TimelineEntryView from "./TimelineEntryView";
 
 interface IProps {
   timeline: Clip[];
+  currentClipPlaying: string | null;
 
-  onTimelineDragEnd: (result: DropResult) => void;
+  onClipPlay: (clipUid: string) => void;
+  onClipSettings: (clipUid: string) => void;
 }
 
 export default class TimelineView extends Component<IProps> {
   render() {
     const { timeline } = this.props;
+
     return (
       <Grid item xs={12} style={{ display: "flex" }}>
         <div style={{ display: "inline-block", marginTop: 85, marginRight: 8 }}>
@@ -52,7 +41,12 @@ export default class TimelineView extends Component<IProps> {
                   <Typography>{entry.userName}</Typography>
                 </div>
 
-                <AudioEntryViewModel entry={entry} width={0} />
+                <AudioEntryViewModel
+                  entry={entry}
+                  width={0}
+                  {...this.props}
+                  clipUid={""}
+                />
               </div>
             ))}
         </div>
@@ -64,42 +58,8 @@ export default class TimelineView extends Component<IProps> {
               {...provided.droppableProps}
               style={getListStyle(snapshot.isDraggingOver)}
             >
-              {timeline.map((t, index) => (
-                <Draggable key={t.uid} draggableId={t.uid} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                    >
-                      <Card
-                        style={{
-                          marginTop: 4,
-                          marginBottom: 4,
-                          marginLeft: 4
-                        }}
-                      >
-                        <CardContent>
-                          <Toolbar style={{ display: "flex" }}>
-                            <Typography variant="h6" style={{ flexGrow: 1 }}>
-                              {t.name}
-                            </Typography>
-                            <IconButton>
-                              <PlayArrow />
-                            </IconButton>
-                          </Toolbar>
-
-                          {t.media.map(entry => (
-                            <AudioEntryViewModel
-                              key={entry.uid}
-                              entry={entry}
-                            />
-                          ))}
-                        </CardContent>
-                      </Card>
-                    </div>
-                  )}
-                </Draggable>
+              {timeline.map((clip, index) => (
+                <TimelineEntryView {...this.props} clip={clip} index={index} />
               ))}
               {provided.placeholder}
             </div>

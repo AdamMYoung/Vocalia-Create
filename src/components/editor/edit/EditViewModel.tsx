@@ -2,12 +2,9 @@ import React, { Component } from "react";
 import DataManager from "../../../data/api/DataManager";
 import EditView from "./EditView";
 import { Podcast } from "../../../models/Podcast";
-import { getDurationText } from "../../../utility/TextUtils";
 import Clip from "../../../models/editor/Clip";
 import {
   DragDropContext,
-  Droppable,
-  Draggable,
   DropResult,
   DraggableLocation
 } from "react-beautiful-dnd";
@@ -23,9 +20,6 @@ interface IState {
   timeline: Clip[];
   clips: Clip[];
   podcast: Podcast | null;
-  paused: boolean;
-  playbackPosition: number;
-  displayPosition: number;
 }
 
 export default class EditViewModel extends Component<IProps, IState> {
@@ -35,10 +29,7 @@ export default class EditViewModel extends Component<IProps, IState> {
     this.state = {
       timeline: [],
       clips: [],
-      podcast: null,
-      paused: true,
-      displayPosition: 0,
-      playbackPosition: 0
+      podcast: null
     };
   }
 
@@ -83,51 +74,6 @@ export default class EditViewModel extends Component<IProps, IState> {
     var podcast = await api.getEditorPodcastDetail(podcastId);
 
     if (podcast) this.setState({ podcast });
-  };
-
-  /**
-   * Called when the playback position has changed.
-   */
-  private onUpdatePlaybackPosition = (playbackPosition: number) => {
-    this.setState({ playbackPosition });
-  };
-
-  /**
-   * Called when the displayed time has changed.
-   */
-  private onUpdateDisplayPosition = (displayPosition: number) => {
-    this.setState({ displayPosition });
-  };
-
-  /**
-   * Called when the rewind event has been called.
-   */
-  private onRewind = () => {
-    const { displayPosition } = this.state;
-    if (displayPosition - 5 > 0)
-      this.setState({ playbackPosition: displayPosition - 5 });
-    else {
-      this.setState({ playbackPosition: -1 }, () => {
-        this.setState({ playbackPosition: 0 });
-      });
-    }
-  };
-
-  /**
-   * Called when the fast forward event has been called.
-   */
-  private onForward = () => {
-    const { displayPosition } = this.state;
-    var pos = displayPosition + 5;
-    this.setState({ playbackPosition: pos });
-  };
-
-  /**
-   * Called when the play/pause event has been called.
-   */
-  private onPlayPause = () => {
-    const { paused } = this.state;
-    this.setState({ paused: !paused });
   };
 
   /**
@@ -187,19 +133,14 @@ export default class EditViewModel extends Component<IProps, IState> {
   };
 
   render() {
-    const { podcast, displayPosition } = this.state;
+    const { podcast } = this.state;
     return (
       podcast && (
         <DragDropContext onDragEnd={this.onDragEnd}>
           <EditView
+            {...this.props}
             {...this.state}
             podcast={podcast as Podcast}
-            displayPosition={getDurationText(displayPosition)}
-            onUpdatePlaybackPosition={this.onUpdatePlaybackPosition}
-            onUpdateDisplayPosition={this.onUpdateDisplayPosition}
-            onRewind={this.onRewind}
-            onForward={this.onForward}
-            onPlayPause={this.onPlayPause}
             onTimelineDragEnd={this.onDragEnd}
           />
         </DragDropContext>

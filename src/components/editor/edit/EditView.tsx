@@ -1,32 +1,19 @@
 import React, { Component } from "react";
-import {
-  Grid,
-  Typography,
-  Divider,
-  Card,
-  CardContent
-} from "@material-ui/core";
+import { Grid, Typography, Card, CardContent, Button } from "@material-ui/core";
 import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
 import { Podcast } from "../../../models/Podcast";
-import ControlsView from "./controls/ControlsView";
 import Clip from "../../../models/editor/Clip";
-import TimelineView from "./timeline/TimelineView";
 import TrayViewModel from "./tray/TrayViewModel";
 import { DropResult } from "react-beautiful-dnd";
+import { TimelineViewModel } from "./timeline/TimelineViewModel";
+import DataManager from "../../../data/api/DataManager";
 
 interface IProps {
-  paused: boolean;
-  playbackPosition: number;
-  displayPosition: string;
+  api: DataManager;
   timeline: Clip[];
   clips: Clip[];
   podcast: Podcast;
 
-  onRewind: () => void;
-  onForward: () => void;
-  onPlayPause: () => void;
-  onUpdatePlaybackPosition: (playbackPosition: number) => void;
-  onUpdateDisplayPosition: (playbackPosition: number) => void;
   onTimelineDragEnd: (result: DropResult) => void;
 }
 
@@ -36,15 +23,7 @@ export default class EditView extends Component<IProps> {
 
     return (
       <Grid container>
-        <Grid item xs={12} md={6}>
-          <Card style={{ margin: 4 }}>
-            <CardContent>
-              <PodcastInfoView {...this.props} />
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <TrayViewModel {...this.props} />
         </Grid>
 
@@ -54,7 +33,7 @@ export default class EditView extends Component<IProps> {
           </Typography>
         </Grid>
 
-        <TimelineView {...this.props} timeline={timeline} />
+        <TimelineViewModel {...this.props} timeline={timeline} />
       </Grid>
     );
   }
