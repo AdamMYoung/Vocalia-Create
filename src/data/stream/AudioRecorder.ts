@@ -1,38 +1,25 @@
-import { tr } from "date-fns/esm/locale";
+import Recorder, { RecorderResult } from "recorder-js";
 
 export class AudioRecorder {
-  private micStream: MediaStream | null = null;
-  private recorder: MediaRecorder | null = null;
-  private parts: BlobPart[] = [];
+  private recorder = new Recorder(new AudioContext());
+  private isRecording = false;
+  private blob: Blob | null = null;
 
   public onRecievedAudioData: (event: Blob) => void = () => {};
 
   constructor() {
-    this.getRecorder().then(recorder => (this.recorder = recorder));
+    this.getMedia().then(m => {
+      this.recorder.init(m);
+    });
   }
-
-  /**
-   * Pauses the recording session.
-   */
-  public pause = () => {
-    if (this.recorder && this.recorder.state != "inactive")
-      this.recorder.pause();
-  };
-
-  /**
-   * Resumes the recording session.
-   */
-  public resume = () => {
-    if (this.recorder && this.recorder.state != "inactive")
-      this.recorder.resume();
-  };
 
   /**
    * Starts recording the mic audio.
    */
   public start = () => {
-    if (this.recorder && this.recorder.state != "recording") {
-      this.recorder.start(1000);
+    if (this.recorder) {
+      this.recorder.start();
+      this.isRecording = true;
     }
   };
 
@@ -40,25 +27,22 @@ export class AudioRecorder {
    * Stops recording the incoming mic audio.
    */
   public stop = () => {
-    if (this.recorder && this.recorder.state != "inactive")
-      this.recorder.stop();
+    if (this.recorder && this.isRecording)
+      this.recorder.stop().then(({ blob, buffer }) => {
+        this.blob = blob;
+        this.isRecording = false;
+      });
   };
 
   /**
-   * Creates a media recorder from the provided source.
+   * Gets the recent blob from the recorder, or null if not available.
    */
-  private getRecorder(): Promise<MediaRecorder> {
-    return this.getMedia().then(m => {
-      this.micStream = m;
-      var recorder = new MediaRecorder(m);
-      recorder.ondataavailable = e => {
-        if (e.data.size > 0) {
-          this.onRecievedAudioData(e.data);
-        }
-      };
-      return recorder;
-    });
-  }
+  public getBlob = (): Blob | null => {
+    var blob = this.blob;
+    this.blob = null;
+
+    return blob;
+  };
 
   /**
    * Prompts the user for local device access.

@@ -145,9 +145,20 @@ export default class DataManager {
    * Finishes the current clip being recorded at the session.
    * @param sessionId UID of the session.
    */
-  public async finishClip(sessionId: string, name: string) {
+  public async finishClip(
+    sessionId: string,
+    name: string,
+    clipId: string,
+    file: Blob
+  ) {
     if (this.accessToken)
-      await this.ingest.finishClip(this.accessToken, sessionId, name);
+      await this.ingest.finishClip(
+        this.accessToken,
+        sessionId,
+        name,
+        clipId,
+        file
+      );
   }
 
   /**
@@ -217,15 +228,6 @@ export default class DataManager {
       await this.ingest.acceptInviteLink(this.accessToken, groupUID);
 
     return null;
-  }
-
-  /**
-   * Adds the specified media data to the database.
-   * @param data Data to push.
-   */
-  public async pushMediaData(data: BlobUpload) {
-    if (this.accessToken)
-      await this.ingest.pushMediaData(this.accessToken, data);
   }
 
   //  Editor Repo

@@ -18,6 +18,11 @@ export default class GroupManager {
   public onRecordingChanged: (isRecording: boolean) => void = () => {};
 
   /**
+   * Called when the clip should be submitted.
+   */
+  public onSubmitClip: (clipId: string, clipName: string) => void = () => {};
+
+  /**
    * Called when the session has ended.
    */
   public onSessionEnd: () => void = () => {};
@@ -27,6 +32,9 @@ export default class GroupManager {
     this.hub.on("onSessionEnd", () => this.onSessionEnd());
     this.hub.on("onTimeChanged", duration => this.onTimeChanged(duration));
     this.hub.on("onPauseChanged", isPaused => this.onPauseChanged(isPaused));
+    this.hub.on("onSubmitClip", (clipId, clipName) =>
+      this.onSubmitClip(clipId, clipName)
+    );
     this.hub.on("onRecordingChanged", isRecording =>
       this.onRecordingChanged(isRecording)
     );
@@ -51,5 +59,12 @@ export default class GroupManager {
    */
   public setSessionEnd = () => {
     this.hub.invoke("setSessionEnd");
+  };
+
+  /**
+   * Invokes clip submission.
+   */
+  public submitClip = (clipId: string, clipName: string) => {
+    this.hub.invoke("submitClip", clipId, clipName);
   };
 }

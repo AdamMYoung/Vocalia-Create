@@ -78,23 +78,6 @@ export default class IngestApiRepository {
   }
 
   /**
-   * Finishes the specified clip.
-   * @param accessToken Token for API access.
-   * @param sessionUid UID of the session.
-   */
-  public async finishClip(
-    accessToken: string,
-    sessionUid: string,
-    name: string
-  ) {
-    await getInjectedFetch(
-      API + CLIP + "?sessionUid=" + sessionUid + "&clipName=" + name,
-      accessToken,
-      "PUT"
-    );
-  }
-
-  /**
    * Deletes the specified clip.
    * @param accessToken Token for API access.
    * @param clipUid UID of the clip.
@@ -228,16 +211,23 @@ export default class IngestApiRepository {
    * @param accessToken Access token for API access.
    * @param data Data to push.
    */
-  public async pushMediaData(accessToken: string, data: BlobUpload) {
+  public async finishClip(
+    accessToken: string,
+    sessionId: string,
+    name: string,
+    clipId: string,
+    data: Blob
+  ) {
     var headers = new Headers({
       Authorization: "Bearer " + accessToken
     });
     var formData = new FormData();
-    formData.append("timestamp", Math.round(data.timestamp).toString());
-    formData.append("sessionUid", data.sessionUid);
-    formData.append("data", data.data);
+    formData.append("sessionUid", sessionId);
+    formData.append("name", name);
+    formData.append("data", data);
+    formData.append("clipId", clipId);
 
-    await fetch(API + RECORD, {
+    await fetch(API + CLIP, {
       headers: headers,
       method: "POST",
       body: formData

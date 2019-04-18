@@ -9,6 +9,7 @@ import { User } from "../../../../models/User";
 import { getDurationText } from "../../../../utility/TextUtils";
 import SessionEndDialog from "../SessionEndDialog";
 import { ClipNameDialog } from "../../ClipNameDialog";
+import uuidv1 from "uuid/v1";
 
 interface IProps {
   sessionId: string;
@@ -42,6 +43,8 @@ export default class ControlViewModel extends Component<IProps, IState> {
     group.onRecordingChanged = isRecording => this.updateRecording(isRecording);
     group.onTimeChanged = duration => this.setState({ duration });
     group.onSessionEnd = () => this.setState({ isSessionFinished: true });
+    group.onSubmitClip = (clipId, clipName) =>
+      this.onSubmitClip(clipId, clipName);
 
     this.state = {
       duration: 0,
@@ -58,7 +61,6 @@ export default class ControlViewModel extends Component<IProps, IState> {
 
   componentDidMount() {
     var recorder = new AudioRecorder();
-    recorder.onRecievedAudioData = this.onRecievedAudioData;
     this.setState({ recorder });
   }
 
@@ -94,7 +96,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
   private updatePaused = (isPaused: boolean) => {
     const { recorder } = this.state;
     if (recorder) {
-      isPaused ? recorder.pause() : recorder.resume();
+      //isPaused ? recorder.pause() : recorder.resume();
       this.setState({ isPaused });
     }
   };
@@ -138,11 +140,28 @@ export default class ControlViewModel extends Component<IProps, IState> {
   /**
    * Submits the clip to the database.
    */
-  private onSubmitClip = async (name: string) => {
+  private onSubmitClip = async (id: string, name: string) => {
     const { api, sessionId, onClipsChanged } = this.props;
-    await api.finishClip(sessionId, name);
-    onClipsChanged();
-    this.setState({ isClipFinishedDialogOpen: false });
+    const { recorder } = this.state;
+    if (recorder) {
+      var blob = recorder.getBlob();
+      if (blob) {
+        await api.finishClip(sessionId, name, id, blob);
+
+        onClipsChanged();
+        this.setState({ isClipFinishedDialogOpen: false });
+      }
+    }
+  };
+
+  /**
+   * Requests clip submission.
+   */
+  private onCreateClip = async (name: string) => {
+    const { group } = this.state;
+    var uuid = uuidv1();
+
+    group.submitClip(uuid, name);
   };
 
   /**
@@ -161,19 +180,6 @@ export default class ControlViewModel extends Component<IProps, IState> {
     group.setSessionEnd();
     api.completeSession(sessionId);
     this.setState({ isConfirmDialogOpen: false });
-  };
-
-  /**
-   * Called when mic data has been recieved.
-   */
-  private onRecievedAudioData = async (blob: Blob) => {
-    const { api, sessionId } = this.props;
-
-    await api.pushMediaData({
-      timestamp: Date.now() / 1000,
-      sessionUid: sessionId,
-      data: blob
-    });
   };
 
   render() {
@@ -202,7 +208,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
           />
         )}
         {isClipFinishedDialogOpen && (
-          <ClipNameDialog onAccept={this.onSubmitClip} {...this.props} />
+          <ClipNameDialog onAccept={this.onCreateClip} {...this.props} />
         )}
         {isSessionFinished && <SessionEndDialog />}
       </div>
