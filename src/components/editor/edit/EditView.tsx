@@ -15,6 +15,7 @@ interface IProps {
   podcast: Podcast;
 
   onTimelineDragEnd: (result: DropResult) => void;
+  onReloadTimeline: () => void;
 }
 
 export default class EditView extends Component<IProps> {

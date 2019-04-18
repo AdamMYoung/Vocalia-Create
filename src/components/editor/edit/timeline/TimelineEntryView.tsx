@@ -31,7 +31,7 @@ export default class TimelineEntryView extends Component<IProps> {
     } = this.props;
 
     return (
-      <Draggable key={clip.uid} draggableId={clip.uid} index={index}>
+      <Draggable draggableId={clip.uid} index={index}>
         {(provided, snapshot) => (
           <div
             {...provided.draggableProps}

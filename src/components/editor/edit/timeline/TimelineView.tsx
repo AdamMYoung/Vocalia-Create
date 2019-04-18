@@ -5,6 +5,8 @@ import AudioEntryViewModel from "../audio/AudioEntryViewModel";
 import { Droppable } from "react-beautiful-dnd";
 import { getListStyle } from "../../DragDropStyles";
 import TimelineEntryView from "./TimelineEntryView";
+import { isMobile } from "../../../../utility/DeviceUtils";
+import { drawerWidth } from "../../../../utility/constants";
 
 interface IProps {
   timeline: Clip[];
@@ -19,7 +21,14 @@ export default class TimelineView extends Component<IProps> {
     const { timeline } = this.props;
 
     return (
-      <Grid item xs={12} style={{ display: "flex" }}>
+      <Grid
+        item
+        xs={12}
+        style={{
+          display: "flex",
+          width: window.innerWidth - (isMobile() ? 0 : drawerWidth + 20)
+        }}
+      >
         <div style={{ display: "inline-block", marginTop: 85, marginRight: 8 }}>
           {timeline.length > 0 &&
             timeline[0].media.map(entry => (
@@ -59,7 +68,12 @@ export default class TimelineView extends Component<IProps> {
               style={getListStyle(snapshot.isDraggingOver)}
             >
               {timeline.map((clip, index) => (
-                <TimelineEntryView {...this.props} clip={clip} index={index} />
+                <TimelineEntryView
+                  key={clip.uid}
+                  {...this.props}
+                  clip={clip}
+                  index={index}
+                />
               ))}
               {provided.placeholder}
             </div>

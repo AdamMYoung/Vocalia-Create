@@ -26,7 +26,8 @@ export const getListStyle = (isDraggingOver: boolean) => ({
   display: "flex",
   overflow: "auto",
   minHeight: 200,
-  minWidth: 500
+  minWidth: 500,
+  oversrollBehavior: "none"
 });
 
 export const getTrayStyle = (isDraggingOver: boolean) => ({

@@ -37,29 +37,29 @@ export default class EditViewModel extends Component<IProps, IState> {
    * Loads the podcast and edit streams from the API.
    */
   componentWillMount() {
-    this.loadTimeline();
-    this.loadPodcast();
     this.loadClips();
+    this.loadPodcast();
+  }
+
+  componentDidUpdate(prevProps: IProps, prevState: IState) {
+    const { api, sessionId } = this.props;
+
+    if (prevState.timeline != this.state.timeline) {
+      api.setTimeline(sessionId, this.state.timeline);
+    }
   }
 
   /**
-   * Loads all edit streams for the specified session.
+   * Loads all clips for the specified
    */
-  private loadTimeline = async () => {
+  private loadClips = async () => {
     const { api, sessionId } = this.props;
     var timeline = await api.getTimeline(sessionId);
+    var clips = await api.getEditorClips(sessionId);
 
     if (timeline) {
       this.setState({ timeline });
     }
-  };
-
-  /**
-   * Loads all clips for the specified session.
-   */
-  private loadClips = async () => {
-    const { api, sessionId } = this.props;
-    var clips = await api.getEditorClips(sessionId);
 
     if (clips) {
       this.setState({ clips });
@@ -79,7 +79,7 @@ export default class EditViewModel extends Component<IProps, IState> {
   /**
    * Called when the drag has ended.
    */
-  private onDragEnd = (result: DropResult) => {
+  private onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
     const { clips, timeline } = this.state;
 
@@ -102,10 +102,10 @@ export default class EditViewModel extends Component<IProps, IState> {
     } else {
       switch (source.droppableId) {
         case "tray":
-          this.move(clips, timeline, source, destination);
+          this.move(clips, timeline, source, destination, true);
           break;
         case "timeline":
-          this.move(timeline, clips, source, destination);
+          this.move(timeline, clips, source, destination, false);
           break;
       }
     }
@@ -118,7 +118,8 @@ export default class EditViewModel extends Component<IProps, IState> {
     source: Clip[],
     destination: Clip[],
     droppableSource: DraggableLocation,
-    droppableDestination: DraggableLocation
+    droppableDestination: DraggableLocation,
+    toTimeline: boolean
   ) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
@@ -126,10 +127,17 @@ export default class EditViewModel extends Component<IProps, IState> {
 
     destClone.splice(droppableDestination.index, 0, removed);
 
-    this.setState({
-      clips: sourceClone,
-      timeline: destClone
-    });
+    if (toTimeline) {
+      this.setState({
+        clips: sourceClone,
+        timeline: destClone
+      });
+    } else {
+      this.setState({
+        clips: destClone,
+        timeline: sourceClone
+      });
+    }
   };
 
   render() {
@@ -142,6 +150,7 @@ export default class EditViewModel extends Component<IProps, IState> {
             {...this.state}
             podcast={podcast as Podcast}
             onTimelineDragEnd={this.onDragEnd}
+            onReloadTimeline={() => this.loadClips()}
           />
         </DragDropContext>
       )

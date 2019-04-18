@@ -67,7 +67,8 @@ export default class AudioEntryViewModel extends Component<IProps, IState> {
 
     var wavesurfer = WaveSurfer.create({
       container: "#" + this.identifier,
-      waveColor: "#3F51B5",
+      waveColor: "white",
+      cursorColor: "#3F51B5",
       hideScrollbar: true
     });
 

@@ -6,6 +6,8 @@ import { PodcastUpload } from "../../models/ingest/PodcastUpload";
 import { Podcast } from "../../models/Podcast";
 import { BlobUpload } from "../../models/ingest/BlobUpload";
 import { SessionClip } from "../../models/SessionClip";
+import Clip from "../../models/editor/Clip";
+import ClipEdit from "../../models/editor/ClipEdit";
 
 export default class DataManager {
   private ingest: IngestApiRepository = new IngestApiRepository();
@@ -240,6 +242,16 @@ export default class DataManager {
   }
 
   /**
+   * Updates the session with the provided clips.
+   * @param sessionUID UID of the session.
+   * @param clips Clips to set as timeline.
+   */
+  public async setTimeline(sessionUID: string, clips: Clip[]) {
+    if (this.accessToken)
+      await this.editor.setTimeline(this.accessToken, sessionUID, clips);
+  }
+
+  /**
    * Returns all edit streams of the current session.
    * @param sessionUID UID of the session.
    */
@@ -248,6 +260,14 @@ export default class DataManager {
       return await this.editor.getClips(this.accessToken, sessionUID);
 
     return null;
+  }
+
+  /**
+   * Adds the edit to the database.
+   * @param edit Edit to upload.
+   */
+  public async setEdit(edit: ClipEdit) {
+    if (this.accessToken) await this.editor.setEdit(this.accessToken, edit);
   }
 
   /**

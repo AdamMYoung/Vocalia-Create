@@ -7,6 +7,8 @@ import DataManager from "../../../../data/api/DataManager";
 interface IProps {
   api: DataManager;
   timeline: Clip[];
+
+  onReloadTimeline: () => void;
 }
 
 interface IState {
@@ -49,6 +51,7 @@ export class TimelineViewModel extends Component<IProps, IState> {
    */
   private onCloseSettings = () => {
     this.setState({ currentEditClip: null });
+    this.props.onReloadTimeline();
   };
 
   render() {

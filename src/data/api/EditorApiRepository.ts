@@ -1,12 +1,13 @@
 import { getInjectedFetch } from "./ApiUtils";
 import { Podcast } from "../../models/Podcast";
 import Clip from "../../models/editor/Clip";
-import ClipMedia from "../../models/editor/ClipMedia";
+import ClipEdit from "../../models/editor/ClipEdit";
 
 const API = process.env.REACT_APP_EDITOR_API_URL;
 const TIMELINE = "timeline";
 const CLIPS = "clips";
 const SESSION = "session";
+const EDIT = "edit";
 const PODCASTS = "podcasts";
 const PODCAST = "podcast";
 
@@ -27,6 +28,29 @@ export default class EditorApiRepository {
       .then(response => response.json())
       .then(data => data as Clip[])
       .catch(() => null);
+  }
+
+  /**
+   * Updates the timeline with the provided clips.
+   */
+  public async setTimeline(
+    accessToken: string,
+    sessionUid: string,
+    clips: Clip[]
+  ) {
+    await getInjectedFetch(
+      API + TIMELINE + "?sessionUid=" + sessionUid,
+      accessToken,
+      "POST",
+      clips
+    );
+  }
+
+  /**
+   * Inserts the edit into the database.
+   */
+  public async setEdit(accessToken: string, edit: ClipEdit) {
+    await getInjectedFetch(API + EDIT, accessToken, "POST", edit);
   }
 
   /**
