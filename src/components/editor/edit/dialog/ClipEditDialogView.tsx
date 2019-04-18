@@ -54,13 +54,13 @@ export default class ClipEditDialogView extends Component<IProps> {
           <DialogContentText>Start</DialogContentText>
           <ClipEditDialogVariableView
             value={startTrim}
-            valueName="seconds"
+            valueName="%"
             onValueChanged={onStartTrimChanged}
           />
           <DialogContentText>End</DialogContentText>
           <ClipEditDialogVariableView
             value={endTrim}
-            valueName="seconds"
+            valueName="%"
             onValueChanged={onEndTrimChanged}
           />
 
