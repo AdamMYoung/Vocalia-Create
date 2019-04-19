@@ -49,9 +49,9 @@ export class TimelineViewModel extends Component<IProps, IState> {
   /**
    * Called when the settings dialog should close.
    */
-  private onCloseSettings = () => {
+  private onCloseSettings = (reload: boolean) => {
     this.setState({ currentEditClip: null });
-    this.props.onReloadTimeline();
+    if (reload) this.props.onReloadTimeline();
   };
 
   render() {

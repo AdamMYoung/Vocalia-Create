@@ -8,7 +8,7 @@ interface IProps {
   api: DataManager;
   clip: Clip;
 
-  onClose: () => void;
+  onClose: (reload: boolean) => void;
 }
 
 interface IState {
@@ -65,7 +65,7 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
       gain: gain
     } as ClipEdit);
 
-    onClose();
+    onClose(true);
   };
 
   render() {
@@ -78,7 +78,7 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
         onStartTrimChanged={this.onStartTrimChanged}
         onEndTrimChanged={this.onEndTrimChanged}
         onGainChanged={this.onGainChanged}
-        onCancel={onClose}
+        onCancel={() => onClose(false)}
         onSubmit={this.onSubmit}
       />
     );

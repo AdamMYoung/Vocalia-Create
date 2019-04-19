@@ -6,13 +6,11 @@ import {
   Button,
   DialogContent,
   DialogContentText,
-  Typography,
-  TextField
+  Typography
 } from "@material-ui/core";
 import Clip from "../../../../models/editor/Clip";
 import AudioEntryViewModel from "../audio/AudioEntryViewModel";
 import ClipEditDialogVariableView from "./ClipEditDialogVariableView";
-import ClipMedia from "../../../../models/editor/ClipMedia";
 
 interface IProps {
   clip: Clip;
