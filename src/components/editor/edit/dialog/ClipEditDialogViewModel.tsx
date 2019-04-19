@@ -45,13 +45,6 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
   };
 
   /**
-   * Called when the gain has changed.
-   */
-  private onGainChanged = (gain: number) => {
-    this.setState({ gain });
-  };
-
-  /**
    * Called when the settings should be closed.
    */
   private onSubmit = async () => {
@@ -77,7 +70,6 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
         {...this.state}
         onStartTrimChanged={this.onStartTrimChanged}
         onEndTrimChanged={this.onEndTrimChanged}
-        onGainChanged={this.onGainChanged}
         onCancel={() => onClose(false)}
         onSubmit={this.onSubmit}
       />

@@ -22,7 +22,6 @@ interface IProps {
   onSubmit: () => void;
   onStartTrimChanged: (trim: number) => void;
   onEndTrimChanged: (trim: number) => void;
-  onGainChanged: (gain: number) => void;
 }
 
 export default class ClipEditDialogView extends Component<IProps> {
@@ -35,8 +34,7 @@ export default class ClipEditDialogView extends Component<IProps> {
       onSubmit,
       onCancel,
       onStartTrimChanged,
-      onEndTrimChanged,
-      onGainChanged
+      onEndTrimChanged
     } = this.props;
 
     return (
@@ -62,13 +60,6 @@ export default class ClipEditDialogView extends Component<IProps> {
             value={endTrim}
             valueName="seconds"
             onValueChanged={onEndTrimChanged}
-          />
-
-          <Typography variant="h6">Gain</Typography>
-          <ClipEditDialogVariableView
-            value={gain}
-            valueName="dB"
-            onValueChanged={onGainChanged}
           />
         </DialogContent>
         <DialogActions>

@@ -52,7 +52,17 @@ export default class TrayView extends Component<IProps> {
                       >
                         <Card style={{ margin: 4, width: 150 }}>
                           <CardContent>
-                            <Typography variant="h6">{clip.name}</Typography>
+                            <Typography
+                              variant="h6"
+                              style={{
+                                maxLines: 1,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                              }}
+                            >
+                              {clip.name}
+                            </Typography>
                             <Typography>
                               <TimeAgo date={clip.date + " UTC"} />
                             </Typography>
