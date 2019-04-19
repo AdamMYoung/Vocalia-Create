@@ -225,7 +225,7 @@ export default class IngestApiRepository {
     formData.append("sessionUid", sessionId);
     formData.append("name", name);
     formData.append("data", data);
-    formData.append("clipId", clipId);
+    formData.append("clipUid", clipId);
 
     await fetch(API + CLIP, {
       headers: headers,

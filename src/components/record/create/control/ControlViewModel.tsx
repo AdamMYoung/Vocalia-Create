@@ -146,6 +146,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
     if (recorder) {
       var blob = recorder.getBlob();
       if (blob) {
+        console.log(id);
         await api.finishClip(sessionId, name, id, blob);
 
         onClipsChanged();
@@ -160,7 +161,7 @@ export default class ControlViewModel extends Component<IProps, IState> {
   private onCreateClip = async (name: string) => {
     const { group } = this.state;
     var uuid = uuidv1();
-
+    console.log(uuid);
     group.submitClip(uuid, name);
   };
 

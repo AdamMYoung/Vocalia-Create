@@ -13,6 +13,7 @@ interface IProps {
   timeline: Clip[];
   clips: Clip[];
   podcast: Podcast;
+  sessionId: string;
 
   onTimelineDragEnd: (result: DropResult) => void;
   onReloadTimeline: () => void;

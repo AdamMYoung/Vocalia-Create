@@ -16,11 +16,13 @@ import { Podcast } from "../../../../models/Podcast";
 interface IProps {
   clips: Clip[];
   podcast: Podcast;
+
+  onFinishEditing: () => void;
 }
 
 export default class TrayView extends Component<IProps> {
   render() {
-    const { clips, podcast } = this.props;
+    const { clips, podcast, onFinishEditing } = this.props;
 
     return (
       <Card style={{ margin: 4 }}>
@@ -66,7 +68,9 @@ export default class TrayView extends Component<IProps> {
           </Droppable>
           <Divider />
           <div style={{ padding: 8 }}>
-            <Button fullWidth>Finish Editing</Button>
+            <Button fullWidth onClick={onFinishEditing}>
+              Finish Editing
+            </Button>
           </div>
         </CardContent>
       </Card>

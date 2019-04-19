@@ -301,4 +301,13 @@ export default class DataManager {
     if (this.accessToken)
       await this.editor.deleteEditSession(this.accessToken, sessionUid);
   }
+
+  /**
+   * Finishes the edit session.
+   * @param sessionUid UID of the session.
+   */
+  public async finishEditSession(sessionUid: string) {
+    if (this.accessToken)
+      await this.editor.finishEditSession(this.accessToken, sessionUid);
+  }
 }

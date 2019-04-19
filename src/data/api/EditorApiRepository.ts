@@ -10,6 +10,7 @@ const SESSION = "session";
 const EDIT = "edit";
 const PODCASTS = "podcasts";
 const PODCAST = "podcast";
+const SUBMIT = "submit";
 
 export default class EditorApiRepository {
   /**
@@ -110,6 +111,19 @@ export default class EditorApiRepository {
       API + SESSION + "?sessionUid=" + sessionUid,
       accessToken,
       "DELETE"
+    );
+  }
+
+  /**
+   * Finishes the edit session.
+   * @param accessToken UID of the session.
+   * @param sessionUid Access token for API access.
+   */
+  public async finishEditSession(accessToken: string, sessionUid: string) {
+    await getInjectedFetch(
+      API + SUBMIT + "?sessionUid=" + sessionUid,
+      accessToken,
+      "POST"
     );
   }
 }
