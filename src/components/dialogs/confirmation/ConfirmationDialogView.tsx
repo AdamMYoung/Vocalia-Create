@@ -15,9 +15,22 @@ interface IProps {
   onDeny?: () => void;
 }
 
-export default class ConfirmationDialogView extends Component<IProps> {
+interface IState {
+  buttonsDisabled: boolean;
+}
+
+export default class ConfirmationDialogView extends Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      buttonsDisabled: false
+    };
+  }
+
   render() {
     const { title, subtitle, onConfirm, onDeny } = this.props;
+    const { buttonsDisabled } = this.state;
 
     return (
       <Dialog open>
@@ -26,10 +39,17 @@ export default class ConfirmationDialogView extends Component<IProps> {
           <DialogContentText>{subtitle}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onDeny}>
+          <Button color="primary" onClick={onDeny} disabled={buttonsDisabled}>
             Cancel
           </Button>
-          <Button color="primary" onClick={onConfirm}>
+          <Button
+            color="primary"
+            disabled={buttonsDisabled}
+            onClick={() => {
+              this.setState({ buttonsDisabled: true });
+              onConfirm();
+            }}
+          >
             Confirm
           </Button>
         </DialogActions>

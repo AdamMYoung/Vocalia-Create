@@ -10,6 +10,7 @@ import InviteViewModel from "./invite/InviteViewModel";
 import CreateViewModel from "./record/create/CreateViewModel";
 import LoginView from "./LoginView";
 import EditorSelectionViewModel from "./editor/selection/EditorSelectionViewModel";
+import EditViewModel from "./editor/edit/EditViewModel";
 
 interface IProps {
   isMobile: boolean;
@@ -44,6 +45,18 @@ export default class LayoutView extends Component<IProps> {
             render={() => {
               return <RecordSelectionViewModel {...this.props} />;
             }}
+          />
+
+          <Route
+            exact
+            path="/editor/:podcastId/:sessionId/"
+            render={props => (
+              <EditViewModel
+                {...this.props}
+                podcastId={props.match.params.podcastId}
+                sessionId={props.match.params.sessionId}
+              />
+            )}
           />
 
           <Route

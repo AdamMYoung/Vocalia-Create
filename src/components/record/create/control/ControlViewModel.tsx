@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import ControlView from "./ControlView";
-import moment from "moment";
 import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
 import DataManager from "../../../../data/api/DataManager";
 import GroupManager from "../../../../data/stream/GroupManager";
 import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDialogView";
 import { Podcast } from "../../../../models/Podcast";
 import { User } from "../../../../models/User";
+import { getDurationText } from "../../../../utility/TextUtils";
+import SessionEndDialog from "../SessionEndDialog";
+import { ClipNameDialog } from "../../ClipNameDialog";
+import uuidv1 from "uuid/v1";
 
 interface IProps {
   sessionId: string;
@@ -14,6 +17,9 @@ interface IProps {
   podcast: Podcast;
   currentUser: User;
   hub: signalR.HubConnection;
+  clipNumber: number;
+
+  onClipsChanged: () => void;
 }
 
 interface IState {
@@ -24,6 +30,8 @@ interface IState {
   isRecording: boolean;
   isPaused: boolean;
   isConfirmDialogOpen: boolean;
+  isClipFinishedDialogOpen: boolean;
+  isSessionFinished: boolean;
 }
 
 export default class ControlViewModel extends Component<IProps, IState> {
@@ -34,6 +42,9 @@ export default class ControlViewModel extends Component<IProps, IState> {
     group.onPauseChanged = isPaused => this.updatePaused(isPaused);
     group.onRecordingChanged = isRecording => this.updateRecording(isRecording);
     group.onTimeChanged = duration => this.setState({ duration });
+    group.onSessionEnd = () => this.setState({ isSessionFinished: true });
+    group.onSubmitClip = (clipId, clipName) =>
+      this.onSubmitClip(clipId, clipName);
 
     this.state = {
       duration: 0,
@@ -42,13 +53,14 @@ export default class ControlViewModel extends Component<IProps, IState> {
       group: group,
       isRecording: false,
       isPaused: false,
-      isConfirmDialogOpen: false
+      isConfirmDialogOpen: false,
+      isClipFinishedDialogOpen: false,
+      isSessionFinished: false
     };
   }
 
   componentDidMount() {
     var recorder = new AudioRecorder();
-    recorder.onRecievedAudioData = this.onRecievedAudioData;
     this.setState({ recorder });
   }
 
@@ -79,24 +91,12 @@ export default class ControlViewModel extends Component<IProps, IState> {
   };
 
   /**
-   * Gets the duration time formatted as a string.
-   */
-  private getDurationText = (): string => {
-    const { duration } = this.state;
-
-    return moment("2015-01-01")
-      .startOf("day")
-      .seconds(duration)
-      .format("H:mm:ss");
-  };
-
-  /**
    * Updates the paused status.
    */
   private updatePaused = (isPaused: boolean) => {
     const { recorder } = this.state;
     if (recorder) {
-      isPaused ? recorder.pause() : recorder.start();
+      //isPaused ? recorder.pause() : recorder.resume();
       this.setState({ isPaused });
     }
   };
@@ -129,60 +129,89 @@ export default class ControlViewModel extends Component<IProps, IState> {
   /**
    * Sets the recording status.
    */
-  private setRecording = () => {
+  private setRecording = async () => {
     const { group, isRecording } = this.state;
-    if (!isRecording == true) {
-      group.setRecording(!isRecording);
-    } else {
-      this.setState({ isConfirmDialogOpen: true });
+
+    group.setRecording(!isRecording);
+
+    if (isRecording == true) this.setState({ isClipFinishedDialogOpen: true });
+  };
+
+  /**
+   * Submits the clip to the database.
+   */
+  private onSubmitClip = async (id: string, name: string) => {
+    const { api, sessionId, onClipsChanged } = this.props;
+    const { recorder } = this.state;
+    if (recorder) {
+      var blob = recorder.getBlob();
+      if (blob) {
+        console.log(id);
+        await api.finishClip(sessionId, name, id, blob);
+
+        onClipsChanged();
+        this.setState({ isClipFinishedDialogOpen: false });
+      }
     }
   };
 
   /**
-   * Stops recording the current podcast.
+   * Requests clip submission.
    */
-  private onStopRecording = () => {
-    const { group, recorder, isRecording } = this.state;
-    const { api, sessionId } = this.props;
-
-    api.finishSession(sessionId);
-    group.setRecording(!isRecording);
-    if (recorder) recorder.stop();
-    this.setState({ isConfirmDialogOpen: false });
+  private onCreateClip = async (name: string) => {
+    const { group } = this.state;
+    var uuid = uuidv1();
+    console.log(uuid);
+    group.submitClip(uuid, name);
   };
 
   /**
-   * Called when mic data has been recieved.
+   * Opens the end session dialog.
    */
-  private onRecievedAudioData = async (blob: Blob) => {
-    const { api, sessionId } = this.props;
+  private onOpenEndSessionDialog = () => {
+    this.setState({ isConfirmDialogOpen: true });
+  };
 
-    await api.pushMediaData({
-      timestamp: Date.now() / 1000,
-      sessionUid: sessionId,
-      data: blob
-    });
+  /**
+   * Ends the current session.
+   */
+  private onEndSession = () => {
+    const { group } = this.state;
+    const { api, sessionId } = this.props;
+    group.setSessionEnd();
+    api.completeSession(sessionId);
+    this.setState({ isConfirmDialogOpen: false });
   };
 
   render() {
-    const { isConfirmDialogOpen } = this.state;
+    const {
+      isConfirmDialogOpen,
+      isSessionFinished,
+      isClipFinishedDialogOpen,
+      duration
+    } = this.state;
 
     return (
       <div>
         <ControlView
           {...this.state}
-          duration={this.getDurationText()}
+          duration={getDurationText(duration)}
           togglePaused={this.setPaused}
           toggleRecording={this.setRecording}
+          endSession={this.onOpenEndSessionDialog}
         />
         {isConfirmDialogOpen && (
           <ConfirmationDialogView
-            title="Finish Recording"
-            subtitle="Are you sure you want to end recording?"
-            onConfirm={this.onStopRecording}
+            title="End Session"
+            subtitle="Are you sure you want to end the current session?"
+            onConfirm={this.onEndSession}
             onDeny={() => this.setState({ isConfirmDialogOpen: false })}
           />
         )}
+        {isClipFinishedDialogOpen && (
+          <ClipNameDialog onAccept={this.onCreateClip} {...this.props} />
+        )}
+        {isSessionFinished && <SessionEndDialog />}
       </div>
     );
   }
