@@ -20,6 +20,7 @@ interface IState {
   timeline: Clip[];
   clips: Clip[];
   podcast: Podcast | null;
+  isTimelineLoading: boolean;
 }
 
 export default class EditViewModel extends Component<IProps, IState> {
@@ -29,7 +30,8 @@ export default class EditViewModel extends Component<IProps, IState> {
     this.state = {
       timeline: [],
       clips: [],
-      podcast: null
+      podcast: null,
+      isTimelineLoading: false
     };
   }
 
@@ -43,8 +45,9 @@ export default class EditViewModel extends Component<IProps, IState> {
 
   componentDidUpdate(prevProps: IProps, prevState: IState) {
     const { api, sessionId } = this.props;
+    const { isTimelineLoading } = this.state;
 
-    if (prevState.timeline != this.state.timeline) {
+    if (prevState.timeline != this.state.timeline && !isTimelineLoading) {
       api.setTimeline(sessionId, this.state.timeline);
     }
   }
@@ -57,9 +60,10 @@ export default class EditViewModel extends Component<IProps, IState> {
     var timeline = await api.getTimeline(sessionId);
     var clips = await api.getEditorClips(sessionId);
 
-    if (timeline) {
-      this.setState({ timeline });
-    }
+    this.setState({ timeline: [], isTimelineLoading: true }, () => {
+      if (timeline)
+        this.setState({ timeline: timeline, isTimelineLoading: false });
+    });
 
     if (clips) {
       this.setState({ clips });
