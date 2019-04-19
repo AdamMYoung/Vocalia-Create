@@ -8,7 +8,7 @@ interface IProps {
   api: DataManager;
   clip: Clip;
 
-  onCloseSettings: () => void;
+  onClose: () => void;
 }
 
 interface IState {
@@ -54,8 +54,8 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
   /**
    * Called when the settings should be closed.
    */
-  private onCloseSettings = async () => {
-    const { api, clip, onCloseSettings } = this.props;
+  private onSubmit = async () => {
+    const { api, clip, onClose } = this.props;
     const { startTrim, endTrim, gain } = this.state;
 
     await api.setEdit({
@@ -65,10 +65,12 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
       gain: gain
     } as ClipEdit);
 
-    onCloseSettings();
+    onClose();
   };
 
   render() {
+    const { onClose } = this.props;
+
     return (
       <ClipEditDialogView
         {...this.props}
@@ -76,7 +78,8 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
         onStartTrimChanged={this.onStartTrimChanged}
         onEndTrimChanged={this.onEndTrimChanged}
         onGainChanged={this.onGainChanged}
-        onCloseSettings={this.onCloseSettings}
+        onCancel={onClose}
+        onSubmit={this.onSubmit}
       />
     );
   }

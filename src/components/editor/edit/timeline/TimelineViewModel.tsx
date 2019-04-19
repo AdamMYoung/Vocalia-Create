@@ -68,7 +68,7 @@ export class TimelineViewModel extends Component<IProps, IState> {
         {currentEditClip && (
           <ClipEditDialogViewModel
             clip={currentEditClip}
-            onCloseSettings={this.onCloseSettings}
+            onClose={this.onCloseSettings}
             {...this.props}
           />
         )}

@@ -20,7 +20,8 @@ interface IProps {
   endTrim: number;
   gain: number;
 
-  onCloseSettings: () => void;
+  onCancel: () => void;
+  onSubmit: () => void;
   onStartTrimChanged: (trim: number) => void;
   onEndTrimChanged: (trim: number) => void;
   onGainChanged: (gain: number) => void;
@@ -33,14 +34,15 @@ export default class ClipEditDialogView extends Component<IProps> {
       startTrim,
       endTrim,
       gain,
-      onCloseSettings,
+      onSubmit,
+      onCancel,
       onStartTrimChanged,
       onEndTrimChanged,
       onGainChanged
     } = this.props;
 
     return (
-      <Dialog open onClose={onCloseSettings}>
+      <Dialog open onClose={onCancel}>
         <DialogTitle>{clip.name}</DialogTitle>
         <DialogContent>
           <AudioEntryViewModel
@@ -72,7 +74,8 @@ export default class ClipEditDialogView extends Component<IProps> {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCloseSettings}>Finish</Button>
+          <Button onClick={onCancel}>Cancel</Button>
+          <Button onClick={onSubmit}>Submit</Button>
         </DialogActions>
       </Dialog>
     );
