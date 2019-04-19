@@ -16,7 +16,7 @@ interface IProps {
   clip: Clip;
   startTrim: number;
   endTrim: number;
-  gain: number;
+  buttonsDisabled: boolean;
 
   onCancel: () => void;
   onSubmit: () => void;
@@ -30,7 +30,7 @@ export default class ClipEditDialogView extends Component<IProps> {
       clip,
       startTrim,
       endTrim,
-      gain,
+      buttonsDisabled,
       onSubmit,
       onCancel,
       onStartTrimChanged,
@@ -63,8 +63,12 @@ export default class ClipEditDialogView extends Component<IProps> {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button onClick={onSubmit}>Submit</Button>
+          <Button onClick={onCancel} disabled={buttonsDisabled} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={onSubmit} disabled={buttonsDisabled} color="primary">
+            Submit
+          </Button>
         </DialogActions>
       </Dialog>
     );

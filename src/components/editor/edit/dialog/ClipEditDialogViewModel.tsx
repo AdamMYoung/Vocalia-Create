@@ -14,7 +14,7 @@ interface IProps {
 interface IState {
   startTrim: number;
   endTrim: number;
-  gain: number;
+  buttonsDisabled: boolean;
 }
 
 export default class ClipEditDialogViewModel extends Component<IProps, IState> {
@@ -26,7 +26,7 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
     this.state = {
       startTrim: edit ? edit.startTrim : 0,
       endTrim: edit ? edit.endTrim : 0,
-      gain: edit ? edit.gain : 0
+      buttonsDisabled: false
     };
   }
 
@@ -49,13 +49,14 @@ export default class ClipEditDialogViewModel extends Component<IProps, IState> {
    */
   private onSubmit = async () => {
     const { api, clip, onClose } = this.props;
-    const { startTrim, endTrim, gain } = this.state;
+    const { startTrim, endTrim } = this.state;
+
+    this.setState({ buttonsDisabled: true });
 
     await api.setEdit({
       clipUID: clip.uid,
       startTrim: startTrim,
-      endTrim: endTrim,
-      gain: gain
+      endTrim: endTrim
     } as ClipEdit);
 
     onClose(true);

@@ -16,6 +16,7 @@ interface IProps {
 
 interface IState {
   name: string;
+  buttonsDisabled: boolean;
 }
 
 export class ClipNameDialog extends Component<IProps, IState> {
@@ -23,13 +24,14 @@ export class ClipNameDialog extends Component<IProps, IState> {
     super(props);
 
     this.state = {
-      name: "Clip " + props.clipNumber
+      name: "Clip " + props.clipNumber,
+      buttonsDisabled: false
     };
   }
 
   render() {
     const { onAccept } = this.props;
-    const { name } = this.state;
+    const { name, buttonsDisabled } = this.state;
 
     return (
       <Dialog open>
@@ -47,7 +49,14 @@ export class ClipNameDialog extends Component<IProps, IState> {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={() => onAccept(name)}>
+          <Button
+            color="primary"
+            disabled={buttonsDisabled}
+            onClick={() => {
+              this.setState({ buttonsDisabled: true });
+              onAccept(name);
+            }}
+          >
             Submit
           </Button>
         </DialogActions>
