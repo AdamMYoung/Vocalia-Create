@@ -78,7 +78,7 @@ export default class TrayView extends Component<IProps> {
           </Droppable>
           <Divider />
           <div style={{ padding: 8 }}>
-            <Button fullWidth onClick={onFinishEditing} disabled>
+            <Button fullWidth onClick={onFinishEditing}>
               Finish Editing
             </Button>
           </div>

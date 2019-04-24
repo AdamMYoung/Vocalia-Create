@@ -1,3 +1,5 @@
+import { PublishedEpisode } from "./PublishedEpisode";
+
 export class PublishedPodcast {
   public uid: string;
   public categoryId: string;
@@ -7,6 +9,7 @@ export class PublishedPodcast {
   public imageUrl: string;
   public isExplicit: boolean;
   public isActive: boolean;
+  public episodes: PublishedEpisode[];
 
   constructor(
     uid: string,
@@ -16,7 +19,8 @@ export class PublishedPodcast {
     description: string,
     imageUrl: string,
     isExplicit: boolean,
-    isActive: boolean
+    isActive: boolean,
+    episodes: PublishedEpisode[]
   ) {
     this.uid = uid;
     this.categoryId = categoryId;
@@ -26,5 +30,6 @@ export class PublishedPodcast {
     this.imageUrl = imageUrl;
     this.isExplicit = isExplicit;
     this.isActive = isActive;
+    this.episodes = episodes;
   }
 }
