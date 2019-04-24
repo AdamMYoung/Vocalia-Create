@@ -8,11 +8,19 @@ import { BlobUpload } from "../../models/ingest/BlobUpload";
 import { SessionClip } from "../../models/SessionClip";
 import Clip from "../../models/editor/Clip";
 import ClipEdit from "../../models/editor/ClipEdit";
+import { PublishedPodcast } from "../../models/publishing/PublishedPodcast";
+import { PublishedEpisode } from "../../models/publishing/PublishedEpisode";
+import PublishingApiRepository from "./PublishingApiRepository";
+import { UnassignedPodcast } from "../../models/publishing/UnassignedPodcast";
+import { UnassignedEpisode } from "../../models/publishing/UnassignedEpisode";
+import { Language } from "../../models/publishing/Language";
+import { Category } from "../../models/publishing/Category";
 
 export default class DataManager {
   private ingest: IngestApiRepository = new IngestApiRepository();
   private social: SocialApiRepository = new SocialApiRepository();
   private editor: EditorApiRepository = new EditorApiRepository();
+  private publishing: PublishingApiRepository = new PublishingApiRepository();
   accessToken: string | null = null;
 
   //  Social
@@ -309,5 +317,83 @@ export default class DataManager {
   public async finishEditSession(sessionUid: string) {
     if (this.accessToken)
       await this.editor.finishEditSession(this.accessToken, sessionUid);
+  }
+
+  // Publishing Repository
+
+  /**
+   * Gets all unassigned podcasts.
+   */
+  public async getUnassignedPodcasts(): Promise<UnassignedPodcast[] | null> {
+    if (this.accessToken)
+      return await this.publishing.getUnassignedPodcasts(this.accessToken);
+
+    return null;
+  }
+
+  /**
+   * Gets all unassigned episodes.
+   */
+  public async getAssignedPodcasts(): Promise<PublishedPodcast[] | null> {
+    if (this.accessToken)
+      return await this.publishing.getAssignedPodcasts(this.accessToken);
+
+    return null;
+  }
+
+  /**
+   * Gets all assigned podcasts.
+   */
+  public async getUnassignedEpisodes(): Promise<UnassignedEpisode[] | null> {
+    if (this.accessToken)
+      return await this.publishing.getUnassignedEpisodes(this.accessToken);
+
+    return null;
+  }
+
+  /**
+   * Updates the specified podcast.
+   */
+  public async updatePodcast(podcast: PublishedPodcast) {
+    if (this.accessToken)
+      await this.publishing.updatePodcast(this.accessToken, podcast);
+  }
+
+  /**
+   * Updates the specified episode.
+   */
+  public async updateEpisode(episode: PublishedEpisode) {
+    if (this.accessToken)
+      await this.publishing.updateEpisode(this.accessToken, episode);
+  }
+
+  /**
+   * Deletes the specified podcast.
+   */
+  public async deletePublishedPodcast(podcastUid: string) {
+    if (this.accessToken)
+      await this.publishing.deletePodcast(this.accessToken, podcastUid);
+  }
+
+  /**
+   * Deletes the specified episode.
+   */
+  public async deletePublishedEpisode(episodeUid: string) {
+    if (this.accessToken)
+      await this.publishing.deleteEpisode(this.accessToken, episodeUid);
+  }
+
+  /**
+   * Gets all assignable languages.
+   */
+  public async getLanguages(): Promise<Language[]> {
+    return await this.publishing.getLanguages();
+  }
+
+  /**
+   * Gets all assignable categories.
+   */
+  public async getCategories(): Promise<Category[]> {
+    return await this.publishing.getCategories();
   }
 }
