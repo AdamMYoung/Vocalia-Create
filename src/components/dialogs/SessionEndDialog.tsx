@@ -7,7 +7,9 @@ import {
 } from "@material-ui/core";
 import { Redirect } from "react-router";
 
-interface IProps {}
+interface IProps {
+  redirectPath: string;
+}
 
 interface IState {
   seconds: number;
@@ -35,6 +37,7 @@ export default class SessionEndDialog extends Component<IProps, IState> {
 
   render() {
     const { seconds } = this.state;
+    const { redirectPath } = this.props;
 
     return (
       <Dialog open>
@@ -44,7 +47,7 @@ export default class SessionEndDialog extends Component<IProps, IState> {
             {"Closing in " + seconds}
           </DialogContentText>
         </DialogContent>
-        {seconds == 0 && <Redirect to="/record/" />}
+        {seconds == 0 && <Redirect to={redirectPath} />}
       </Dialog>
     );
   }

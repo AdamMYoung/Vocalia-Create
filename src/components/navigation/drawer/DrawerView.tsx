@@ -102,7 +102,7 @@ class DrawerView extends Component<IProps> {
             onClick={() => setDrawer(false)}
           />
           <DrawerElementView
-            route="/publish/selection"
+            route="/publishing"
             title="Publish"
             icon={<Publish />}
             onClick={() => setDrawer(false)}

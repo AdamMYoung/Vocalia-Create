@@ -7,7 +7,7 @@ import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDi
 import { Podcast } from "../../../../models/Podcast";
 import { User } from "../../../../models/User";
 import { getDurationText } from "../../../../utility/TextUtils";
-import SessionEndDialog from "../SessionEndDialog";
+import SessionEndDialog from "../../../dialogs/SessionEndDialog";
 import { ClipNameDialog } from "../../ClipNameDialog";
 import uuidv1 from "uuid/v1";
 
@@ -211,7 +211,9 @@ export default class ControlViewModel extends Component<IProps, IState> {
         {isClipFinishedDialogOpen && (
           <ClipNameDialog onAccept={this.onCreateClip} {...this.props} />
         )}
-        {isSessionFinished && <SessionEndDialog />}
+        {isSessionFinished && (
+          <SessionEndDialog redirectPath="/record/selection" />
+        )}
       </div>
     );
   }

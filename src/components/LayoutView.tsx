@@ -11,6 +11,7 @@ import CreateViewModel from "./record/create/CreateViewModel";
 import LoginView from "./LoginView";
 import EditorSelectionViewModel from "./editor/selection/EditorSelectionViewModel";
 import EditViewModel from "./editor/edit/EditViewModel";
+import PublishingViewModel from "./publishing/PublishingViewModel";
 
 interface IProps {
   isMobile: boolean;
@@ -63,6 +64,13 @@ export default class LayoutView extends Component<IProps> {
             path="/editor/selection"
             render={() => {
               return <EditorSelectionViewModel {...this.props} />;
+            }}
+          />
+
+          <Route
+            path="/publishing"
+            render={() => {
+              return <PublishingViewModel {...this.props} />;
             }}
           />
 
