@@ -79,24 +79,25 @@ export default class UnassignedPodcastDialogViewModel extends Component<
   /**
    * Called when the category changes.
    */
-  private onCategoryChanged = (categoryId: number) => {
+  private onCategoryChanged = (title: string) => {
     const { categories } = this.state;
 
-    if (categories)
+    if (categories) {
       this.setState({
-        category: categories.filter(c => c.id == categoryId)[0]
+        category: categories.filter(c => c.title == title)[0]
       });
+    }
   };
 
   /**
    * Called when the language changes.
    */
-  private onLanguageChanged = (languageId: number) => {
+  private onLanguageChanged = (name: string) => {
     const { languages } = this.state;
 
     if (languages)
       this.setState({
-        language: languages.filter(c => c.id == languageId)[0]
+        language: languages.filter(c => c.name == name)[0]
       });
   };
 

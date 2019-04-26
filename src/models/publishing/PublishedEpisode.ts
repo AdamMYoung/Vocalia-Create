@@ -4,6 +4,7 @@ export class PublishedEpisode {
   public description: string;
   public rssUrl: string;
   public publishDate: Date;
+  public podcastUID: string;
   public mediaUrl: string;
   public isActive: boolean;
 
@@ -14,7 +15,8 @@ export class PublishedEpisode {
     rssUrl: string,
     publishDate: Date,
     mediaUrl: string,
-    isActive: boolean
+    isActive: boolean,
+    podcastUID: string
   ) {
     this.uid = uid;
     this.title = title;
@@ -23,5 +25,6 @@ export class PublishedEpisode {
     this.publishDate = publishDate;
     this.mediaUrl = mediaUrl;
     this.isActive = isActive;
+    this.podcastUID = podcastUID;
   }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { UnassignedEpisode } from "../../../../models/publishing/UnassignedEpisode";
+import TimeAgo from "react-timeago";
 import {
   Dialog,
   DialogTitle,
@@ -34,7 +35,9 @@ export default class UnassignedEpisodeDialogView extends Component<IProps> {
 
     return (
       <Dialog open onClose={onClose}>
-        <DialogTitle>{episode.name}</DialogTitle>
+        <DialogTitle>
+          <TimeAgo date={new Date(episode.date)} />
+        </DialogTitle>
         <DialogContent>
           <TextField
             fullWidth
@@ -50,11 +53,11 @@ export default class UnassignedEpisodeDialogView extends Component<IProps> {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onSubmit}>
-            Submit
-          </Button>
           <Button color="primary" onClick={onClose}>
             Close
+          </Button>
+          <Button color="primary" onClick={onSubmit}>
+            Submit
           </Button>
         </DialogActions>
       </Dialog>

@@ -42,30 +42,30 @@ export default class AssignedPodcastDialogViewModel extends Component<
     };
   }
 
+  componentDidMount() {
+    this.loadAdditionalInfo();
+  }
+
   /**
-   * Gets the categories and languages.
+   * Gets the categories and languages from the database.
    */
-  async componentDidMount() {
+  private loadAdditionalInfo = async () => {
     const { api, podcast } = this.props;
 
     var categories = await api.getCategories();
     if (categories)
       this.setState({
         categories,
-        category: podcast
-          ? categories.filter(c => c.id == podcast.categoryId)[0]
-          : categories[0]
+        category: categories.filter(c => c.id == podcast.categoryID)[0]
       });
 
     var languages = await api.getLanguages();
     if (languages)
       this.setState({
         languages,
-        language: podcast
-          ? languages.filter(c => c.id == podcast.languageId)[0]
-          : languages[0]
+        language: languages.filter(c => c.id == podcast.languageID)[0]
       });
-  }
+  };
 
   /**
    * Called when the title changes.
@@ -91,24 +91,24 @@ export default class AssignedPodcastDialogViewModel extends Component<
   /**
    * Called when the category changes.
    */
-  private onCategoryChanged = (categoryId: number) => {
+  private onCategoryChanged = (title: string) => {
     const { categories } = this.state;
 
     if (categories)
       this.setState({
-        category: categories.filter(c => c.id == categoryId)[0]
+        category: categories.filter(c => c.title == title)[0]
       });
   };
 
   /**
    * Called when the language changes.
    */
-  private onLanguageChanged = (languageId: number) => {
+  private onLanguageChanged = (name: string) => {
     const { languages } = this.state;
 
     if (languages)
       this.setState({
-        language: languages.filter(c => c.id == languageId)[0]
+        language: languages.filter(c => c.name == name)[0]
       });
   };
 
@@ -119,7 +119,10 @@ export default class AssignedPodcastDialogViewModel extends Component<
     const { api, podcast, onClose } = this.props;
     const { title, description, language, category, isExplicit } = this.state;
 
-    if (title && description && language && category)
+    console.log(category, language);
+
+    if (title && description && language && category) {
+      console.log("Updating podcast");
       await api.updatePodcast(
         new PublishedPodcast(
           podcast.uid,
@@ -133,7 +136,9 @@ export default class AssignedPodcastDialogViewModel extends Component<
           podcast.episodes
         )
       );
-    onClose();
+
+      onClose();
+    }
   };
 
   render() {

@@ -1,11 +1,21 @@
 export class UnassignedEpisode {
   public uid: string;
-  public podcastUid: string;
+  public podcastUID: string;
   public name: string;
+  public date: Date;
+  public imageUrl: string;
 
-  constructor(uid: string, podcastUid: string, name: string) {
+  constructor(
+    uid: string,
+    podcastUID: string,
+    name: string,
+    date: Date,
+    imageUrl: string
+  ) {
     this.uid = uid;
-    this.podcastUid = podcastUid;
+    this.podcastUID = podcastUID;
     this.name = name;
+    this.date = date;
+    this.imageUrl = imageUrl;
   }
 }

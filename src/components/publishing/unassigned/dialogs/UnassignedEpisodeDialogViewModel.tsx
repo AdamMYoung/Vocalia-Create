@@ -59,7 +59,8 @@ export default class UnassignedEpisodeDialogViewModel extends Component<
           "",
           new Date(),
           "",
-          true
+          true,
+          episode.podcastUID
         )
       );
     onClose();

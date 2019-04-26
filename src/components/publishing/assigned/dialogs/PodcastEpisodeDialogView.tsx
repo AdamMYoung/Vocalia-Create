@@ -15,7 +15,7 @@ export default class PodcastEpisodeDialogView extends Component<IProps> {
         <Typography variant="h6">Episodes</Typography>
         <List>
           {episodes.map(e => (
-            <ListItem>
+            <ListItem key={e.uid}>
               <ListItemText primary={e.title} secondary={e.publishDate} />
             </ListItem>
           ))}

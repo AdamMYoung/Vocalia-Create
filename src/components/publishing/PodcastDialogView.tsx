@@ -9,7 +9,10 @@ import {
   Select,
   MenuItem,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Typography,
+  NativeSelect,
+  Input
 } from "@material-ui/core";
 import { Category } from "../../models/publishing/Category";
 import { Language } from "../../models/publishing/Language";
@@ -26,8 +29,8 @@ interface IProps {
 
   onTitleChanged: (title: string) => void;
   onDescriptionChanged: (description: string) => void;
-  onCategoryChanged: (categoryId: number) => void;
-  onLanguageChanged: (languageId: number) => void;
+  onCategoryChanged: (name: string) => void;
+  onLanguageChanged: (name: string) => void;
   onExplicitChanged: (isExplicit: boolean) => void;
 
   onClose: () => void;
@@ -81,32 +84,42 @@ export default class PodcastDialogView extends Component<IProps> {
             label="Is Explicit"
           />
 
-          <Select
-            value={category ? category.title : ""}
-            onChange={e => onCategoryChanged(parseInt(e.target.value))}
+          <Typography>Category</Typography>
+          <NativeSelect
+            value={category ? category.title : "Test"}
+            onChange={e => onCategoryChanged(e.target.value)}
+            input={<Input />}
+            fullWidth
           >
             {categories.map(c => (
-              <MenuItem value={c.id}>{c.title}</MenuItem>
+              <option key={c.id} value={c.title}>
+                {c.title}
+              </option>
             ))}
-          </Select>
+          </NativeSelect>
 
-          <Select
-            value={language ? language.name : ""}
-            onChange={e => onLanguageChanged(parseInt(e.target.value))}
+          <Typography>Language</Typography>
+          <NativeSelect
+            value={language ? language.name : "Test"}
+            onChange={e => onLanguageChanged(e.target.value)}
+            input={<Input />}
+            fullWidth
           >
             {languages.map(c => (
-              <MenuItem value={c.id}>{c.name}</MenuItem>
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
             ))}
-          </Select>
+          </NativeSelect>
 
-          {this.props.children}
+          <div style={{ margin: 8 }}>{this.props.children}</div>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onSubmit}>
-            Submit
-          </Button>
           <Button color="primary" onClick={onClose}>
             Close
+          </Button>
+          <Button color="primary" onClick={onSubmit}>
+            Submit
           </Button>
         </DialogActions>
       </Dialog>

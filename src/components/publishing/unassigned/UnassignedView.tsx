@@ -13,7 +13,8 @@ import {
   CardMedia,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  CardContent
 } from "@material-ui/core";
 
 interface IProps {
@@ -35,24 +36,33 @@ export default class UnassignedView extends Component<IProps> {
 
     const podcastEntries = podcasts.map(p => (
       <Card
+        key={p.uid}
         style={{ width: 160, height: 160, margin: 4 }}
         onClick={() => onPodcastSelected(p)}
       >
         <CardActionArea>
           <CardMedia component="img" image={p.imageUrl} />
         </CardActionArea>
+        <CardContent>
+          <Typography>{p.name}</Typography>
+        </CardContent>
       </Card>
     ));
 
-    const episodeEntries = (
-      <List>
-        {episodes.map(e => (
-          <ListItem onClick={() => onEpisodeSelected(e)}>
-            <ListItemText>{e.name}</ListItemText>
-          </ListItem>
-        ))}
-      </List>
-    );
+    const episodeEntries = episodes.map(e => (
+      <Card
+        key={e.uid}
+        style={{ width: 160, height: 160, margin: 4 }}
+        onClick={() => onEpisodeSelected(e)}
+      >
+        <CardActionArea>
+          <CardMedia component="img" image={e.imageUrl} />
+        </CardActionArea>
+        <CardContent>
+          <Typography>{e.date}</Typography>
+        </CardContent>
+      </Card>
+    ));
 
     return (
       <Grid container>
@@ -63,7 +73,7 @@ export default class UnassignedView extends Component<IProps> {
           {podcasts.length > 0 && (
             <div>
               <Typography variant="h6">Podcasts</Typography>
-              {podcastEntries}
+              <Grid container>{podcastEntries}</Grid>
             </div>
           )}
         </Grid>
@@ -71,7 +81,7 @@ export default class UnassignedView extends Component<IProps> {
         {episodes.length > 0 && (
           <div>
             <Typography variant="h6">Episodes</Typography>
-            {episodeEntries}
+            <Grid container>{episodeEntries}</Grid>
           </div>
         )}
       </Grid>

@@ -2,8 +2,8 @@ import { PublishedEpisode } from "./PublishedEpisode";
 
 export class PublishedPodcast {
   public uid: string;
-  public categoryId: number;
-  public languageId: number;
+  public categoryID: number;
+  public languageID: number;
   public title: string;
   public description: string;
   public imageUrl: string;
@@ -23,8 +23,8 @@ export class PublishedPodcast {
     episodes: PublishedEpisode[]
   ) {
     this.uid = uid;
-    this.categoryId = categoryId;
-    this.languageId = languageId;
+    this.categoryID = categoryId;
+    this.languageID = languageId;
     this.title = title;
     this.description = description;
     this.imageUrl = imageUrl;
