@@ -17,9 +17,11 @@ interface IState {
   title: string;
   description: string;
   isExplicit: boolean;
+  rssUrl: string;
   category: Category | null;
   language: Language | null;
 
+  isUpdating: boolean;
   categories: Category[];
   languages: Language[];
 }
@@ -37,7 +39,9 @@ export default class AssignedPodcastDialogViewModel extends Component<
       category: null,
       language: null,
       isExplicit: props.podcast.isExplicit,
+      rssUrl: props.podcast.rssUrl,
       categories: [],
+      isUpdating: false,
       languages: []
     };
   }
@@ -119,10 +123,8 @@ export default class AssignedPodcastDialogViewModel extends Component<
     const { api, podcast, onClose } = this.props;
     const { title, description, language, category, isExplicit } = this.state;
 
-    console.log(category, language);
-
     if (title && description && language && category) {
-      console.log("Updating podcast");
+      this.setState({ isUpdating: true });
       await api.updatePodcast(
         new PublishedPodcast(
           podcast.uid,
@@ -133,6 +135,7 @@ export default class AssignedPodcastDialogViewModel extends Component<
           podcast.imageUrl,
           isExplicit,
           podcast.isActive,
+          podcast.rssUrl,
           podcast.episodes
         )
       );

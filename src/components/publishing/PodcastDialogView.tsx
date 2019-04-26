@@ -21,6 +21,8 @@ interface IProps {
   title: string;
   description: string;
   isExplicit: boolean;
+  rssUrl: string;
+  isUpdating: boolean;
   category: Category | null;
   language: Language | null;
 
@@ -45,6 +47,7 @@ export default class PodcastDialogView extends Component<IProps> {
       category,
       language,
       isExplicit,
+      rssUrl,
       categories,
       languages,
       onTitleChanged,
@@ -53,13 +56,18 @@ export default class PodcastDialogView extends Component<IProps> {
       onLanguageChanged,
       onExplicitChanged,
       onClose,
-      onSubmit
+      onSubmit,
+      isUpdating
     } = this.props;
 
     return (
       <Dialog open onClose={onClose}>
         <DialogTitle>Podcasts</DialogTitle>
         <DialogContent>
+          {rssUrl.length > 0 && (
+            <TextField fullWidth label="RSS URL" value={rssUrl} disabled />
+          )}
+
           <TextField
             fullWidth
             label="Title"
@@ -115,10 +123,10 @@ export default class PodcastDialogView extends Component<IProps> {
           <div style={{ margin: 8 }}>{this.props.children}</div>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onClose}>
+          <Button color="primary" onClick={onClose} disabled={isUpdating}>
             Close
           </Button>
-          <Button color="primary" onClick={onSubmit}>
+          <Button color="primary" onClick={onSubmit} disabled={isUpdating}>
             Submit
           </Button>
         </DialogActions>

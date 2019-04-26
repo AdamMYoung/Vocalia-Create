@@ -14,6 +14,7 @@ interface IProps {
   episode: UnassignedEpisode;
   title: string;
   description: string;
+  isUpdating: boolean;
 
   onTitleChanged: (title: string) => void;
   onDescriptionChanged: (description: string) => void;
@@ -27,6 +28,7 @@ export default class UnassignedEpisodeDialogView extends Component<IProps> {
       episode,
       title,
       description,
+      isUpdating,
       onTitleChanged,
       onDescriptionChanged,
       onClose,
@@ -53,10 +55,10 @@ export default class UnassignedEpisodeDialogView extends Component<IProps> {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onClose}>
+          <Button color="primary" onClick={onClose} disabled={isUpdating}>
             Close
           </Button>
-          <Button color="primary" onClick={onSubmit}>
+          <Button color="primary" onClick={onSubmit} disabled={isUpdating}>
             Submit
           </Button>
         </DialogActions>

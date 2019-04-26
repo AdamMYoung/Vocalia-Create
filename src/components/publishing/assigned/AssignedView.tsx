@@ -26,21 +26,28 @@ export default class AssignedView extends Component<IProps> {
         <Toolbar>
           <Typography variant="h6">Published</Typography>
         </Toolbar>
+
         <Grid item xs={12}>
-          <Typography variant="h6">Podcasts</Typography>
-          <Grid container>
-            {podcasts.map(p => (
-              <Card
-                key={p.uid}
-                style={{ width: 160, height: 160, margin: 4 }}
-                onClick={() => onPodcastSelected(p)}
-              >
-                <CardActionArea>
-                  <CardMedia component="img" image={p.imageUrl} />
-                </CardActionArea>
-              </Card>
-            ))}
-          </Grid>
+          {podcasts.length > 0 ? (
+            <div>
+              <Typography variant="h6">Podcasts</Typography>
+              <Grid container>
+                {podcasts.map(p => (
+                  <Card
+                    key={p.uid}
+                    style={{ width: 160, height: 160, margin: 4 }}
+                    onClick={() => onPodcastSelected(p)}
+                  >
+                    <CardActionArea>
+                      <CardMedia component="img" image={p.imageUrl} />
+                    </CardActionArea>
+                  </Card>
+                ))}
+              </Grid>
+            </div>
+          ) : (
+            <Typography>There's nothing here...</Typography>
+          )}
         </Grid>
       </Grid>
     );

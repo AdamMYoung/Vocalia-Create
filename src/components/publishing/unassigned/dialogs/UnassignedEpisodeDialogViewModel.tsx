@@ -14,6 +14,7 @@ interface IProps {
 interface IState {
   title: string;
   description: string;
+  isUpdating: boolean;
 }
 
 export default class UnassignedEpisodeDialogViewModel extends Component<
@@ -25,7 +26,8 @@ export default class UnassignedEpisodeDialogViewModel extends Component<
 
     this.state = {
       title: props.episode.name,
-      description: ""
+      description: "",
+      isUpdating: false
     };
   }
 
@@ -50,7 +52,8 @@ export default class UnassignedEpisodeDialogViewModel extends Component<
     const { api, episode, onClose } = this.props;
     const { title, description } = this.state;
 
-    if (title && description)
+    if (title && description) {
+      this.setState({ isUpdating: true });
       await api.updateEpisode(
         new PublishedEpisode(
           episode.uid,
@@ -63,6 +66,7 @@ export default class UnassignedEpisodeDialogViewModel extends Component<
           episode.podcastUID
         )
       );
+    }
     onClose();
   };
 

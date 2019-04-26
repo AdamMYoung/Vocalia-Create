@@ -9,6 +9,7 @@ export class PublishedPodcast {
   public imageUrl: string;
   public isExplicit: boolean;
   public isActive: boolean;
+  public rssUrl: string;
   public episodes: PublishedEpisode[];
 
   constructor(
@@ -20,6 +21,7 @@ export class PublishedPodcast {
     imageUrl: string,
     isExplicit: boolean,
     isActive: boolean,
+    rssUrl: string,
     episodes: PublishedEpisode[]
   ) {
     this.uid = uid;
@@ -31,5 +33,6 @@ export class PublishedPodcast {
     this.isExplicit = isExplicit;
     this.isActive = isActive;
     this.episodes = episodes;
+    this.rssUrl = rssUrl;
   }
 }

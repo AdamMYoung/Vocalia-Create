@@ -84,6 +84,9 @@ export default class UnassignedView extends Component<IProps> {
             <Grid container>{episodeEntries}</Grid>
           </div>
         )}
+        {episodes.length == 0 && podcasts.length == 0 && (
+          <Typography>There's nothing here...</Typography>
+        )}
       </Grid>
     );
   }
