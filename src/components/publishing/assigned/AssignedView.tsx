@@ -8,7 +8,8 @@ import {
   Card,
   CardActionArea,
   CardMedia,
-  CardContent
+  CardContent,
+  Toolbar
 } from "@material-ui/core";
 
 interface IProps {
@@ -22,7 +23,9 @@ export default class AssignedView extends Component<IProps> {
 
     return (
       <Grid container>
-        <Typography variant="h4">Published</Typography>
+        <Toolbar>
+          <Typography variant="h6">Published</Typography>
+        </Toolbar>
         {podcasts.map(p => (
           <Card
             style={{ width: 160, height: 160, margin: 4 }}

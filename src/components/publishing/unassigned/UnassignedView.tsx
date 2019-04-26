@@ -56,7 +56,9 @@ export default class UnassignedView extends Component<IProps> {
 
     return (
       <Grid container>
-        <Typography variant="h4">Unpublished</Typography>
+        <Toolbar>
+          <Typography variant="h6">Unassigned</Typography>
+        </Toolbar>
         <Grid item xs={12}>
           {podcasts.length > 0 && (
             <div>

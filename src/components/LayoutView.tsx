@@ -92,17 +92,13 @@ export default class LayoutView extends Component<IProps> {
             )}
           />
 
+          <Route
+            path="/options"
+            render={props => <OptionsViewModel {...this.props} />}
+          />
+
           <Redirect to="/record/selection" />
         </Switch>
-
-        <Route
-          path="/:location/:dialog"
-          render={props =>
-            props.match.params.dialog == "options" && (
-              <OptionsViewModel {...this.props} />
-            )
-          }
-        />
       </React.Fragment>
     );
 

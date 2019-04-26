@@ -126,7 +126,7 @@ class DrawerView extends Component<IProps> {
           <DrawerElementView
             title="Options"
             icon={<Settings />}
-            route={window.location.pathname + "/options"}
+            route={"/options"}
           />
         </List>
       </div>
