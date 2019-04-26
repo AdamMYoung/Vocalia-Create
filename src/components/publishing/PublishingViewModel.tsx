@@ -27,6 +27,10 @@ export default class PublishingViewModel extends Component<IProps, IState> {
   }
 
   async componentDidMount() {
+    this.loadPublishingData();
+  }
+
+  private loadPublishingData = async () => {
     const { api } = this.props;
 
     var publishedPodcasts = await api.getAssignedPodcasts();
@@ -37,9 +41,15 @@ export default class PublishingViewModel extends Component<IProps, IState> {
 
     var unassignedEpisodes = await api.getUnassignedEpisodes();
     if (unassignedEpisodes) this.setState({ unassignedEpisodes });
-  }
+  };
 
   render() {
-    return <PublishingView {...this.state} {...this.props} />;
+    return (
+      <PublishingView
+        {...this.state}
+        {...this.props}
+        onReload={this.loadPublishingData}
+      />
+    );
   }
 }

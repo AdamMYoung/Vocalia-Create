@@ -2,8 +2,8 @@ import { PublishedEpisode } from "./PublishedEpisode";
 
 export class PublishedPodcast {
   public uid: string;
-  public categoryId: string;
-  public languageId: string;
+  public categoryId: number;
+  public languageId: number;
   public title: string;
   public description: string;
   public imageUrl: string;
@@ -13,8 +13,8 @@ export class PublishedPodcast {
 
   constructor(
     uid: string,
-    categoryId: string,
-    languageId: string,
+    categoryId: number,
+    languageId: number,
     title: string,
     description: string,
     imageUrl: string,

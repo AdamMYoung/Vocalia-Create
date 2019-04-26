@@ -14,6 +14,7 @@ interface IProps {
   publishedPodcasts: PublishedPodcast[];
   unassignedPodcasts: UnassignedPodcast[];
   unassignedEpisodes: UnassignedEpisode[];
+  onReload: () => void;
 }
 
 export default class PublishingView extends Component<IProps> {

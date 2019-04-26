@@ -7,6 +7,7 @@ import AssignedPodcastDialogViewModel from "./dialogs/AssignedPodcastDialogViewM
 interface IProps {
   api: DataManager;
   podcasts: PublishedPodcast[];
+  onReload: () => void;
 }
 
 interface IState {
@@ -33,7 +34,10 @@ export default class AssignedViewModel extends Component<IProps, IState> {
    * Called when the dialog is closed.
    */
   private onClose = () => {
+    const { onReload } = this.props;
+
     this.setState({ podcast: null });
+    onReload();
   };
 
   render() {

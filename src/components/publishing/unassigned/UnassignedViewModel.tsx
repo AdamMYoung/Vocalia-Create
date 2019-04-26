@@ -10,6 +10,7 @@ interface IProps {
   api: DataManager;
   podcasts: UnassignedPodcast[];
   episodes: UnassignedEpisode[];
+  onReload: () => void;
 }
 
 interface IState {
@@ -45,7 +46,10 @@ export default class UnassignedViewModel extends Component<IProps, IState> {
    * Called when the dialog has closed.
    */
   private onClose = () => {
+    const { onReload } = this.props;
+
     this.setState({ selectedEpisode: null, selectedPodcast: null });
+    onReload();
   };
 
   render() {
