@@ -39,7 +39,11 @@ export default class AssignedView extends Component<IProps> {
                     onClick={() => onPodcastSelected(p)}
                   >
                     <CardActionArea>
-                      <CardMedia component="img" image={p.imageUrl} />
+                      <CardMedia
+                        component="img"
+                        style={{ width: 160, height: 160 }}
+                        image={p.imageUrl}
+                      />
                     </CardActionArea>
                   </Card>
                 ))}
