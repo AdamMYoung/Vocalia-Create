@@ -45,12 +45,16 @@ export default class UnassignedEpisodeDialogView extends Component<IProps> {
             fullWidth
             label="Title"
             value={title}
+            margin="normal"
+          variant="outlined"
             onChange={e => onTitleChanged(e.target.value)}
           />
           <TextField
             fullWidth
             label="Description"
             value={description}
+            margin="normal"
+          variant="outlined"
             onChange={e => onDescriptionChanged(e.target.value)}
           />
         </DialogContent>

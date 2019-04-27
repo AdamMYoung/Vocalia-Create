@@ -1,5 +1,6 @@
 import { DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
 import { drawerWidth } from "../../utility/constants";
+import { isMobile } from "../../utility/DeviceUtils";
 
 const grid = 4;
 
@@ -26,8 +27,7 @@ export const getListStyle = (isDraggingOver: boolean) => ({
   display: "flex",
   overflow: "auto",
   minHeight: 200,
-  minWidth: 500,
-  oversrollBehavior: "none"
+  minWidth: 200
 });
 
 export const getTrayStyle = (isDraggingOver: boolean) => ({

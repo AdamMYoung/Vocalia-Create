@@ -64,6 +64,7 @@ export default class NewPodcastDialogView extends Component<IProps> {
         <TextField
           label="Name"
           margin="normal"
+          variant="outlined"
           value={name}
           fullWidth
           onChange={e => onNameChanged(e.target.value)}
@@ -71,6 +72,7 @@ export default class NewPodcastDialogView extends Component<IProps> {
         <TextField
           label="Description"
           margin="normal"
+          variant="outlined"
           multiline
           fullWidth
           value={description}

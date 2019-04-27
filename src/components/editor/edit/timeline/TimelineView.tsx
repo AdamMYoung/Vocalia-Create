@@ -25,8 +25,7 @@ export default class TimelineView extends Component<IProps> {
         item
         xs={12}
         style={{
-          display: "flex",
-          width: window.innerWidth - (isMobile() ? 0 : drawerWidth + 20)
+          display: "flex"
         }}
       >
         <div style={{ display: "inline-block", marginTop: 85, marginRight: 8 }}>
@@ -40,7 +39,7 @@ export default class TimelineView extends Component<IProps> {
                   <Avatar
                     key={entry.userUID}
                     style={{
-                      margin: 8,
+                      margin: 4,
                       height: 48,
                       width: 48,
                       display: "inline-block"
