@@ -41,11 +41,12 @@ export default class UnassignedView extends Component<IProps> {
         onClick={() => onPodcastSelected(p)}
       >
         <CardActionArea>
-          <CardMedia component="img" image={p.imageUrl} />
+          <CardMedia
+            component="img"
+            style={{ width: 160, height: 160 }}
+            image={p.imageUrl}
+          />
         </CardActionArea>
-        <CardContent>
-          <Typography>{p.name}</Typography>
-        </CardContent>
       </Card>
     ));
 
@@ -56,7 +57,11 @@ export default class UnassignedView extends Component<IProps> {
         onClick={() => onEpisodeSelected(e)}
       >
         <CardActionArea>
-          <CardMedia component="img" image={e.imageUrl} />
+          <CardMedia
+            component="img"
+            style={{ width: 160, height: 160 }}
+            image={e.imageUrl}
+          />
         </CardActionArea>
         <CardContent>
           <Typography>{e.date}</Typography>

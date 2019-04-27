@@ -40,7 +40,8 @@ export class ClipNameDialog extends Component<IProps, IState> {
           <DialogContentText>Enter a name below:</DialogContentText>
           <TextField
             autoFocus
-            margin="dense"
+            margin="normal"
+            variant="outlined"
             label="Name"
             type="name"
             fullWidth

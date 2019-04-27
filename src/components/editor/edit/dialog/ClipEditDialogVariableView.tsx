@@ -21,6 +21,8 @@ export default class ClipEditDialogVariableView extends Component<IProps> {
           inputProps={{
             style: { textAlign: "center" }
           }}
+          margin="normal"
+          variant="outlined"
           value={value + " " + valueName}
         />
         <IconButton onClick={() => onValueChanged(value + 1)}>
