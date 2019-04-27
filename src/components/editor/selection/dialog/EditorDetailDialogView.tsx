@@ -43,9 +43,7 @@ export default class EditorDetailDialogView extends Component<IProps> {
             </List>
           </DialogContent>
           <DialogActions>
-            <Button color="primary" onClick={onClose}>
-              Close
-            </Button>
+            <Button onClick={onClose}>Close</Button>
           </DialogActions>
         </Dialog>
         {this.props.children}

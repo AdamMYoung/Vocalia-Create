@@ -98,7 +98,6 @@ export default class PodcastDialogView extends Component<IProps> {
               <Checkbox
                 checked={isExplicit}
                 onChange={() => onExplicitChanged(!isExplicit)}
-                color="primary"
               />
             }
             label="Is Explicit"
@@ -146,10 +145,10 @@ export default class PodcastDialogView extends Component<IProps> {
           <div style={{ margin: 8 }}>{this.props.children}</div>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onClose} disabled={isUpdating}>
+          <Button onClick={onClose} disabled={isUpdating}>
             Close
           </Button>
-          <Button color="primary" onClick={onSubmit} disabled={isUpdating}>
+          <Button onClick={onSubmit} disabled={isUpdating}>
             Submit
           </Button>
         </DialogActions>

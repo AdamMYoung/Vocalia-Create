@@ -58,16 +58,10 @@ export default class DetailDialogView extends Component<IProps> {
           </DialogContent>
           <DialogActions>
             <LinkContainer to={sessionUrl}>
-              <Button color="primary" disabled={!hasSession}>
-                Join
-              </Button>
+              <Button disabled={!hasSession}>Join</Button>
             </LinkContainer>
-            <Button color="primary" onClick={onNewSession}>
-              New Session
-            </Button>
-            <Button color="primary" onClick={onClose}>
-              Close
-            </Button>
+            <Button onClick={onNewSession}>New Session</Button>
+            <Button onClick={onClose}>Close</Button>
           </DialogActions>
         </Dialog>
         {this.props.children}

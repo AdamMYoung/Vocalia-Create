@@ -63,10 +63,10 @@ export default class ClipEditDialogView extends Component<IProps> {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel} disabled={buttonsDisabled} color="primary">
+          <Button onClick={onCancel} disabled={buttonsDisabled}>
             Cancel
           </Button>
-          <Button onClick={onSubmit} disabled={buttonsDisabled} color="primary">
+          <Button onClick={onSubmit} disabled={buttonsDisabled}>
             Submit
           </Button>
         </DialogActions>

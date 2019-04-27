@@ -89,10 +89,8 @@ export default class NewPodcastDialogView extends Component<IProps> {
           {text}
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={onSubmit} disabled={!canSubmit} color="primary">
+          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onSubmit} disabled={!canSubmit}>
             Create
           </Button>
         </DialogActions>

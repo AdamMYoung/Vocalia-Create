@@ -74,11 +74,10 @@ export default class NewInviteDialogView extends Component<IProps> {
         <DialogTitle>New Invite</DialogTitle>
         <DialogContent>{controls}</DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onClose}>
+          <Button onClick={onClose}>
             {inviteCode.length > 0 ? "Close" : "Cancel"}
           </Button>
           <Button
-            color="primary"
             onClick={onCreateInvite}
             disabled={isLoadingInvite || inviteCode.length > 0}
           >

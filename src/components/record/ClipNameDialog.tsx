@@ -51,7 +51,6 @@ export class ClipNameDialog extends Component<IProps, IState> {
         </DialogContent>
         <DialogActions>
           <Button
-            color="primary"
             disabled={buttonsDisabled}
             onClick={() => {
               this.setState({ buttonsDisabled: true });

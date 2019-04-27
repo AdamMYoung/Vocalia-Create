@@ -38,9 +38,7 @@ export default class InviteView extends Component<IProps> {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onRejectInvite}>
-            Close
-          </Button>
+          <Button onClick={onRejectInvite}>Close</Button>
         </DialogActions>
       </React.Fragment>
     );
@@ -64,12 +62,8 @@ export default class InviteView extends Component<IProps> {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onRejectInvite}>
-            Decline
-          </Button>
-          <Button color="primary" onClick={onAcceptInvite}>
-            Accept
-          </Button>
+          <Button onClick={onRejectInvite}>Decline</Button>
+          <Button onClick={onAcceptInvite}>Accept</Button>
         </DialogActions>
       </React.Fragment>
     );

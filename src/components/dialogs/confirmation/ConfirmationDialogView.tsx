@@ -39,11 +39,10 @@ export default class ConfirmationDialogView extends Component<IProps, IState> {
           <DialogContentText>{subtitle}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onDeny} disabled={buttonsDisabled}>
+          <Button onClick={onDeny} disabled={buttonsDisabled}>
             Cancel
           </Button>
           <Button
-            color="primary"
             disabled={buttonsDisabled}
             onClick={() => {
               this.setState({ buttonsDisabled: true });

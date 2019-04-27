@@ -46,7 +46,7 @@ export default class UnassignedEpisodeDialogView extends Component<IProps> {
             label="Title"
             value={title}
             margin="normal"
-          variant="outlined"
+            variant="outlined"
             onChange={e => onTitleChanged(e.target.value)}
           />
           <TextField
@@ -54,15 +54,15 @@ export default class UnassignedEpisodeDialogView extends Component<IProps> {
             label="Description"
             value={description}
             margin="normal"
-          variant="outlined"
+            variant="outlined"
             onChange={e => onDescriptionChanged(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onClose} disabled={isUpdating}>
+          <Button onClick={onClose} disabled={isUpdating}>
             Close
           </Button>
-          <Button color="primary" onClick={onSubmit} disabled={isUpdating}>
+          <Button onClick={onSubmit} disabled={isUpdating}>
             Submit
           </Button>
         </DialogActions>

@@ -32,9 +32,7 @@ export default class OptionsView extends Component<IProps> {
           </List>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onClose}>
-            Close
-          </Button>
+          <Button onClick={onClose}>Close</Button>
         </DialogActions>
       </Dialog>
     );
