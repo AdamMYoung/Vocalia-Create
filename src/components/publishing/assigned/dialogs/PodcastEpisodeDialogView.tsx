@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { PublishedEpisode } from "../../../../models/publishing/PublishedEpisode";
 import { List, ListItemText, ListItem, Typography } from "@material-ui/core";
+import TimeAgo from "react-timeago";
 
 interface IProps {
   episodes: PublishedEpisode[];
@@ -16,7 +17,10 @@ export default class PodcastEpisodeDialogView extends Component<IProps> {
         <List>
           {episodes.map(e => (
             <ListItem key={e.uid}>
-              <ListItemText primary={e.title} secondary={e.publishDate} />
+              <ListItemText
+                primary={e.title}
+                secondary={<TimeAgo date={e.publishDate} />}
+              />
             </ListItem>
           ))}
         </List>
