@@ -66,7 +66,7 @@ export default class DetailDialogViewModel extends Component<IProps, IState> {
 
     var users: User[] = [];
     podcast.members.forEach(async member => {
-      var user = await api.getUserOverviewInfo(member.uid);
+      var user = await api.getUserDetailInfo(member.uid);
       if (user) users.push(user);
       this.setState({ users });
     });
