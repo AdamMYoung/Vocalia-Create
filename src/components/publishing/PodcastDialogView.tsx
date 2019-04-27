@@ -73,7 +73,6 @@ export default class PodcastDialogView extends Component<IProps> {
               variant="outlined"
               label="RSS URL"
               value={rssUrl}
-              disabled
             />
           )}
 
