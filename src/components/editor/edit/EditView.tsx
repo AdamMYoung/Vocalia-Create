@@ -33,9 +33,8 @@ export default class EditView extends Component<IProps> {
           <Typography variant="h6" style={{ textAlign: "center" }}>
             Recordings
           </Typography>
+          <TimelineViewModel {...this.props} timeline={timeline} />
         </Grid>
-
-        <TimelineViewModel {...this.props} timeline={timeline} />
       </Grid>
     );
   }

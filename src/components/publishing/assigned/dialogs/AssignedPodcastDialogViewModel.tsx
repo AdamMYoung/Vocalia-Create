@@ -158,7 +158,9 @@ export default class AssignedPodcastDialogViewModel extends Component<
         onExplicitChanged={this.onExplicitChanged}
         onSubmit={this.onSubmit}
       >
-        <PodcastEpisodeDialogView episodes={episodes} />
+        {episodes.length > 0 && (
+          <PodcastEpisodeDialogView episodes={episodes} />
+        )}
       </PodcastDialogView>
     );
   }

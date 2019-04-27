@@ -36,7 +36,10 @@ export default class NewInviteDialogView extends Component<IProps> {
     } = this.props;
 
     const controls = (
-      <form autoComplete="off">
+      <form
+        autoComplete="off"
+        style={{ display: "flex", alignItems: "center" }}
+      >
         <FormControlLabel
           control={<Switch checked={hasExpiry} onChange={onExpiryToggle} />}
           label="Can Expire"
@@ -48,6 +51,8 @@ export default class NewInviteDialogView extends Component<IProps> {
           disabled={!hasExpiry}
           onChange={onExpiryChanged}
           label="Expiry"
+          variant="outlined"
+          margin="dense"
           showTodayButton
         />
 
@@ -57,6 +62,7 @@ export default class NewInviteDialogView extends Component<IProps> {
             style={{ margin: 8 }}
             fullWidth
             margin="normal"
+            variant="outlined"
             value={process.env.REACT_APP_INVITE_LINK + inviteCode}
           />
         )}

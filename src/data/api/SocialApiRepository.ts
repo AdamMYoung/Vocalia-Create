@@ -3,9 +3,7 @@ import { User } from "../../models/User";
 
 const API = process.env.REACT_APP_SOCIAL_API_URL;
 const USER_DETAIL = "user/detail";
-const USER_OVERVIEW = "user/overview";
-const FEED = "feed";
-const FOLLOWERS = "followers";
+const USER = "user";
 
 export default class SocialApiRepository {
   /**
@@ -13,7 +11,7 @@ export default class SocialApiRepository {
    * @param accessToken Token for API access.
    */
   public async getSignedInUserInfo(accessToken: string): Promise<User | null> {
-    return await getInjectedFetch(API + FEED, accessToken)
+    return await getInjectedFetch(API + USER, accessToken)
       .then(response => response.json())
       .then(data => data as User)
       .catch(() => null);
@@ -28,42 +26,5 @@ export default class SocialApiRepository {
       .then(response => response.json())
       .then(data => data as User)
       .catch(() => null);
-  }
-
-  /**
-   * Gets the specified user's timeline.
-   * @param userId User to fetch.
-   */
-  public async getUserOverviewInfo(userId: string): Promise<User | null> {
-    return await fetch(API + USER_OVERVIEW + "?userId=" + userId)
-      .then(response => response.json())
-      .then(data => data as User)
-      .catch(() => null);
-  }
-
-  /**
-   * Adds the specified user to the signed-in user's follows.
-   * @param accessToken Token for API access.
-   * @param userId User to add.
-   */
-  public async addFollow(accessToken: string, userId: string) {
-    await getInjectedFetch(
-      API + FOLLOWERS + "?followId=" + userId,
-      accessToken,
-      "POST"
-    );
-  }
-
-  /**
-   * Removes the specified user from the signed-in user's follows.
-   * @param accessToken Token for API access.
-   * @param userId User to remove.
-   */
-  public async removeFollow(accessToken: string, userId: string) {
-    await getInjectedFetch(
-      API + FOLLOWERS + "?followId=" + userId,
-      accessToken,
-      "DELETE"
-    );
   }
 }

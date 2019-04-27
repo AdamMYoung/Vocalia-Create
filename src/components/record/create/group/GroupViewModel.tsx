@@ -80,7 +80,7 @@ export default class GroupViewModel extends Component<IProps, IState> {
 
     userStreams[stream.id] = stream;
 
-    var user = await api.getUserOverviewInfo(stream.tag);
+    var user = await api.getUserDetailInfo(stream.tag);
     if (user) userInfo[stream.tag] = user;
 
     this.setState({ userStreams, userInfo });

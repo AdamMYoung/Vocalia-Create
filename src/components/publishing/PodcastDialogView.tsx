@@ -12,7 +12,9 @@ import {
   Checkbox,
   Typography,
   NativeSelect,
-  Input
+  Input,
+  InputLabel,
+  FormControl
 } from "@material-ui/core";
 import { Category } from "../../models/publishing/Category";
 import { Language } from "../../models/publishing/Language";
@@ -65,19 +67,29 @@ export default class PodcastDialogView extends Component<IProps> {
         <DialogTitle>Podcasts</DialogTitle>
         <DialogContent>
           {rssUrl.length > 0 && (
-            <TextField fullWidth label="RSS URL" value={rssUrl} disabled />
+            <TextField
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              label="RSS URL"
+              value={rssUrl}
+            />
           )}
 
           <TextField
             fullWidth
             label="Title"
             value={title}
+            margin="normal"
+            variant="outlined"
             onChange={e => onTitleChanged(e.target.value)}
           />
           <TextField
             fullWidth
             label="Description"
             value={description}
+            margin="normal"
+            variant="outlined"
             onChange={e => onDescriptionChanged(e.target.value)}
           />
 
@@ -92,33 +104,44 @@ export default class PodcastDialogView extends Component<IProps> {
             label="Is Explicit"
           />
 
-          <Typography>Category</Typography>
-          <NativeSelect
-            value={category ? category.title : "Test"}
-            onChange={e => onCategoryChanged(e.target.value)}
-            input={<Input />}
-            fullWidth
-          >
-            {categories.map(c => (
-              <option key={c.id} value={c.title}>
-                {c.title}
-              </option>
-            ))}
-          </NativeSelect>
+          <FormControl style={{ marginTop: 12 }} fullWidth>
+            <InputLabel htmlFor="category">Category</InputLabel>
+            <Select
+              value={category ? category.title : "Test"}
+              onChange={e => onCategoryChanged(e.target.value)}
+              input={<Input />}
+              fullWidth
+              inputProps={{
+                name: "category",
+                id: "category"
+              }}
+            >
+              {categories.map(c => (
+                <MenuItem key={c.id} value={c.title}>
+                  {c.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          <Typography>Language</Typography>
-          <NativeSelect
-            value={language ? language.name : "Test"}
-            onChange={e => onLanguageChanged(e.target.value)}
-            input={<Input />}
-            fullWidth
-          >
-            {languages.map(c => (
-              <option key={c.id} value={c.name}>
-                {c.name}
-              </option>
-            ))}
-          </NativeSelect>
+          <FormControl fullWidth style={{ marginTop: 12 }}>
+            <InputLabel htmlFor="language">Language</InputLabel>
+            <Select
+              value={language ? language.name : "Test"}
+              onChange={e => onLanguageChanged(e.target.value)}
+              input={<Input />}
+              inputProps={{
+                name: "language",
+                id: "language"
+              }}
+            >
+              {languages.map(c => (
+                <MenuItem key={c.id} value={c.name}>
+                  {c.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <div style={{ margin: 8 }}>{this.props.children}</div>
         </DialogContent>
