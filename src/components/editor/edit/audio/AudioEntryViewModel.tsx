@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ClipMedia from "../../../../models/editor/ClipMedia";
 import WaveSurfer from "wavesurfer.js";
+import { SettingsManager } from "../../../../data/settings/SettingsManager";
 
 interface IProps {
   entry: ClipMedia;
@@ -62,12 +63,14 @@ export default class AudioEntryViewModel extends Component<IProps, IState> {
   /**
    * Generates the waveform for the audio file.
    */
-  private loadWavesurfer = () => {
+  private loadWavesurfer = async () => {
     const { entry, onClipPlay, clipUid } = this.props;
+
+    var settings = new SettingsManager();
 
     var wavesurfer = WaveSurfer.create({
       container: "#" + this.identifier,
-      waveColor: "white",
+      waveColor: (await settings.getDarkMode()) ? "white" : "black",
       cursorColor: "#3F51B5",
       hideScrollbar: true
     });

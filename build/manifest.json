@@ -1,0 +1,15 @@
+{
+  "short_name": "Create",
+  "name": "Vocalia Create",
+  "icons": [
+    {
+      "src": "https://vocalia.blob.core.windows.net/static-content/assets/Record.png",
+      "sizes": "512x512 192x192 64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/record",
+  "display": "standalone",
+  "theme_color": "#3f51b5",
+  "background_color": "#ffffff"
+}

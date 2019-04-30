@@ -14,9 +14,11 @@ export default class ClipEditDialogVariableView extends Component<IProps> {
 
     return (
       <div style={{ display: "flex" }}>
-        <IconButton onClick={() => onValueChanged(value - 1)}>
-          <Remove />
-        </IconButton>
+        <div style={{ margin: "auto" }}>
+          <IconButton onClick={() => onValueChanged(value - 1)}>
+            <Remove />
+          </IconButton>
+        </div>
         <TextField
           inputProps={{
             style: { textAlign: "center" }
@@ -25,9 +27,11 @@ export default class ClipEditDialogVariableView extends Component<IProps> {
           variant="outlined"
           value={value + " " + valueName}
         />
-        <IconButton onClick={() => onValueChanged(value + 1)}>
-          <Add />
-        </IconButton>
+        <div style={{ margin: "auto" }}>
+          <IconButton onClick={() => onValueChanged(value + 1)}>
+            <Add />
+          </IconButton>
+        </div>
       </div>
     );
   }

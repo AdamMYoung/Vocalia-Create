@@ -12,6 +12,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import { getTrayStyle } from "../../DragDropStyles";
 import TimeAgo from "react-timeago";
 import { Podcast } from "../../../../models/Podcast";
+import PodcastInfoView from "../../../dialogs/detail/elements/PodcastInfoView";
 
 interface IProps {
   clips: Clip[];
@@ -27,9 +28,7 @@ export default class TrayView extends Component<IProps> {
     return (
       <Card style={{ margin: 4 }}>
         <CardContent>
-          <Typography variant="h6" style={{ textAlign: "center" }}>
-            {podcast.name}
-          </Typography>
+          <PodcastInfoView podcast={podcast} />
 
           <Droppable droppableId="tray" direction="horizontal">
             {(provided, snapshot) => (
