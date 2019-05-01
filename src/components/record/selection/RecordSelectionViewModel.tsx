@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import DataManager from "../../../data/api/DataManager";
-import NewPodcastDialogViewModel from "../../dialogs/newPodcast/NewPodcastDialogViewModel";
-import DetailDialogViewModel from "../../dialogs/detail/DetailDialogViewModel";
-import SelectionView from "../../selection/SelectionView";
 import { Podcast } from "../../../models/Podcast";
+import DetailDialogViewModel from "../../dialogs/detail/DetailDialogViewModel";
+import NewPodcastDialogViewModel from "../../dialogs/newPodcast/NewPodcastDialogViewModel";
+import SelectionView from "../../selection/SelectionView";
 
 interface IProps {
   api: DataManager;

@@ -1,16 +1,12 @@
-import React, { Component } from "react";
-import { PublishedPodcast } from "../../../models/publishing/PublishedPodcast";
 import {
-  Grid,
-  Tabs,
-  Tab,
-  Typography,
   Card,
   CardActionArea,
   CardMedia,
-  CardContent,
-  Toolbar
+  Grid,
+  Typography
 } from "@material-ui/core";
+import React, { Component } from "react";
+import { PublishedPodcast } from "../../../models/publishing/PublishedPodcast";
 
 interface IProps {
   podcasts: PublishedPodcast[];

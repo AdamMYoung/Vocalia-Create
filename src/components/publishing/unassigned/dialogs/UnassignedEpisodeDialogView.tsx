@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { UnassignedEpisode } from "../../../../models/publishing/UnassignedEpisode";
-import TimeAgo from "react-timeago";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   TextField
 } from "@material-ui/core";
+import React, { Component } from "react";
+import TimeAgo from "react-timeago";
+import { UnassignedEpisode } from "../../../../models/publishing/UnassignedEpisode";
 
 interface IProps {
   episode: UnassignedEpisode;

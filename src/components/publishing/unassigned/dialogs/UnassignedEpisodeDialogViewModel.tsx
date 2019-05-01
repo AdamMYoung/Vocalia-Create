@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import UnassignedEpisodeDialogView from "./UnassignedEpisodeDialogView";
-import { UnassignedEpisode } from "../../../../models/publishing/UnassignedEpisode";
 import DataManager from "../../../../data/api/DataManager";
 import { PublishedEpisode } from "../../../../models/publishing/PublishedEpisode";
+import { UnassignedEpisode } from "../../../../models/publishing/UnassignedEpisode";
+import UnassignedEpisodeDialogView from "./UnassignedEpisodeDialogView";
 
 interface IProps {
   api: DataManager;

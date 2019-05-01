@@ -1,21 +1,19 @@
+import {
+  Card,
+  CardContent,
+  Divider,
+  Grid,
+  Typography
+} from "@material-ui/core";
 import React, { Component } from "react";
 import DataManager from "../../../data/api/DataManager";
-import {
-  Grid,
-  Divider,
-  Typography,
-  AppBar,
-  Toolbar,
-  Card,
-  CardContent
-} from "@material-ui/core";
-import GroupViewModel from "./group/GroupViewModel";
-import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
-import ControlViewModel from "./control/ControlViewModel";
 import { Podcast } from "../../../models/Podcast";
-import { User } from "../../../models/User";
-import ClipListViewModel from "./clips/ClipListViewModel";
 import { SessionClip } from "../../../models/SessionClip";
+import { User } from "../../../models/User";
+import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
+import ClipListViewModel from "./clips/ClipListViewModel";
+import ControlViewModel from "./control/ControlViewModel";
+import GroupViewModel from "./group/GroupViewModel";
 
 interface IProps {
   sessionId: string;

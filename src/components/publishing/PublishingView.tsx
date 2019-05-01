@@ -1,13 +1,11 @@
-import React, { Component } from "react";
 import { Grid } from "@material-ui/core";
-import UnassignedView from "./unassigned/UnassignedView";
-import AssignedView from "./assigned/AssignedView";
+import React, { Component } from "react";
+import DataManager from "../../data/api/DataManager";
 import { PublishedPodcast } from "../../models/publishing/PublishedPodcast";
-import { UnassignedPodcast } from "../../models/publishing/UnassignedPodcast";
 import { UnassignedEpisode } from "../../models/publishing/UnassignedEpisode";
+import { UnassignedPodcast } from "../../models/publishing/UnassignedPodcast";
 import AssignedViewModel from "./assigned/AssignedViewModel";
 import UnassignedViewModel from "./unassigned/UnassignedViewModel";
-import DataManager from "../../data/api/DataManager";
 
 interface IProps {
   api: DataManager;

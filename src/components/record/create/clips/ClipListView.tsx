@@ -1,5 +1,5 @@
-import React, { Component } from "react";
 import { List, Typography } from "@material-ui/core";
+import React, { Component } from "react";
 import { SessionClip } from "../../../../models/SessionClip";
 import ClipView from "./entry/ClipView";
 

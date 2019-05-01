@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { PublishedPodcast } from "../../../../models/publishing/PublishedPodcast";
 import DataManager from "../../../../data/api/DataManager";
-import PodcastDialogView from "../../PodcastDialogView";
 import { Category } from "../../../../models/publishing/Category";
 import { Language } from "../../../../models/publishing/Language";
+import { PublishedPodcast } from "../../../../models/publishing/PublishedPodcast";
+import PodcastDialogView from "../../PodcastDialogView";
 import PodcastEpisodeDialogView from "./PodcastEpisodeDialogView";
 
 interface IProps {

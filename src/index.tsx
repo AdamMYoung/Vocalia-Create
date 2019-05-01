@@ -1,11 +1,10 @@
+import DateFnsUtils from "@date-io/date-fns";
+import { MuiPickersUtilsProvider } from "material-ui-pickers";
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { MuiPickersUtilsProvider } from "material-ui-pickers";
-
-import DateFnsUtils from "@date-io/date-fns";
 
 ReactDOM.render(
   <BrowserRouter>

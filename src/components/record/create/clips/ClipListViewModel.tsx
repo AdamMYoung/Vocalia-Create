@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import ClipListView from "./ClipListView";
-import { SessionClip } from "../../../../models/SessionClip";
 import DataManager from "../../../../data/api/DataManager";
+import { SessionClip } from "../../../../models/SessionClip";
+import ClipListView from "./ClipListView";
 
 interface IProps {
   api: DataManager;

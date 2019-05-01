@@ -1,9 +1,9 @@
+import { createMuiTheme, MuiThemeProvider, Theme } from "@material-ui/core";
 import React, { Component } from "react";
 import DataManager from "../data/api/DataManager";
-import LayoutView from "./LayoutView";
 import Auth from "../data/auth/Auth";
-import { Theme, createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { SettingsManager } from "../data/settings/SettingsManager";
+import LayoutView from "./LayoutView";
 
 interface IProps {
   isMobile: boolean;

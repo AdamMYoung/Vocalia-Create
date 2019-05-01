@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import EditorDetailDialogView from "./EditorDetailDialogView";
-import { Podcast } from "../../../../models/Podcast";
 import DataManager from "../../../../data/api/DataManager";
+import { Podcast } from "../../../../models/Podcast";
 import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDialogView";
+import EditorDetailDialogView from "./EditorDetailDialogView";
 
 interface IProps {
   api: DataManager;

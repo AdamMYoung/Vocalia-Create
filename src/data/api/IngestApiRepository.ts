@@ -1,8 +1,7 @@
-import { getInjectedFetch } from "./ApiUtils";
-import { Podcast } from "../../models/Podcast";
 import { PodcastUpload } from "../../models/ingest/PodcastUpload";
-import { BlobUpload } from "../../models/ingest/BlobUpload";
+import { Podcast } from "../../models/Podcast";
 import { SessionClip } from "../../models/SessionClip";
+import { getInjectedFetch } from "./ApiUtils";
 
 const API = process.env.REACT_APP_INGEST_API_URL;
 const PODCAST = "podcast";

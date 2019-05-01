@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import UserView from "./UserView";
 import { UserStream } from "../../../../../models/ingest/UserStream";
 import { User } from "../../../../../models/User";
+import UserView from "./UserView";
 
 interface IProps {
   stream: UserStream;

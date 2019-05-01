@@ -1,13 +1,13 @@
-import React, { Component } from "react";
 import {
+  Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  Button,
   DialogTitle,
   TextField
 } from "@material-ui/core";
+import React, { Component } from "react";
 
 interface IProps {
   onAccept: (name: string) => void;

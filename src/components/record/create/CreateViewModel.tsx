@@ -1,12 +1,12 @@
+import * as signalR from "@aspnet/signalr";
+import { Dialog, DialogTitle } from "@material-ui/core";
 import React, { Component } from "react";
 import DataManager from "../../../data/api/DataManager";
-import CreateView from "./CreateView";
-import * as signalR from "@aspnet/signalr";
-import NewInviteDialogViewModel from "../../dialogs/newInvite/NewInviteDialogViewModel";
-import { Dialog, DialogTitle } from "@material-ui/core";
 import { Podcast } from "../../../models/Podcast";
-import { User } from "../../../models/User";
 import { SessionClip } from "../../../models/SessionClip";
+import { User } from "../../../models/User";
+import NewInviteDialogViewModel from "../../dialogs/newInvite/NewInviteDialogViewModel";
+import CreateView from "./CreateView";
 
 interface IProps {
   api: DataManager;

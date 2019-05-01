@@ -1,5 +1,5 @@
+import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import React, { Component } from "react";
-import { Typography, Grid, Button, Divider } from "@material-ui/core";
 
 interface IProps {
   duration: string;

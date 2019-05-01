@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import TrayView from "./TrayView";
+import DataManager from "../../../../data/api/DataManager";
 import Clip from "../../../../models/editor/Clip";
 import { Podcast } from "../../../../models/Podcast";
-import DataManager from "../../../../data/api/DataManager";
 import SessionEndDialog from "../../../dialogs/SessionEndDialog";
+import TrayView from "./TrayView";
 
 interface IProps {
   api: DataManager;

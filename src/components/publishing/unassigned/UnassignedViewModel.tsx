@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { UnassignedPodcast } from "../../../models/publishing/UnassignedPodcast";
-import { UnassignedEpisode } from "../../../models/publishing/UnassignedEpisode";
-import UnassignedView from "./UnassignedView";
 import DataManager from "../../../data/api/DataManager";
+import { UnassignedEpisode } from "../../../models/publishing/UnassignedEpisode";
+import { UnassignedPodcast } from "../../../models/publishing/UnassignedPodcast";
 import UnassignedEpisodeDialogViewModel from "./dialogs/UnassignedEpisodeDialogViewModel";
 import UnassignedPodcastDialogViewModel from "./dialogs/UnassignedPodcastDialogViewModel";
+import UnassignedView from "./UnassignedView";
 
 interface IProps {
   api: DataManager;

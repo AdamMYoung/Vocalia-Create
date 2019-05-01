@@ -1,5 +1,5 @@
-import { getInjectedFetch } from "./ApiUtils";
 import { User } from "../../models/User";
+import { getInjectedFetch } from "./ApiUtils";
 
 const API = process.env.REACT_APP_SOCIAL_API_URL;
 const USER_DETAIL = "user/detail";

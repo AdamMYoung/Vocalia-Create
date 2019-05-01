@@ -1,4 +1,4 @@
-import Recorder, { RecorderResult } from "recorder-js";
+import Recorder from "recorder-js";
 
 export class AudioRecorder {
   private recorder = new Recorder(new AudioContext());

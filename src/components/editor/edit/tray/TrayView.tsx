@@ -1,17 +1,17 @@
-import React, { Component } from "react";
 import {
+  Button,
   Card,
-  Typography,
   CardContent,
   Divider,
-  Button
+  Typography
 } from "@material-ui/core";
-import Clip from "../../../../models/editor/Clip";
+import React, { Component } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { getTrayStyle } from "../../DragDropStyles";
 import TimeAgo from "react-timeago";
+import Clip from "../../../../models/editor/Clip";
 import { Podcast } from "../../../../models/Podcast";
 import PodcastInfoView from "../../../dialogs/detail/elements/PodcastInfoView";
+import { getTrayStyle } from "../../DragDropStyles";
 
 interface IProps {
   clips: Clip[];

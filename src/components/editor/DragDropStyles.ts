@@ -1,6 +1,4 @@
 import { DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
-import { drawerWidth } from "../../utility/constants";
-import { isMobile } from "../../utility/DeviceUtils";
 
 const grid = 4;
 

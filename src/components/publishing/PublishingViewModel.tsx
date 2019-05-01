@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import PublishingView from "./PublishingView";
 import DataManager from "../../data/api/DataManager";
-import { UnassignedPodcast } from "../../models/publishing/UnassignedPodcast";
 import { PublishedPodcast } from "../../models/publishing/PublishedPodcast";
 import { UnassignedEpisode } from "../../models/publishing/UnassignedEpisode";
+import { UnassignedPodcast } from "../../models/publishing/UnassignedPodcast";
+import PublishingView from "./PublishingView";
 
 interface IProps {
   api: DataManager;

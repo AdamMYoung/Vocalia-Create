@@ -1,12 +1,10 @@
+import { Avatar, Grid, Typography } from "@material-ui/core";
 import React, { Component } from "react";
-import Clip from "../../../../models/editor/Clip";
-import { Grid, Avatar, Typography } from "@material-ui/core";
-import AudioEntryViewModel from "../audio/AudioEntryViewModel";
 import { Droppable } from "react-beautiful-dnd";
+import Clip from "../../../../models/editor/Clip";
 import { getListStyle } from "../../DragDropStyles";
+import AudioEntryViewModel from "../audio/AudioEntryViewModel";
 import TimelineEntryView from "./TimelineEntryView";
-import { isMobile } from "../../../../utility/DeviceUtils";
-import { drawerWidth } from "../../../../utility/constants";
 
 interface IProps {
   timeline: Clip[];

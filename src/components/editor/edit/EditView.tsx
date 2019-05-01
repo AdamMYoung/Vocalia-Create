@@ -1,12 +1,11 @@
+import { Grid, Typography } from "@material-ui/core";
 import React, { Component } from "react";
-import { Grid, Typography, Card, CardContent, Button } from "@material-ui/core";
-import PodcastInfoView from "../../dialogs/detail/elements/PodcastInfoView";
-import { Podcast } from "../../../models/Podcast";
-import Clip from "../../../models/editor/Clip";
-import TrayViewModel from "./tray/TrayViewModel";
 import { DropResult } from "react-beautiful-dnd";
-import { TimelineViewModel } from "./timeline/TimelineViewModel";
 import DataManager from "../../../data/api/DataManager";
+import Clip from "../../../models/editor/Clip";
+import { Podcast } from "../../../models/Podcast";
+import { TimelineViewModel } from "./timeline/TimelineViewModel";
+import TrayViewModel from "./tray/TrayViewModel";
 
 interface IProps {
   api: DataManager;

@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import SelectionView from "../../selection/SelectionView";
 import DataManager from "../../../data/api/DataManager";
 import { Podcast } from "../../../models/Podcast";
-import DetailDialogViewModel from "../../dialogs/detail/DetailDialogViewModel";
-import EditorDetailDialogView from "./dialog/EditorDetailDialogView";
+import SelectionView from "../../selection/SelectionView";
 import EditorDetailDialogViewModel from "./dialog/EditorDetailDialogViewModel";
 
 interface IProps {

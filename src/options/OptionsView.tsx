@@ -1,12 +1,12 @@
-import React, { Component } from "react";
 import {
+  Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
-  List,
   DialogActions,
-  Button
+  DialogContent,
+  DialogTitle,
+  List
 } from "@material-ui/core";
+import React, { Component } from "react";
 import OptionsListToggleView from "./elements/OptionsListToggleView";
 
 interface IProps {

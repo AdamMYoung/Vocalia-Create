@@ -1,13 +1,13 @@
-import React, { Component } from "react";
 import {
-  DialogTitle,
+  Button,
+  Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  Button,
-  Typography,
-  Dialog
+  DialogTitle,
+  Typography
 } from "@material-ui/core";
+import React, { Component } from "react";
 import { Redirect } from "react-router";
 import { Podcast } from "../../models/Podcast";
 

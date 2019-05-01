@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { fade } from "@material-ui/core/styles/colorManipulator";
 import {
-  withStyles,
-  WithStyles,
-  CssBaseline,
   AppBar,
-  Toolbar,
+  createStyles,
+  CssBaseline,
   IconButton,
   Theme,
-  createStyles,
-  Typography
+  Toolbar,
+  Typography,
+  withStyles,
+  WithStyles
 } from "@material-ui/core";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 import MenuIcon from "@material-ui/icons/Menu";
+import React, { Component } from "react";
 import { drawerWidth } from "../../utility/constants";
 import DrawerView from "./drawer/DrawerView";
 

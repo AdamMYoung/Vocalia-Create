@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import DataManager from "../../../data/api/DataManager";
 import { PublishedPodcast } from "../../../models/publishing/PublishedPodcast";
 import AssignedView from "./AssignedView";
-import DataManager from "../../../data/api/DataManager";
 import AssignedPodcastDialogViewModel from "./dialogs/AssignedPodcastDialogViewModel";
 
 interface IProps {

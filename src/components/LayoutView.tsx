@@ -1,17 +1,17 @@
 import React, { Component } from "react";
+import { Redirect, Route, Switch } from "react-router";
 import DataManager from "../data/api/DataManager";
-import { Route, Switch, Redirect } from "react-router";
-import Callback from "../data/auth/Callback";
 import Auth from "../data/auth/Auth";
+import Callback from "../data/auth/Callback";
+import EditViewModel from "./editor/edit/EditViewModel";
+import EditorSelectionViewModel from "./editor/selection/EditorSelectionViewModel";
+import InviteViewModel from "./invite/InviteViewModel";
+import LoginView from "./LoginView";
 import NavigationViewModel from "./navigation/NavigationViewModel";
 import OptionsViewModel from "./options/OptionsViewModel";
-import RecordSelectionViewModel from "./record/selection/RecordSelectionViewModel";
-import InviteViewModel from "./invite/InviteViewModel";
-import CreateViewModel from "./record/create/CreateViewModel";
-import LoginView from "./LoginView";
-import EditorSelectionViewModel from "./editor/selection/EditorSelectionViewModel";
-import EditViewModel from "./editor/edit/EditViewModel";
 import PublishingViewModel from "./publishing/PublishingViewModel";
+import CreateViewModel from "./record/create/CreateViewModel";
+import RecordSelectionViewModel from "./record/selection/RecordSelectionViewModel";
 
 interface IProps {
   isMobile: boolean;

@@ -1,15 +1,15 @@
-import React, { Component } from "react";
 import {
-  withStyles,
-  Theme,
-  createStyles,
-  WithStyles,
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
-  Typography
+  CardMedia,
+  createStyles,
+  Theme,
+  Typography,
+  withStyles,
+  WithStyles
 } from "@material-ui/core";
+import React, { Component } from "react";
 import { Podcast } from "../../models/Podcast";
 
 /**

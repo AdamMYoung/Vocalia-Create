@@ -1,7 +1,7 @@
+import { List, ListItem, ListItemText, Typography } from "@material-ui/core";
 import React, { Component } from "react";
-import { PublishedEpisode } from "../../../../models/publishing/PublishedEpisode";
-import { List, ListItemText, ListItem, Typography } from "@material-ui/core";
 import TimeAgo from "react-timeago";
+import { PublishedEpisode } from "../../../../models/publishing/PublishedEpisode";
 
 interface IProps {
   episodes: PublishedEpisode[];

@@ -1,18 +1,16 @@
-import React, { Component } from "react";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  List,
-  ListItem,
-  ListItemText,
-  DialogActions,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  List,
   Typography
 } from "@material-ui/core";
+import React, { Component } from "react";
 import { Podcast } from "../../../../models/Podcast";
-import SessionView from "./SessionView";
 import PodcastInfoView from "../../../dialogs/detail/elements/PodcastInfoView";
+import SessionView from "./SessionView";
 
 interface IProps {
   podcast: Podcast;

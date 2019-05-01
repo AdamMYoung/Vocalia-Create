@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { SessionClip } from "../../../../../models/SessionClip";
 import {
-  ListItem,
-  ListItemText,
   IconButton,
-  ListItemSecondaryAction
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText
 } from "@material-ui/core";
+import { Delete, PlayArrow, Stop } from "@material-ui/icons";
+import React, { Component } from "react";
 import TimeAgo from "react-timeago";
-import { Delete, Stop, PlayArrow } from "@material-ui/icons";
+import { SessionClip } from "../../../../../models/SessionClip";
 
 interface IProps {
   clip: SessionClip;

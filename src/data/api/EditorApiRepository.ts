@@ -1,7 +1,7 @@
-import { getInjectedFetch } from "./ApiUtils";
-import { Podcast } from "../../models/Podcast";
 import Clip from "../../models/editor/Clip";
 import ClipEdit from "../../models/editor/ClipEdit";
+import { Podcast } from "../../models/Podcast";
+import { getInjectedFetch } from "./ApiUtils";
 
 const API = process.env.REACT_APP_EDITOR_API_URL;
 const TIMELINE = "timeline";

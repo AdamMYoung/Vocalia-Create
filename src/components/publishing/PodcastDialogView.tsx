@@ -1,21 +1,19 @@
-import React, { Component } from "react";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
   Button,
-  Select,
-  MenuItem,
-  FormControlLabel,
   Checkbox,
-  Typography,
-  NativeSelect,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  FormControlLabel,
   Input,
   InputLabel,
-  FormControl
+  MenuItem,
+  Select,
+  TextField
 } from "@material-ui/core";
+import React, { Component } from "react";
 import { Category } from "../../models/publishing/Category";
 import { Language } from "../../models/publishing/Language";
 

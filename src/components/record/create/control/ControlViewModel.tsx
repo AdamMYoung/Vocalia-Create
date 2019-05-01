@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import ControlView from "./ControlView";
-import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
+import uuidv1 from "uuid/v1";
 import DataManager from "../../../../data/api/DataManager";
+import { AudioRecorder } from "../../../../data/stream/AudioRecorder";
 import GroupManager from "../../../../data/stream/GroupManager";
-import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDialogView";
 import { Podcast } from "../../../../models/Podcast";
 import { User } from "../../../../models/User";
 import { getDurationText } from "../../../../utility/TextUtils";
+import ConfirmationDialogView from "../../../dialogs/confirmation/ConfirmationDialogView";
 import SessionEndDialog from "../../../dialogs/SessionEndDialog";
 import { ClipNameDialog } from "../../ClipNameDialog";
-import uuidv1 from "uuid/v1";
+import ControlView from "./ControlView";
 
 interface IProps {
   sessionId: string;

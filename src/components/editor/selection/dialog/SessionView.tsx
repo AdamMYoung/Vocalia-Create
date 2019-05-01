@@ -1,16 +1,15 @@
-import React, { Component } from "react";
 import {
+  IconButton,
   ListItem,
-  ListItemText,
   ListItemSecondaryAction,
-  Button,
-  IconButton
+  ListItemText
 } from "@material-ui/core";
-import TimeAgo from "react-timeago";
-import { Session } from "../../../../models/Session";
 import { Delete, OpenInBrowser } from "@material-ui/icons";
+import React, { Component } from "react";
 import { LinkContainer } from "react-router-bootstrap";
+import TimeAgo from "react-timeago";
 import { Podcast } from "../../../../models/Podcast";
+import { Session } from "../../../../models/Session";
 
 interface IProps {
   session: Session;

@@ -1,18 +1,18 @@
-import React, { Component } from "react";
 import {
-  Theme,
   createStyles,
-  WithStyles,
-  List,
   Divider,
-  Hidden,
-  SwipeableDrawer,
   Drawer,
+  Hidden,
+  List,
+  SwipeableDrawer,
+  Theme,
+  WithStyles,
   withStyles
 } from "@material-ui/core";
+import { Edit, Mic, Person, Publish, Settings } from "@material-ui/icons";
+import React, { Component } from "react";
 import { drawerWidth } from "../../../utility/constants";
 import DrawerElementView from "./DrawerElementView";
-import { Person, Settings, Mic, Edit, Publish } from "@material-ui/icons";
 
 /**
  * CSS styles for the navigation drawer.

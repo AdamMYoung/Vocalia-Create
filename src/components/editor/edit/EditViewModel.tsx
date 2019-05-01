@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import DataManager from "../../../data/api/DataManager";
-import EditView from "./EditView";
-import { Podcast } from "../../../models/Podcast";
-import Clip from "../../../models/editor/Clip";
 import {
   DragDropContext,
-  DropResult,
-  DraggableLocation
+  DraggableLocation,
+  DropResult
 } from "react-beautiful-dnd";
+import DataManager from "../../../data/api/DataManager";
+import Clip from "../../../models/editor/Clip";
+import { Podcast } from "../../../models/Podcast";
 import { reorder } from "../../../utility/ListUtils";
+import EditView from "./EditView";
 
 interface IProps {
   api: DataManager;

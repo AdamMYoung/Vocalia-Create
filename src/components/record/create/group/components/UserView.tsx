@@ -1,13 +1,13 @@
-import React, { Component } from "react";
 import {
+  Avatar,
+  IconButton,
   ListItem,
   ListItemAvatar,
-  Avatar,
-  ListItemText,
   ListItemSecondaryAction,
-  IconButton
+  ListItemText
 } from "@material-ui/core";
 import { VolumeMute, VolumeUp } from "@material-ui/icons";
+import React, { Component } from "react";
 import { User } from "../../../../../models/User";
 
 interface IProps {

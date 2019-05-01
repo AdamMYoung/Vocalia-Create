@@ -1,5 +1,5 @@
-import { Session } from "./Session";
 import { PodcastMember } from "./PodcastMember";
+import { Session } from "./Session";
 
 export class Podcast {
   uid: string;

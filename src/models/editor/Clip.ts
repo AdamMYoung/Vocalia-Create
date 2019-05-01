@@ -1,5 +1,5 @@
-import ClipMedia from "./ClipMedia";
 import ClipEdit from "./ClipEdit";
+import ClipMedia from "./ClipMedia";
 
 export default class Clip {
   uid: string;

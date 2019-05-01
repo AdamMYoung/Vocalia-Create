@@ -1,21 +1,14 @@
-import React, { Component } from "react";
-import { UnassignedPodcast } from "../../../models/publishing/UnassignedPodcast";
-import { UnassignedEpisode } from "../../../models/publishing/UnassignedEpisode";
 import {
-  Grid,
-  Tabs,
-  Tab,
-  AppBar,
-  Toolbar,
-  Typography,
   Card,
   CardActionArea,
+  CardContent,
   CardMedia,
-  List,
-  ListItem,
-  ListItemText,
-  CardContent
+  Grid,
+  Typography
 } from "@material-ui/core";
+import React, { Component } from "react";
+import { UnassignedEpisode } from "../../../models/publishing/UnassignedEpisode";
+import { UnassignedPodcast } from "../../../models/publishing/UnassignedPodcast";
 
 interface IProps {
   podcasts: UnassignedPodcast[];
