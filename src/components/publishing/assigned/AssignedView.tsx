@@ -23,14 +23,10 @@ export default class AssignedView extends Component<IProps> {
 
     return (
       <Grid container>
-        <Toolbar>
-          <Typography variant="h6">Published</Typography>
-        </Toolbar>
-
         <Grid item xs={12}>
-          {podcasts.length > 0 ? (
+          {podcasts.length > 0 && (
             <div>
-              <Typography variant="h6">Podcasts</Typography>
+              <Typography variant="h6">Published Episodes</Typography>
               <Grid container>
                 {podcasts.map(p => (
                   <Card
@@ -49,8 +45,6 @@ export default class AssignedView extends Component<IProps> {
                 ))}
               </Grid>
             </div>
-          ) : (
-            <Typography>There's nothing here...</Typography>
           )}
         </Grid>
       </Grid>

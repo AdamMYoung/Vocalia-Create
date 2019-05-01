@@ -37,7 +37,12 @@ export default class UnassignedView extends Component<IProps> {
     const podcastEntries = podcasts.map(p => (
       <Card
         key={p.uid}
-        style={{ width: 160, height: 160, margin: 4 }}
+        style={{
+          width: 160,
+          height: 160,
+          margin: 4,
+          boxShadow: "0px 0px 10px 2px #3f51b5"
+        }}
         onClick={() => onPodcastSelected(p)}
       >
         <CardActionArea>
@@ -53,7 +58,12 @@ export default class UnassignedView extends Component<IProps> {
     const episodeEntries = episodes.map(e => (
       <Card
         key={e.uid}
-        style={{ width: 160, height: 160, margin: 4 }}
+        style={{
+          width: 160,
+          height: 160,
+          margin: 4,
+          boxShadow: "0px 0px 10px 2px #3f51b5"
+        }}
         onClick={() => onEpisodeSelected(e)}
       >
         <CardActionArea>
@@ -71,27 +81,22 @@ export default class UnassignedView extends Component<IProps> {
 
     return (
       <Grid container>
-        <Toolbar>
-          <Typography variant="h6">Unassigned</Typography>
-        </Toolbar>
+        <Grid item xs={12}>
+          {episodes.length > 0 && (
+            <div>
+              <Typography variant="h6">Unpublished Episodes</Typography>
+              <Grid container>{episodeEntries}</Grid>
+            </div>
+          )}
+        </Grid>
         <Grid item xs={12}>
           {podcasts.length > 0 && (
             <div>
-              <Typography variant="h6">Podcasts</Typography>
+              <Typography variant="h6">Unpublished Podcasts</Typography>
               <Grid container>{podcastEntries}</Grid>
             </div>
           )}
         </Grid>
-        <Grid item xs={12} />
-        {episodes.length > 0 && (
-          <div>
-            <Typography variant="h6">Episodes</Typography>
-            <Grid container>{episodeEntries}</Grid>
-          </div>
-        )}
-        {episodes.length == 0 && podcasts.length == 0 && (
-          <Typography>There's nothing here...</Typography>
-        )}
       </Grid>
     );
   }

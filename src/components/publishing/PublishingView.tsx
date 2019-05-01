@@ -27,14 +27,14 @@ export default class PublishingView extends Component<IProps> {
 
     return (
       <Grid container>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <UnassignedViewModel
             {...this.props}
             podcasts={unassignedPodcasts}
             episodes={unassignedEpisodes}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <AssignedViewModel {...this.props} podcasts={publishedPodcasts} />
         </Grid>
       </Grid>
